@@ -1,741 +1,435 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #6d6d6d; -webkit-text-stroke: #6d6d6d}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #6b0001; -webkit-text-stroke: #6b0001}
-    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #fb0007; -webkit-text-stroke: #fb0007}
-    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #0000ff; -webkit-text-stroke: #0000ff}
-    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; -webkit-text-stroke: #000000}
-    p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #18702b; -webkit-text-stroke: #18702b}
-    p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; -webkit-text-stroke: #000000; min-height: 16.0px}
-    p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #093c94; -webkit-text-stroke: #093c94}
-    p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #4d5055; -webkit-text-stroke: #4d5055}
-    p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #18702b; -webkit-text-stroke: #18702b; min-height: 16.0px}
-    span.s1 {font-kerning: none; background-color: #ecf1f7}
-    span.s2 {font-kerning: none; color: #fb0007; background-color: #ecf1f7; -webkit-text-stroke: 0px #fb0007}
-    span.s3 {font-kerning: none; color: #2a2a2a; background-color: #ecf1f7; -webkit-text-stroke: 0px #2a2a2a}
-    span.s4 {font-kerning: none; color: #000000; background-color: #ecf1f7; -webkit-text-stroke: 0px #000000}
-    span.s5 {font-kerning: none; color: #0000ff; background-color: #ecf1f7; -webkit-text-stroke: 0px #0000ff}
-    span.s6 {font-kerning: none; color: #6b0001; background-color: #ecf1f7; -webkit-text-stroke: 0px #6b0001}
-    span.s7 {font-kerning: none; color: #6f0ec3; background-color: #ecf1f7; -webkit-text-stroke: 0px #6f0ec3}
-    span.s8 {font-kerning: none; color: #093c94; background-color: #ecf1f7; -webkit-text-stroke: 0px #093c94}
-    span.s9 {font-kerning: none; color: #18702b; background-color: #ecf1f7; -webkit-text-stroke: 0px #18702b}
-    span.s10 {font-kerning: none}
-    span.s11 {font-kerning: none; color: #137646; background-color: #ecf1f7; -webkit-text-stroke: 0px #137646}
-    span.s12 {font-kerning: none; color: #a4450b; background-color: #ecf1f7; -webkit-text-stroke: 0px #a4450b}
-    span.s13 {font-kerning: none; color: #0e6e6d; background-color: #ecf1f7; -webkit-text-stroke: 0px #0e6e6d}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Mind: Protocol 6</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap');
+        
+        body {
+            background-color: #0a0a0c;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .heading-font { font-family: 'Orbitron', sans-serif; }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+        }
+
+        .level-card {
+            transition: all 0.3s ease;
+        }
+
+        .level-card.locked {
+            opacity: 0.4;
+            filter: grayscale(1);
+            pointer-events: none;
+        }
+
+        .xp-bar {
+            height: 12px;
+            background: #1e293b;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .xp-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .protocol-complete {
+            border-color: #fbbf24 !important;
+            background: rgba(251, 191, 36, 0.05) !important;
+        }
+
+        .emo-btn {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s;
+        }
+        .emo-btn:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+        
+        .emo-btn.selected {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+        }
+
+        .streak-fire {
+            color: #ff4500;
+            filter: drop-shadow(0 0 5px rgba(255, 69, 0, 0.5));
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a0c; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+
+        @keyframes slideIn {
+            from { transform: translateX(20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .animate-slide { animation: slideIn 0.3s ease-out forwards; }
+    </style>
 </head>
-<body>
-<p class="p1"><span class="s1">&lt;!DOCTYPE</span><span class="s2"> html</span><span class="s1">&gt;</span></p>
-<p class="p2"><span class="s3">&lt;</span><span class="s1">html</span><span class="s4"> </span><span class="s2">lang</span><span class="s3">=</span><span class="s5">"en"</span><span class="s3">&gt;</span></p>
-<p class="p2"><span class="s3">&lt;</span><span class="s1">head</span><span class="s3">&gt;</span></p>
-<p class="p3"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">meta</span><span class="s4"> </span><span class="s1">charset</span><span class="s3">=</span><span class="s5">"UTF-8"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">meta</span><span class="s4"> </span><span class="s2">name</span><span class="s3">=</span><span class="s1">"viewport"</span><span class="s4"> </span><span class="s2">content</span><span class="s3">=</span><span class="s1">"width=device-width, initial-scale=1.0"</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">title</span><span class="s3">&gt;</span><span class="s1">Apex Mind: Protocol 6</span><span class="s3">&lt;/</span><span class="s6">title</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">script</span><span class="s4"> </span><span class="s2">src</span><span class="s3">=</span><span class="s1">"https://cdn.tailwindcss.com"</span><span class="s3">&gt;&lt;/</span><span class="s6">script</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">link</span><span class="s4"> </span><span class="s2">href</span><span class="s3">=</span><span class="s1">"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"</span><span class="s4"> </span><span class="s2">rel</span><span class="s3">=</span><span class="s1">"stylesheet"</span><span class="s3">&gt;</span></p>
-<p class="p2"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s1">style</span><span class="s3">&gt;</span></p>
-<p class="p6"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s7">@import</span><span class="s4"> </span><span class="s8">url</span><span class="s4">(</span><span class="s1">'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&amp;family=Inter:wght@300;400;600&amp;display=swap'</span><span class="s4">);</span></p>
-<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s6">body</span><span class="s1"> {</span></p>
-<p class="p3"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">background-color:</span><span class="s4"> </span><span class="s8">#0a0a0c</span><span class="s4">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">color:</span><span class="s1"> </span><span class="s8">#e2e8f0</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">font-family:</span><span class="s1"> </span><span class="s9">'Inter'</span><span class="s1">, </span><span class="s8">sans-serif</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">overflow-x:</span><span class="s1"> </span><span class="s8">hidden</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s6">.heading-font</span><span class="s1"> { </span><span class="s2">font-family:</span><span class="s1"> </span><span class="s9">'Orbitron'</span><span class="s1">, </span><span class="s8">sans-serif</span><span class="s1">; }</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s6">.glass</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">background:</span><span class="s1"> </span><span class="s8">rgba(</span><span class="s11">255</span><span class="s1">, </span><span class="s11">255</span><span class="s1">, </span><span class="s11">255</span><span class="s1">, </span><span class="s11">0.03</span><span class="s8">)</span><span class="s1">;</span></p>
-<p class="p3"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">backdrop-filter:</span><span class="s4"> </span><span class="s8">blur(</span><span class="s11">10px</span><span class="s8">)</span><span class="s4">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">border:</span><span class="s1"> </span><span class="s11">1px</span><span class="s1"> </span><span class="s8">solid</span><span class="s1"> </span><span class="s8">rgba(</span><span class="s11">255</span><span class="s1">, </span><span class="s11">255</span><span class="s1">, </span><span class="s11">255</span><span class="s1">, </span><span class="s11">0.05</span><span class="s8">)</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">border-radius:</span><span class="s1"> </span><span class="s11">16px</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p2"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">.level-card</span><span class="s4"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">transition:</span><span class="s1"> </span><span class="s8">all</span><span class="s1"> </span><span class="s11">0.3s</span><span class="s1"> </span><span class="s8">ease</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p2"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">.level-card.locked</span><span class="s4"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">opacity:</span><span class="s1"> </span><span class="s11">0.4</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">filter:</span><span class="s1"> </span><span class="s8">grayscale(</span><span class="s11">1</span><span class="s8">)</span><span class="s1">;</span></p>
-<p class="p3"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">pointer-events:</span><span class="s4"> </span><span class="s8">none</span><span class="s4">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s6">.xp-bar</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">height:</span><span class="s1"> </span><span class="s11">12px</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">background:</span><span class="s1"> </span><span class="s8">#1e293b</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">border-radius:</span><span class="s1"> </span><span class="s11">6px</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">overflow:</span><span class="s1"> </span><span class="s8">hidden</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">box-shadow:</span><span class="s1"> </span><span class="s8">inset</span><span class="s1"> </span><span class="s11">0</span><span class="s1"> </span><span class="s11">2px</span><span class="s1"> </span><span class="s11">4px</span><span class="s1"> </span><span class="s8">rgba(</span><span class="s11">0</span><span class="s1">,</span><span class="s11">0</span><span class="s1">,</span><span class="s11">0</span><span class="s1">,</span><span class="s11">0.5</span><span class="s8">)</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p2"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">.xp-progress</span><span class="s4"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">height:</span><span class="s1"> </span><span class="s11">100%</span><span class="s1">;</span></p>
-<p class="p8"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s2">background:</span><span class="s4"> </span><span class="s1">linear-gradient(</span><span class="s11">90deg</span><span class="s4">, </span><span class="s1">#3b82f6</span><span class="s4">, </span><span class="s1">#8b5cf6</span><span class="s4">, </span><span class="s1">#ec4899)</span><span class="s4">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">width:</span><span class="s1"> </span><span class="s11">0%</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">transition:</span><span class="s1"> </span><span class="s8">width</span><span class="s1"> </span><span class="s11">0.8s</span><span class="s1"> </span><span class="s8">cubic-bezier(</span><span class="s11">0.34</span><span class="s1">, </span><span class="s11">1.56</span><span class="s1">, </span><span class="s11">0.64</span><span class="s1">, </span><span class="s11">1</span><span class="s8">)</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p2"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">.protocol-complete</span><span class="s4"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">border-color:</span><span class="s1"> </span><span class="s8">#fbbf24</span><span class="s1"> </span><span class="s7">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">background:</span><span class="s1"> </span><span class="s8">rgba(</span><span class="s11">251</span><span class="s1">, </span><span class="s11">191</span><span class="s1">, </span><span class="s11">36</span><span class="s1">, </span><span class="s11">0.05</span><span class="s8">)</span><span class="s1"> </span><span class="s7">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s6">.emo-btn</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">background:</span><span class="s1"> </span><span class="s8">rgba(</span><span class="s11">30</span><span class="s1">, </span><span class="s11">41</span><span class="s1">, </span><span class="s11">59</span><span class="s1">, </span><span class="s11">0.5</span><span class="s8">)</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">border:</span><span class="s1"> </span><span class="s11">1px</span><span class="s1"> </span><span class="s8">solid</span><span class="s1"> </span><span class="s8">rgba(</span><span class="s11">255</span><span class="s1">, </span><span class="s11">255</span><span class="s1">, </span><span class="s11">255</span><span class="s1">, </span><span class="s11">0.1</span><span class="s8">)</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">transition:</span><span class="s1"> </span><span class="s8">all</span><span class="s1"> </span><span class="s11">0.2s</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">.emo-btn:hover</span><span class="s4"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">background:</span><span class="s1"> </span><span class="s8">rgba(</span><span class="s11">59</span><span class="s1">, </span><span class="s11">130</span><span class="s1">, </span><span class="s11">246</span><span class="s1">, </span><span class="s11">0.2</span><span class="s8">)</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">border-color:</span><span class="s1"> </span><span class="s8">#3b82f6</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">transform:</span><span class="s1"> </span><span class="s8">translateY(</span><span class="s11">-2px</span><span class="s8">)</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
-<p class="p2"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">.emo-btn.selected</span><span class="s4"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">border-color:</span><span class="s1"> </span><span class="s8">#3b82f6</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">background:</span><span class="s1"> </span><span class="s8">rgba(</span><span class="s11">59</span><span class="s1">, </span><span class="s11">130</span><span class="s1">, </span><span class="s11">246</span><span class="s1">, </span><span class="s11">0.3</span><span class="s8">)</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">box-shadow:</span><span class="s1"> </span><span class="s11">0</span><span class="s1"> </span><span class="s11">0</span><span class="s1"> </span><span class="s11">15px</span><span class="s1"> </span><span class="s8">rgba(</span><span class="s11">59</span><span class="s1">, </span><span class="s11">130</span><span class="s1">, </span><span class="s11">246</span><span class="s1">, </span><span class="s11">0.2</span><span class="s8">)</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p2"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">.streak-fire</span><span class="s4"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">color:</span><span class="s1"> </span><span class="s8">#ff4500</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">filter:</span><span class="s1"> </span><span class="s8">drop-shadow(</span><span class="s11">0</span><span class="s1"> </span><span class="s11">0</span><span class="s1"> </span><span class="s11">5px</span><span class="s1"> </span><span class="s8">rgba(</span><span class="s11">255</span><span class="s1">, </span><span class="s11">69</span><span class="s1">, </span><span class="s11">0</span><span class="s1">, </span><span class="s11">0.5</span><span class="s8">))</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p2"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">::-webkit-scrollbar</span><span class="s4"> { </span><span class="s2">width:</span><span class="s4"> </span><span class="s11">6px</span><span class="s4">; }</span></p>
-<p class="p2"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">::-webkit-scrollbar-track</span><span class="s4"> { </span><span class="s2">background:</span><span class="s4"> </span><span class="s8">#0a0a0c</span><span class="s4">; }</span></p>
-<p class="p2"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">::-webkit-scrollbar-thumb</span><span class="s4"> { </span><span class="s2">background:</span><span class="s4"> </span><span class="s8">#1e293b</span><span class="s4">; </span><span class="s2">border-radius:</span><span class="s4"> </span><span class="s11">10px</span><span class="s4">; }</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">@keyframes</span><span class="s1"> </span><span class="s8">slideIn</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">from</span><span class="s1"> { </span><span class="s2">transform:</span><span class="s1"> </span><span class="s8">translateX(</span><span class="s11">20px</span><span class="s8">)</span><span class="s1">; </span><span class="s2">opacity:</span><span class="s1"> </span><span class="s11">0</span><span class="s1">; }</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">to</span><span class="s1"> { </span><span class="s2">transform:</span><span class="s1"> </span><span class="s8">translateX(</span><span class="s11">0</span><span class="s8">)</span><span class="s1">; </span><span class="s2">opacity:</span><span class="s1"> </span><span class="s11">1</span><span class="s1">; }</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p8"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s6">.animate-slide</span><span class="s4"> { </span><span class="s2">animation:</span><span class="s4"> </span><span class="s1">slideIn</span><span class="s4"> </span><span class="s11">0.3s</span><span class="s4"> </span><span class="s1">ease-out</span><span class="s4"> </span><span class="s1">forwards</span><span class="s4">; }</span></p>
-<p class="p2"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s1">style</span><span class="s3">&gt;</span></p>
-<p class="p2"><span class="s3">&lt;/</span><span class="s1">head</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s3">&lt;</span><span class="s6">body</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"p-4 md:p-8 max-w-4xl mx-auto min-h-screen flex flex-col"</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p9"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;!-- Header Section --&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">header</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"flex justify-between items-center mb-8"</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">h1</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"heading-font text-2xl font-bold text-blue-500 tracking-wider"</span><span class="s3">&gt;</span><span class="s4">APEX MIND</span><span class="s3">&lt;/</span><span class="s6">h1</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">p</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"text-xs text-slate-500 uppercase tracking-widest"</span><span class="s3">&gt;</span><span class="s4">Protocol 6 v2.3</span><span class="s3">&lt;/</span><span class="s6">p</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"flex items-center gap-4"</span><span class="s3">&gt;</span></p>
-<p class="p9"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">&lt;!-- Settings/Backup Gear --&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s4"> </span><span class="s2">onclick</span><span class="s3">=</span><span class="s1">"openModal('settings')"</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"w-10 h-10 glass flex items-center justify-center text-slate-400 hover:text-white transition"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">i</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"fa-solid fa-gear"</span><span class="s3">&gt;&lt;/</span><span class="s6">i</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"text-right hidden md:block"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"text-[10px] text-slate-500 uppercase tracking-widest"</span><span class="s3">&gt;</span><span class="s4">Streak</span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"heading-font text-lg"</span><span class="s3">&gt;&lt;</span><span class="s6">i</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"fa-solid fa-fire streak-fire mr-1"</span><span class="s3">&gt;&lt;/</span><span class="s6">i</span><span class="s3">&gt;&lt;</span><span class="s6">span</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"streak-display"</span><span class="s3">&gt;</span><span class="s4">0</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s1"> </span><span class="s2">class</span><span class="s3">=</span><span class="s5">"text-right"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"text-xs text-slate-400 mb-1"</span><span class="s3">&gt;</span><span class="s4">XP: </span><span class="s3">&lt;</span><span class="s6">span</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"xp-display"</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"text-blue-400 font-bold"</span><span class="s3">&gt;</span><span class="s4">0</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"heading-font text-[10px] text-slate-500"</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"rank-display"</span><span class="s3">&gt;</span><span class="s4">RANK: UNKNOWN</span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p2"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s1">header</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p9"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;!-- Main XP Progress --&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"glass p-6 mb-8 relative overflow-hidden border-b-2 border-blue-500/20"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"flex justify-between items-end mb-3"</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">span</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"text-xs font-bold uppercase tracking-tighter text-blue-400 block mb-1"</span><span class="s3">&gt;</span><span class="s4">Current Protocol</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">span</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"text-sm font-semibold uppercase tracking-wider text-white"</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"current-phase-name"</span><span class="s3">&gt;</span><span class="s4">PHASE: THE OBSERVER</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">span</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"text-[10px] text-slate-500 font-mono"</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"next-phase-info"</span><span class="s3">&gt;</span><span class="s4">ANALYZING PROGRESS...</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s1"> </span><span class="s2">class</span><span class="s3">=</span><span class="s5">"xp-bar"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"xp-bar-fill"</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"xp-progress"</span><span class="s3">&gt;&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p9"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;!-- Daily Status &amp; Intel --&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"grid grid-cols-1 md:grid-cols-3 gap-4 mb-8"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"md:col-span-2 glass p-6 border-l-4 border-blue-500"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">h2</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"heading-font text-[10px] text-slate-500 mb-2 flex items-center uppercase tracking-widest"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">i</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"fa-solid fa-bolt text-yellow-500 mr-2"</span><span class="s3">&gt;&lt;/</span><span class="s6">i</span><span class="s3">&gt;</span><span class="s4"> Daily Intel</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">h2</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">p</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"text-md font-light leading-relaxed italic text-slate-200"</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"daily-tip"</span><span class="s3">&gt;</span><span class="s4">"Syncing data..."</span><span class="s3">&lt;/</span><span class="s6">p</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"daily-status-card"</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"glass p-6 flex flex-col justify-center items-center text-center transition-all duration-500"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">h2</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"heading-font text-[10px] text-slate-500 mb-2 uppercase tracking-widest"</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"daily-label"</span><span class="s3">&gt;</span><span class="s4">Daily Logs</span><span class="s3">&lt;/</span><span class="s6">h2</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"text-3xl font-bold text-white mb-1"</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"daily-count"</span><span class="s3">&gt;</span><span class="s4">0 / 3</span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">p</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"text-[10px] text-slate-500 uppercase tracking-widest font-bold"</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"daily-status-text"</span><span class="s3">&gt;</span><span class="s4">Active</span><span class="s3">&lt;/</span><span class="s6">p</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p9"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;!-- Phase Countdown --&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"countdown-banner"</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"hidden glass p-4 mb-8 border border-amber-500/30 bg-amber-500/5 animate-pulse"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"flex items-center justify-between text-xs text-amber-200 font-mono"</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">span</span><span class="s3">&gt;&lt;</span><span class="s6">i</span><span class="s1"> </span><span class="s2">class</span><span class="s3">=</span><span class="s5">"fa-solid fa-hourglass-half mr-2"</span><span class="s3">&gt;&lt;/</span><span class="s6">i</span><span class="s3">&gt;</span><span class="s1"> PROTOCOL COMPLETE FOR TODAY</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">span</span><span class="s1"> </span><span class="s2">id</span><span class="s3">=</span><span class="s5">"days-to-unlock"</span><span class="s3">&gt;</span><span class="s1">Analyzing unlock window...</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p9"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;!-- App Tabs --&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"features-grid"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"glass p-6 level-card"</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"feat-scanner"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"flex justify-between items-start mb-4"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">i</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"fa-solid fa-eye text-2xl text-cyan-400"</span><span class="s3">&gt;&lt;/</span><span class="s6">i</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">span</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"text-[10px] bg-cyan-900/30 text-cyan-400 px-2 py-1 rounded uppercase font-bold tracking-widest"</span><span class="s3">&gt;</span><span class="s4">Active</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">h3</span><span class="s1"> </span><span class="s2">class</span><span class="s3">=</span><span class="s5">"heading-font text-md mb-2"</span><span class="s3">&gt;</span><span class="s1">Emotion Scanner</span><span class="s3">&lt;/</span><span class="s6">h3</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">p</span><span class="s1"> </span><span class="s2">class</span><span class="s3">=</span><span class="s5">"text-sm text-slate-400 mb-4"</span><span class="s3">&gt;</span><span class="s1">Identify emotions in media or people. Today's primary task.</span><span class="s3">&lt;/</span><span class="s6">p</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"btn-scanner"</span><span class="s4"> </span><span class="s2">onclick</span><span class="s3">=</span><span class="s1">"openModal('scanner')"</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"w-full py-2 bg-cyan-600/20 border border-cyan-500/50 hover:bg-cyan-500/30 text-cyan-400 rounded-lg text-sm transition font-semibold"</span><span class="s3">&gt;</span><span class="s4">INITIALIZE SCAN</span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"glass p-6 level-card locked"</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"feat-battery"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"flex justify-between items-start mb-4"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">i</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"fa-solid fa-battery-half text-2xl text-emerald-400"</span><span class="s3">&gt;&lt;/</span><span class="s6">i</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">span</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"text-[10px] bg-slate-800 text-slate-500 px-2 py-1 rounded"</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"label-battery"</span><span class="s3">&gt;</span><span class="s4">LOCKED: 500 XP</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">h3</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"heading-font text-md mb-2"</span><span class="s3">&gt;</span><span class="s4">Battery Check</span><span class="s3">&lt;/</span><span class="s6">h3</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">p</span><span class="s1"> </span><span class="s2">class</span><span class="s3">=</span><span class="s5">"text-sm text-slate-400 mb-4"</span><span class="s3">&gt;</span><span class="s1">Internal diagnostics: Track your own mental energy levels.</span><span class="s3">&lt;/</span><span class="s6">p</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"btn-battery"</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"w-full py-2 bg-slate-800 text-slate-500 rounded-lg text-sm cursor-not-allowed"</span><span class="s3">&gt;</span><span class="s4">LOCKED</span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"glass p-6 level-card locked"</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"feat-repair"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"flex justify-between items-start mb-4"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">i</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"fa-solid fa-wrench text-2xl text-orange-400"</span><span class="s3">&gt;&lt;/</span><span class="s6">i</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">span</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"text-[10px] bg-slate-800 text-slate-500 px-2 py-1 rounded"</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"label-repair"</span><span class="s3">&gt;</span><span class="s4">LOCKED: 1500 XP</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">h3</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"heading-font text-md mb-2"</span><span class="s3">&gt;</span><span class="s4">Repair Lab</span><span class="s3">&lt;/</span><span class="s6">h3</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">p</span><span class="s1"> </span><span class="s2">class</span><span class="s3">=</span><span class="s5">"text-sm text-slate-400 mb-4"</span><span class="s3">&gt;</span><span class="s1">Social scripts to fix glitches with friends or family.</span><span class="s3">&lt;/</span><span class="s6">p</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"btn-repair"</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"w-full py-2 bg-slate-800 text-slate-500 rounded-lg text-sm cursor-not-allowed"</span><span class="s3">&gt;</span><span class="s4">LOCKED</span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"glass p-6 level-card locked"</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"feat-timer"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"flex justify-between items-start mb-4"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">i</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"fa-solid fa-stopwatch text-2xl text-red-400"</span><span class="s3">&gt;&lt;/</span><span class="s6">i</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">span</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"text-[10px] bg-slate-800 text-slate-500 px-2 py-1 rounded"</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"label-timer"</span><span class="s3">&gt;</span><span class="s4">LOCKED: 3000 XP</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">h3</span><span class="s1"> </span><span class="s2">class</span><span class="s3">=</span><span class="s5">"heading-font text-md mb-2"</span><span class="s3">&gt;</span><span class="s1">Recovery Timer</span><span class="s3">&lt;/</span><span class="s6">h3</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">p</span><span class="s1"> </span><span class="s2">class</span><span class="s3">=</span><span class="s5">"text-sm text-slate-400 mb-4"</span><span class="s3">&gt;</span><span class="s1">Training: Track how fast you bounce back from 'Tilt'.</span><span class="s3">&lt;/</span><span class="s6">p</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"btn-timer"</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"w-full py-2 bg-slate-800 text-slate-500 rounded-lg text-sm cursor-not-allowed"</span><span class="s3">&gt;</span><span class="s4">LOCKED</span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p9"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;!-- Summary of Today --&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"today-summary"</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"hidden mb-8"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">h2</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"heading-font text-[10px] text-slate-500 mb-4 uppercase tracking-widest"</span><span class="s3">&gt;</span><span class="s4">Today's Data Logs</span><span class="s3">&lt;/</span><span class="s6">h2</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"summary-list"</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"space-y-2"</span><span class="s3">&gt;&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p9"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;!-- Modals --&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"modal-container"</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"fixed inset-0 bg-black/95 backdrop-blur-md hidden flex items-center justify-center p-4 z-50"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"glass w-full max-w-xl p-8 relative shadow-2xl border-slate-700"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s4"> </span><span class="s2">onclick</span><span class="s3">=</span><span class="s1">"closeModal()"</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"absolute top-4 right-4 text-slate-400 hover:text-white transition"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">i</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"fa-solid fa-xmark text-xl"</span><span class="s3">&gt;&lt;/</span><span class="s6">i</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"modal-content"</span><span class="s3">&gt;&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p9"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;!-- Toast Notification --&gt;</span></p>
-<p class="p4"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s4"> </span><span class="s2">id</span><span class="s3">=</span><span class="s1">"toast"</span><span class="s4"> </span><span class="s2">class</span><span class="s3">=</span><span class="s1">"fixed bottom-8 left-1/2 -translate-x-1/2 glass px-6 py-3 border-blue-500 border hidden text-blue-400 font-semibold text-sm z-[100] transition-all"</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>XP GAINED</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p2"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s1">script</span><span class="s3">&gt;</span></p>
-<p class="p9"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">// --- APP DATA ---</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">let</span><span class="s1"> state = {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>xp: </span><span class="s12">0</span><span class="s1">,</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>logs: [],</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>dailyCount: </span><span class="s12">0</span><span class="s1">,</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>dailyLimit: </span><span class="s12">3</span><span class="s1">,</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>streak: </span><span class="s12">0</span><span class="s1">,</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>lastDate: </span><span class="s7">null</span><span class="s1">,</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>lastReset: </span><span class="s7">null</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>};</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">const</span><span class="s1"> </span><span class="s13">PHASES</span><span class="s1"> = [</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s9">"THE OBSERVER"</span><span class="s1">, threshold: </span><span class="s12">0</span><span class="s1"> },</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s9">"THE ARCHITECT"</span><span class="s1">, threshold: </span><span class="s12">500</span><span class="s1"> },</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s9">"THE DIPLOMAT"</span><span class="s1">, threshold: </span><span class="s12">1500</span><span class="s1"> },</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s9">"THE STRATEGIST"</span><span class="s1">, threshold: </span><span class="s12">3000</span><span class="s1"> },</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s9">"APEX MASTER"</span><span class="s1">, threshold: </span><span class="s12">5000</span><span class="s1"> }</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>];</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">const</span><span class="s1"> </span><span class="s13">EMOTIONS</span><span class="s1"> = [</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s9">"Frustrated"</span><span class="s1">, cat: </span><span class="s9">"High Energy"</span><span class="s1">, color: </span><span class="s9">"text-red-400"</span><span class="s1"> },</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s9">"Excited"</span><span class="s1">, cat: </span><span class="s9">"High Energy"</span><span class="s1">, color: </span><span class="s9">"text-yellow-400"</span><span class="s1"> },</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s9">"Bored"</span><span class="s1">, cat: </span><span class="s9">"Low Energy"</span><span class="s1">, color: </span><span class="s9">"text-slate-400"</span><span class="s1"> },</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s9">"Anxious"</span><span class="s1">, cat: </span><span class="s9">"High Energy"</span><span class="s1">, color: </span><span class="s9">"text-orange-400"</span><span class="s1"> },</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s9">"Focused"</span><span class="s1">, cat: </span><span class="s9">"High Energy"</span><span class="s1">, color: </span><span class="s9">"text-cyan-400"</span><span class="s1"> },</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s9">"Calm"</span><span class="s1">, cat: </span><span class="s9">"Low Energy"</span><span class="s1">, color: </span><span class="s9">"text-emerald-400"</span><span class="s1"> },</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s9">"Annoyed"</span><span class="s1">, cat: </span><span class="s9">"Mid Energy"</span><span class="s1">, color: </span><span class="s9">"text-pink-400"</span><span class="s1"> },</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s9">"Proud"</span><span class="s1">, cat: </span><span class="s9">"Mid Energy"</span><span class="s1">, color: </span><span class="s9">"text-blue-400"</span><span class="s1"> },</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s9">"Confused"</span><span class="s1">, cat: </span><span class="s9">"Mid Energy"</span><span class="s1">, color: </span><span class="s9">"text-purple-400"</span><span class="s1"> },</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s9">"Lonely"</span><span class="s1">, cat: </span><span class="s9">"Low Energy"</span><span class="s1">, color: </span><span class="s9">"text-indigo-400"</span><span class="s1"> },</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ name: </span><span class="s9">"Content"</span><span class="s1">, cat: </span><span class="s9">"Low Energy"</span><span class="s1">, color: </span><span class="s9">"text-teal-400"</span><span class="s1"> },</span></p>
-<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span>{ name: </span><span class="s1">"Overwhelmed"</span><span class="s4">, cat: </span><span class="s1">"Max Energy"</span><span class="s4">, color: </span><span class="s1">"text-rose-500"</span><span class="s4"> }</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>];</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">const</span><span class="s1"> </span><span class="s13">TARGETS</span><span class="s1"> = [</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ id: </span><span class="s9">'family'</span><span class="s1">, label: </span><span class="s9">'Family'</span><span class="s1">, icon: </span><span class="s9">'fa-house'</span><span class="s1"> },</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ id: </span><span class="s9">'friend'</span><span class="s1">, label: </span><span class="s9">'Friend'</span><span class="s1">, icon: </span><span class="s9">'fa-user-group'</span><span class="s1"> },</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ id: </span><span class="s9">'media'</span><span class="s1">, label: </span><span class="s9">'Video/Game'</span><span class="s1">, icon: </span><span class="s9">'fa-gamepad'</span><span class="s1"> },</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ id: </span><span class="s9">'stranger'</span><span class="s1">, label: </span><span class="s9">'Other'</span><span class="s1">, icon: </span><span class="s9">'fa-user-secret'</span><span class="s1"> },</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{ id: </span><span class="s9">'self'</span><span class="s1">, label: </span><span class="s9">'Myself'</span><span class="s1">, icon: </span><span class="s9">'fa-fingerprint'</span><span class="s1"> }</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>];</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">const</span><span class="s1"> </span><span class="s13">DAILY_INTELS</span><span class="s1"> = [</span></p>
-<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">"Losing is just data. Every time you lose, your brain maps out a mistake to avoid next time."</span><span class="s4">,</span></p>
-<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">"Repair Phrases are power moves. Apologizing first actually shows higher social status."</span><span class="s4">,</span></p>
-<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">"Physical hack: If your heart is racing, exhale twice as long as you inhale."</span><span class="s4">,</span></p>
-<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">"Peer pressure isn't an attack, it's a test of your internal core code."</span><span class="s4">,</span></p>
-<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">"Recovery speed is the ultimate flex. How fast can you go from 'Tilt' to 'Focus'?"</span><span class="s4">,</span></p>
-<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">"If you're feeling 'cringe,' it usually just means your social awareness is upgrading."</span><span class="s4">,</span></p>
-<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">"Anger is a secondary emotion. It usually hides fear, embarrassment, or sadness."</span><span class="s4">,</span></p>
-<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">"Boundaries aren't walls to keep people out; they are gates to let the right ones in."</span><span class="s4">,</span></p>
-<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">"Active listening is like scouting in a game. You're gathering info others miss."</span><span class="s4">,</span></p>
-<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">"Your 'Operating System' is still being built. Be patient with your hardware lags."</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>];</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p9"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">// --- CORE LOGIC ---</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> initApp() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> saved = localStorage.getItem(</span><span class="s9">'apex_mind_v2_3'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">if</span><span class="s1"> (saved) state = </span><span class="s13">JSON</span><span class="s1">.parse(saved);</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>handleTimeLogic();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>updateUI();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>setDailyIntel();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> handleTimeLogic() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> now = </span><span class="s7">new</span><span class="s1"> </span><span class="s13">Date</span><span class="s1">();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> today = now.toDateString();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> yesterday = </span><span class="s7">new</span><span class="s1"> </span><span class="s13">Date</span><span class="s1">(now);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>yesterday.setDate(yesterday.getDate() - </span><span class="s12">1</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> yesterdayStr = yesterday.toDateString();</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">if</span><span class="s1"> (state.lastReset !== today) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s7">if</span><span class="s1"> (state.lastDate === yesterdayStr) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>state.streak += </span><span class="s12">1</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>} </span><span class="s7">else</span><span class="s1"> </span><span class="s7">if</span><span class="s1"> (state.lastDate !== today) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>state.streak = </span><span class="s12">0</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
-<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>state.dailyCount = </span><span class="s12">0</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>state.lastReset = today;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>save();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> save() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>localStorage.setItem(</span><span class="s9">'apex_mind_v2_3'</span><span class="s1">, </span><span class="s13">JSON</span><span class="s1">.stringify(state));</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> updateUI() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById(</span><span class="s9">'xp-display'</span><span class="s1">).innerText = state.xp;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById(</span><span class="s9">'streak-display'</span><span class="s1">).innerText = state.streak;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById(</span><span class="s9">'daily-count'</span><span class="s1">).innerText = </span><span class="s9">`</span><span class="s1">${state.dailyCount}</span><span class="s9"> / </span><span class="s1">${state.dailyLimit}</span><span class="s9">`</span><span class="s1">;</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">let</span><span class="s1"> currentPhase = </span><span class="s13">PHASES</span><span class="s1">[</span><span class="s12">0</span><span class="s1">];</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">let</span><span class="s1"> nextPhase = </span><span class="s13">PHASES</span><span class="s1">[</span><span class="s12">1</span><span class="s1">];</span></p>
-<p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">for</span><span class="s1"> (</span><span class="s7">let</span><span class="s1"> i = </span><span class="s13">PHASES</span><span class="s1">.length - </span><span class="s12">1</span><span class="s1">; i &gt;= </span><span class="s12">0</span><span class="s1">; i--) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s7">if</span><span class="s1"> (state.xp &gt;= </span><span class="s13">PHASES</span><span class="s1">[i].threshold) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>currentPhase = </span><span class="s13">PHASES</span><span class="s1">[i];</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>nextPhase = </span><span class="s13">PHASES</span><span class="s1">[i+</span><span class="s12">1</span><span class="s1">] || </span><span class="s13">PHASES</span><span class="s1">[i];</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s7">break</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById(</span><span class="s9">'rank-display'</span><span class="s1">).innerText = </span><span class="s9">`RANK: </span><span class="s1">${currentPhase.name}</span><span class="s9">`</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById(</span><span class="s9">'current-phase-name'</span><span class="s1">).innerText = </span><span class="s9">`PHASE: </span><span class="s1">${currentPhase.name}</span><span class="s9">`</span><span class="s1">;</span></p>
-<p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> range = nextPhase.threshold - currentPhase.threshold;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> progress = range === </span><span class="s12">0</span><span class="s1"> ? </span><span class="s12">100</span><span class="s1"> : ((state.xp - currentPhase.threshold) / range) * </span><span class="s12">100</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById(</span><span class="s9">'xp-bar-fill'</span><span class="s1">).style.width = </span><span class="s9">`</span><span class="s1">${</span><span class="s13">Math</span><span class="s1">.min(progress, </span><span class="s12">100</span><span class="s1">)}</span><span class="s9">%`</span><span class="s1">;</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p9"><span class="s4"><span class="Apple-converted-space">            </span></span><span class="s1">// Daily Cap Handling</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> card = document.getElementById(</span><span class="s9">'daily-status-card'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> banner = document.getElementById(</span><span class="s9">'countdown-banner'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> scanBtn = document.getElementById(</span><span class="s9">'btn-scanner'</span><span class="s1">);</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">if</span><span class="s1"> (state.dailyCount &gt;= state.dailyLimit) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>card.classList.add(</span><span class="s9">'protocol-complete'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById(</span><span class="s9">'daily-status-text'</span><span class="s1">).innerText = </span><span class="s9">"Complete"</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById(</span><span class="s9">'daily-status-text'</span><span class="s1">).classList.add(</span><span class="s9">'text-amber-400'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>banner.classList.remove(</span><span class="s9">'hidden'</span><span class="s1">);</span></p>
-<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s7">const</span><span class="s1"> xpNeeded = nextPhase.threshold - state.xp;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s7">const</span><span class="s1"> days = </span><span class="s13">Math</span><span class="s1">.ceil(xpNeeded / </span><span class="s12">150</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById(</span><span class="s9">'days-to-unlock'</span><span class="s1">).innerText = xpNeeded &gt; </span><span class="s12">0</span><span class="s1"> ? </span><span class="s9">`ETA: </span><span class="s1">${days}</span><span class="s9"> days until </span><span class="s1">${nextPhase.name}</span><span class="s9">`</span><span class="s1"> : </span><span class="s9">"NEW PHASE UNLOCKED!"</span><span class="s1">;</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>scanBtn.innerText = </span><span class="s9">"VIEW DAILY DATA"</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>scanBtn.onclick = () =&gt; showDailySummary();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>} </span><span class="s7">else</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>card.classList.remove(</span><span class="s9">'protocol-complete'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById(</span><span class="s9">'daily-status-text'</span><span class="s1">).innerText = </span><span class="s9">"Active"</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>document.getElementById(</span><span class="s9">'daily-status-text'</span><span class="s1">).classList.remove(</span><span class="s9">'text-amber-400'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>banner.classList.add(</span><span class="s9">'hidden'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>scanBtn.innerText = </span><span class="s9">"INITIALIZE SCAN"</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>scanBtn.onclick = () =&gt; openModal(</span><span class="s9">'scanner'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span>unlock(state.xp &gt;= </span><span class="s12">500</span><span class="s4">, </span><span class="s1">'feat-battery'</span><span class="s4">, </span><span class="s1">'btn-battery'</span><span class="s4">, </span><span class="s1">'label-battery'</span><span class="s4">, </span><span class="s1">'calibrate'</span><span class="s4">, </span><span class="s1">'emerald'</span><span class="s4">);</span></p>
-<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span>unlock(state.xp &gt;= </span><span class="s12">1500</span><span class="s4">, </span><span class="s1">'feat-repair'</span><span class="s4">, </span><span class="s1">'btn-repair'</span><span class="s4">, </span><span class="s1">'label-repair'</span><span class="s4">, </span><span class="s1">'access lab'</span><span class="s4">, </span><span class="s1">'orange'</span><span class="s4">);</span></p>
-<p class="p6"><span class="s4"><span class="Apple-converted-space">            </span>unlock(state.xp &gt;= </span><span class="s12">3000</span><span class="s4">, </span><span class="s1">'feat-timer'</span><span class="s4">, </span><span class="s1">'btn-timer'</span><span class="s4">, </span><span class="s1">'label-timer'</span><span class="s4">, </span><span class="s1">'initialize tracker'</span><span class="s4">, </span><span class="s1">'red'</span><span class="s4">);</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>updateSummaryList();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> unlock(condition, cardId, btnId, labelId, btnText, color) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> card = document.getElementById(cardId);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> btn = document.getElementById(btnId);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> label = document.getElementById(labelId);</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">if</span><span class="s1"> (condition) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>card.classList.remove(</span><span class="s9">'locked'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>label.innerText = </span><span class="s9">"UNLOCKED"</span><span class="s1">;</span></p>
-<p class="p6"><span class="s4"><span class="Apple-converted-space">                </span>label.className = </span><span class="s1">`text-[10px] bg-</span><span class="s4">${color}</span><span class="s1">-900/30 text-</span><span class="s4">${color}</span><span class="s1">-400 px-2 py-1 rounded font-bold uppercase tracking-widest`</span><span class="s4">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>btn.innerText = btnText.toUpperCase();</span></p>
-<p class="p6"><span class="s4"><span class="Apple-converted-space">                </span>btn.className = </span><span class="s1">`w-full py-2 bg-</span><span class="s4">${color}</span><span class="s1">-600/20 border border-</span><span class="s4">${color}</span><span class="s1">-500/50 hover:bg-</span><span class="s4">${color}</span><span class="s1">-500/30 text-</span><span class="s4">${color}</span><span class="s1">-400 rounded-lg text-sm transition font-semibold`</span><span class="s4">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>btn.onclick = () =&gt; openModal(cardId.split(</span><span class="s9">'-'</span><span class="s1">)[</span><span class="s12">1</span><span class="s1">]);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> setDailyIntel() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> day = </span><span class="s13">Math</span><span class="s1">.floor(</span><span class="s7">new</span><span class="s1"> </span><span class="s13">Date</span><span class="s1">().getTime() / </span><span class="s12">86400000</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById(</span><span class="s9">'daily-tip'</span><span class="s1">).innerText = </span><span class="s9">`"</span><span class="s1">${</span><span class="s13">DAILY_INTELS</span><span class="s1">[day % </span><span class="s13">DAILY_INTELS</span><span class="s1">.length]}</span><span class="s9">"`</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> gainXP(amt, type, value, target = </span><span class="s7">null</span><span class="s1">) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">if</span><span class="s1"> (state.dailyCount &lt; state.dailyLimit) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>state.xp += amt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>state.dailyCount += </span><span class="s12">1</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>state.lastDate = </span><span class="s7">new</span><span class="s1"> </span><span class="s13">Date</span><span class="s1">().toDateString();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>state.logs.push({<span class="Apple-converted-space"> </span></span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>timestamp: </span><span class="s7">new</span><span class="s1"> </span><span class="s13">Date</span><span class="s1">().toISOString(),<span class="Apple-converted-space"> </span></span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>date: </span><span class="s7">new</span><span class="s1"> </span><span class="s13">Date</span><span class="s1">().toDateString(),</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>type,<span class="Apple-converted-space"> </span></span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>value,</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>target</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>});</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>showToast(</span><span class="s9">`+</span><span class="s1">${amt}</span><span class="s9"> XP`</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>save();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>updateUI();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>} </span><span class="s7">else</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>showToast(</span><span class="s9">"DAILY PROTOCOL COMPLETE"</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> showToast(msg) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> t = document.getElementById(</span><span class="s9">'toast'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>t.innerText = msg;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>t.classList.remove(</span><span class="s9">'hidden'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; t.classList.add(</span><span class="s9">'hidden'</span><span class="s1">), </span><span class="s12">2500</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> updateSummaryList() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> today = </span><span class="s7">new</span><span class="s1"> </span><span class="s13">Date</span><span class="s1">().toDateString();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> todayLogs = state.logs.filter(l =&gt; l.date === today);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> summaryDiv = document.getElementById(</span><span class="s9">'today-summary'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> listDiv = document.getElementById(</span><span class="s9">'summary-list'</span><span class="s1">);</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">if</span><span class="s1"> (todayLogs.length &gt; </span><span class="s12">0</span><span class="s1">) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>summaryDiv.classList.remove(</span><span class="s9">'hidden'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>listDiv.innerHTML = todayLogs.map(l =&gt; </span><span class="s9">`</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="glass p-3 flex justify-between items-center border-l-2 border-blue-500/50"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="flex flex-col"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;span class="text-[8px] uppercase text-slate-500 font-bold tracking-widest"&gt;</span><span class="s4">${l.type}</span><span class="s1"> Logged&lt;/span&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;span class="text-sm font-semibold text-white"&gt;</span><span class="s4">${l.value}</span><span class="s1">&lt;/span&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="text-right"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                             </span></span><span class="s4">${l.target ? </span><span class="s1">`&lt;span class="text-[9px] bg-blue-900/30 text-blue-400 px-2 py-1 rounded uppercase font-bold tracking-tighter"&gt;</span><span class="s4">${l.target}</span><span class="s1">&lt;/span&gt;`</span><span class="s4"> : </span><span class="s1">''</span><span class="s4">}</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>`</span><span class="s4">).join(</span><span class="s1">''</span><span class="s4">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>} </span><span class="s7">else</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>summaryDiv.classList.add(</span><span class="s9">'hidden'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> showDailySummary() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>openModal(</span><span class="s9">'summary'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p9"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">// --- BACKUP / SYNC LOGIC ---</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> exportData() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> dataStr = </span><span class="s9">"data:text/json;charset=utf-8,"</span><span class="s1"> + encodeURIComponent(</span><span class="s13">JSON</span><span class="s1">.stringify(state));</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> downloadAnchorNode = document.createElement(</span><span class="s9">'a'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>downloadAnchorNode.setAttribute(</span><span class="s9">"href"</span><span class="s1">, dataStr);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>downloadAnchorNode.setAttribute(</span><span class="s9">"download"</span><span class="s1">, </span><span class="s9">"ApexMind_Backup_"</span><span class="s1"> + </span><span class="s7">new</span><span class="s1"> </span><span class="s13">Date</span><span class="s1">().toISOString().split(</span><span class="s9">'T'</span><span class="s1">)[</span><span class="s12">0</span><span class="s1">] + </span><span class="s9">".json"</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>document.body.appendChild(downloadAnchorNode);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>downloadAnchorNode.click();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>downloadAnchorNode.remove();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>showToast(</span><span class="s9">"DATA BACKUP CREATED"</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> triggerImport() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById(</span><span class="s9">'import-input'</span><span class="s1">).click();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> handleImport(event) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> file = event.target.files[</span><span class="s12">0</span><span class="s1">];</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">if</span><span class="s1"> (!file) </span><span class="s7">return</span><span class="s1">;</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> reader = </span><span class="s7">new</span><span class="s1"> </span><span class="s13">FileReader</span><span class="s1">();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>reader.onload = </span><span class="s7">function</span><span class="s1">(e) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s7">try</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s7">const</span><span class="s1"> importedState = </span><span class="s13">JSON</span><span class="s1">.parse(e.target.result);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s7">if</span><span class="s1"> (importedState.xp !== </span><span class="s7">undefined</span><span class="s1">) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>state = importedState;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>save();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>updateUI();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>showToast(</span><span class="s9">"SYSTEM SYNC SUCCESSFUL"</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>closeModal();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>} </span><span class="s7">catch</span><span class="s1"> (err) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>showToast(</span><span class="s9">"ERROR: INVALID FILE"</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>};</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>reader.readAsText(file);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p9"><span class="s4"><span class="Apple-converted-space">        </span></span><span class="s1">// --- MODAL VIEWS ---</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">let</span><span class="s1"> currentScanEmotion = </span><span class="s7">null</span><span class="s1">;</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> openModal(type) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> container = document.getElementById(</span><span class="s9">'modal-container'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> content = document.getElementById(</span><span class="s9">'modal-content'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>container.classList.remove(</span><span class="s9">'hidden'</span><span class="s1">);</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">if</span><span class="s1"> (type === </span><span class="s9">'scanner'</span><span class="s1">) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>renderEmotionGrid();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>} </span><span class="s7">else</span><span class="s1"> </span><span class="s7">if</span><span class="s1"> (type === </span><span class="s9">'summary'</span><span class="s1">) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>renderSummary();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>} </span><span class="s7">else</span><span class="s1"> </span><span class="s7">if</span><span class="s1"> (type === </span><span class="s9">'battery'</span><span class="s1">) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>renderBattery();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>} </span><span class="s7">else</span><span class="s1"> </span><span class="s7">if</span><span class="s1"> (type === </span><span class="s9">'repair'</span><span class="s1">) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>renderRepair();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>} </span><span class="s7">else</span><span class="s1"> </span><span class="s7">if</span><span class="s1"> (type === </span><span class="s9">'timer'</span><span class="s1">) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>renderTimer();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>} </span><span class="s7">else</span><span class="s1"> </span><span class="s7">if</span><span class="s1"> (type === </span><span class="s9">'settings'</span><span class="s1">) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>renderSettings();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> renderSettings() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> content = document.getElementById(</span><span class="s9">'modal-content'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>content.innerHTML = </span><span class="s9">`</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;h2 class="heading-font text-xl text-slate-200 mb-2 uppercase tracking-tighter"&gt;System Settings&lt;/h2&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;p class="text-xs text-slate-500 mb-8 uppercase tracking-widest font-bold"&gt;Protocol Maintenance &amp; Backups&lt;/p&gt;</span></p>
-<p class="p10"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="space-y-4"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="glass p-5 border border-white/5"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;h4 class="text-sm font-bold text-blue-400 uppercase mb-2"&gt;Export Data&lt;/h4&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;p class="text-xs text-slate-400 mb-4"&gt;Save your XP, Streaks, and Logs to a local file. Do this once a week!&lt;/p&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;button onclick="exportData()" class="w-full py-3 bg-blue-600/20 border border-blue-500/50 text-blue-400 rounded-lg text-xs font-bold hover:bg-blue-500/30 transition"&gt;DOWNLOAD BACKUP (.JSON)&lt;/button&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="glass p-5 border border-white/5"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;h4 class="text-sm font-bold text-amber-400 uppercase mb-2"&gt;Restore Data&lt;/h4&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;p class="text-xs text-slate-400 mb-4"&gt;If your browser clears your progress, upload your backup file here.&lt;/p&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;input type="file" id="import-input" class="hidden" accept=".json" onchange="handleImport(event)"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;button onclick="triggerImport()" class="w-full py-3 bg-amber-600/20 border border-amber-500/50 text-amber-400 rounded-lg text-xs font-bold hover:bg-amber-500/30 transition"&gt;UPLOAD BACKUP FILE&lt;/button&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="mt-8 pt-6 border-t border-white/5 text-center"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;p class="text-[10px] text-slate-600 uppercase tracking-widest mb-1"&gt;Apex Mind Core v2.3&lt;/p&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;p class="text-[9px] text-slate-700"&gt;All data stored locally. No cloud sync active.&lt;/p&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">            </span>`</span><span class="s4">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> renderEmotionGrid() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> content = document.getElementById(</span><span class="s9">'modal-content'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>content.innerHTML = </span><span class="s9">`</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="animate-slide"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;h2 class="heading-font text-xl text-cyan-400 mb-2 uppercase tracking-tighter"&gt;Emotion Scanner: Step 1&lt;/h2&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;p class="text-sm text-slate-400 mb-6 font-light italic"&gt;Identify the primary emotion detected in your environment.&lt;/p&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span></span><span class="s4">${</span><span class="s13">EMOTIONS</span><span class="s4">.map(e =&gt; </span><span class="s1">`</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;button onclick="selectEmotion('</span><span class="s4">${e.name}</span><span class="s1">')" class="emo-btn p-4 rounded-xl text-left </span><span class="s4">${currentScanEmotion === e.name ? </span><span class="s1">'selected'</span><span class="s4"> : </span><span class="s1">''</span><span class="s4">}</span><span class="s1">"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;span class="block text-[10px] uppercase font-bold tracking-tighter opacity-50 mb-1"&gt;</span><span class="s4">${e.cat}</span><span class="s1">&lt;/span&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;span class="text-sm font-semibold </span><span class="s4">${e.color}</span><span class="s1">"&gt;</span><span class="s4">${e.name}</span><span class="s1">&lt;/span&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/button&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>`</span><span class="s4">).join(</span><span class="s1">''</span><span class="s4">)}</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">            </span>`</span><span class="s4">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> selectEmotion(emo) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>currentScanEmotion = emo;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>renderTargetStep();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> renderTargetStep() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> content = document.getElementById(</span><span class="s9">'modal-content'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>content.innerHTML = </span><span class="s9">`</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="animate-slide"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="flex items-center gap-3 mb-4"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;button onclick="renderEmotionGrid()" class="text-slate-500 hover:text-white"&gt;&lt;i class="fa-solid fa-arrow-left"&gt;&lt;/i&gt;&lt;/button&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;h2 class="heading-font text-xl text-cyan-400 uppercase tracking-tighter"&gt;Step 2: Source Link&lt;/h2&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;p class="text-sm text-slate-400 mb-6 font-light"&gt;Target acquired: &lt;span class="text-white font-bold"&gt;</span><span class="s4">${currentScanEmotion}</span><span class="s1">&lt;/span&gt;. Who/what displayed this?&lt;/p&gt;</span></p>
-<p class="p10"><span class="s1"><span class="Apple-converted-space">                    </span></span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="grid grid-cols-1 gap-2 mb-8"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span></span><span class="s4">${</span><span class="s13">TARGETS</span><span class="s4">.map(t =&gt; </span><span class="s1">`</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;button onclick="completeScan('</span><span class="s4">${t.label}</span><span class="s1">')" class="glass p-4 text-left flex items-center hover:bg-white/5 transition border border-transparent hover:border-cyan-500/50"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div class="w-10 h-10 rounded-full bg-cyan-900/20 flex items-center justify-center text-cyan-400 mr-4"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;i class="fa-solid </span><span class="s4">${t.icon}</span><span class="s1">"&gt;&lt;/i&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;span class="block text-md font-semibold text-slate-200"&gt;</span><span class="s4">${t.label}</span><span class="s1">&lt;/span&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                                    </span>&lt;span class="text-[10px] text-slate-500 uppercase font-bold tracking-widest"&gt;Select Source&lt;/span&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;span class="ml-auto text-[10px] text-cyan-500 font-bold"&gt;+10 XP BONUS&lt;/span&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/button&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>`</span><span class="s4">).join(</span><span class="s1">''</span><span class="s4">)}</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;button onclick="completeScan(null)" class="text-center py-2 text-xs text-slate-600 uppercase hover:text-slate-400 font-bold tracking-widest mt-2"&gt;Skip Context (No Bonus)&lt;/button&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">            </span>`</span><span class="s4">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> completeScan(target) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> bonus = target ? </span><span class="s12">10</span><span class="s1"> : </span><span class="s12">0</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>gainXP(</span><span class="s12">50</span><span class="s1"> + bonus, </span><span class="s9">'Scanner'</span><span class="s1">, currentScanEmotion, target);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>currentScanEmotion = </span><span class="s7">null</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>closeModal();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> renderSummary() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> content = document.getElementById(</span><span class="s9">'modal-content'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> today = </span><span class="s7">new</span><span class="s1"> </span><span class="s13">Date</span><span class="s1">().toDateString();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> todayLogs = state.logs.filter(l =&gt; l.date === today);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>content.innerHTML = </span><span class="s9">`</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;h2 class="heading-font text-xl text-amber-400 mb-4 uppercase"&gt;Daily Briefing&lt;/h2&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="space-y-3 mb-8"&gt;</span></p>
-<p class="p5"><span class="s9"><span class="Apple-converted-space">                    </span></span><span class="s1">${todayLogs.map(l =&gt; </span><span class="s9">`</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div class="p-4 bg-white/5 rounded-lg border border-white/10 flex justify-between items-center"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;span class="text-[10px] text-slate-500 uppercase block"&gt;</span><span class="s4">${l.type}</span><span class="s1">&lt;/span&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;span class="text-sm text-white font-bold"&gt;</span><span class="s4">${l.value}</span><span class="s1">&lt;/span&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                            </span></span><span class="s4">${l.target ? </span><span class="s1">`&lt;span class="text-[10px] bg-blue-900/40 text-blue-400 px-2 py-1 rounded font-bold uppercase tracking-tighter"&gt;</span><span class="s4">${l.target}</span><span class="s1">&lt;/span&gt;`</span><span class="s4"> : </span><span class="s1">''</span><span class="s4">}</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>`</span><span class="s4">).join(</span><span class="s1">''</span><span class="s4">)}</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg text-center"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;p class="text-xs text-amber-200 uppercase font-bold tracking-widest mb-1"&gt;Status: Daily Goal Reached&lt;/p&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;p class="text-[10px] text-slate-500 uppercase"&gt;System syncing... Return in 24 hours.&lt;/p&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">            </span>`</span><span class="s4">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> renderBattery() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> content = document.getElementById(</span><span class="s9">'modal-content'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>content.innerHTML = </span><span class="s9">`</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;h2 class="heading-font text-xl text-emerald-400 mb-4 uppercase tracking-tighter"&gt;Battery Check&lt;/h2&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;p class="text-sm text-slate-400 mb-8"&gt;Internal Diagnostics: What is your current energy level?&lt;/p&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="px-4"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;input type="range" id="battery-slider" class="w-full h-3 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500" min="1" max="100"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="flex justify-between text-[10px] font-mono text-slate-500 mt-4 uppercase"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;span&gt;Drained&lt;/span&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;span&gt;Steady&lt;/span&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;span&gt;Optimal&lt;/span&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;button onclick="logBattery()" class="mt-12 w-full py-4 bg-emerald-600 text-white rounded-xl font-bold transition shadow-lg shadow-emerald-900/30"&gt;LOG STATUS (+50 XP)&lt;/button&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">            </span>`</span><span class="s4">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> renderRepair() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> content = document.getElementById(</span><span class="s9">'modal-content'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>content.innerHTML = </span><span class="s9">`</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;h2 class="heading-font text-xl text-orange-400 mb-4 uppercase"&gt;Repair Lab&lt;/h2&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="space-y-3 pr-2 max-h-[350px] overflow-y-auto"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="p-4 glass border-l-2 border-orange-500 cursor-pointer hover:bg-white/5 transition" onclick="copyRepair(this)"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;span class="text-[10px] text-orange-400 font-bold uppercase tracking-widest"&gt;The "TILT" Reset&lt;/span&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;p class="text-sm mt-1 text-slate-200"&gt;"I'm feeling a bit tilted right now. Let's talk in 10 minutes."&lt;/p&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="p-4 glass border-l-2 border-orange-500 cursor-pointer hover:bg-white/5 transition" onclick="copyRepair(this)"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;span class="text-[10px] text-orange-400 font-bold uppercase tracking-widest"&gt;The Social Error Fix&lt;/span&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;p class="text-sm mt-1 text-slate-200"&gt;"I overreacted earlier. My bad. Can we try that conversation again?"&lt;/p&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="p-4 glass border-l-2 border-orange-500 cursor-pointer hover:bg-white/5 transition" onclick="copyRepair(this)"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;span class="text-[10px] text-orange-400 font-bold uppercase tracking-widest"&gt;The Clarity Check&lt;/span&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;p class="text-sm mt-1 text-slate-200"&gt;"I'm not sure if I'm reading you right. Are you actually mad or just tired?"&lt;/p&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">            </span>`</span><span class="s4">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> renderTimer() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> content = document.getElementById(</span><span class="s9">'modal-content'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>content.innerHTML = </span><span class="s9">`</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;h2 class="heading-font text-xl text-red-400 mb-4 text-center uppercase tracking-tighter"&gt;Bounce-Back Training&lt;/h2&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="text-center py-6"&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div class="text-6xl heading-font mb-8 text-white tracking-widest" id="timer-display"&gt;00:00&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;button id="timer-toggle" onclick="toggleRecoveryTimer()" class="w-48 h-48 rounded-full border-4 border-red-500/30 bg-red-600/10 text-red-500 heading-font text-2xl hover:bg-red-500/20 transition-all"&gt;START&lt;/button&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p6"><span class="s1"><span class="Apple-converted-space">            </span>`</span><span class="s4">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> closeModal() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>document.getElementById(</span><span class="s9">'modal-container'</span><span class="s1">).classList.add(</span><span class="s9">'hidden'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>currentScanEmotion = </span><span class="s7">null</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> logBattery() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> val = document.getElementById(</span><span class="s9">'battery-slider'</span><span class="s1">).value;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>gainXP(</span><span class="s12">50</span><span class="s1">, </span><span class="s9">'Battery'</span><span class="s1">, </span><span class="s9">`</span><span class="s1">${val}</span><span class="s9">%`</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>closeModal();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> copyRepair(el) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> text = el.querySelector(</span><span class="s9">'p'</span><span class="s1">).innerText;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>navigator.clipboard.writeText(text);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>showToast(</span><span class="s9">"PATCH COPIED"</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>gainXP(</span><span class="s12">25</span><span class="s1">, </span><span class="s9">'Repair'</span><span class="s1">, </span><span class="s9">'Script Copied'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">let</span><span class="s1"> timerInterval, startTime, timerRunning = </span><span class="s7">false</span><span class="s1">;</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> toggleRecoveryTimer() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> btn = document.getElementById(</span><span class="s9">'timer-toggle'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> display = document.getElementById(</span><span class="s9">'timer-display'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">if</span><span class="s1"> (!timerRunning) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>startTime = </span><span class="s7">new</span><span class="s1"> </span><span class="s13">Date</span><span class="s1">();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>timerRunning = </span><span class="s7">true</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>btn.innerText = </span><span class="s9">"ACTIVE"</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>timerInterval = setInterval(() =&gt; {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s7">const</span><span class="s1"> diff = </span><span class="s13">Math</span><span class="s1">.floor((</span><span class="s7">new</span><span class="s1"> </span><span class="s13">Date</span><span class="s1">() - startTime) / </span><span class="s12">1000</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>display.innerText = </span><span class="s9">`</span><span class="s1">${</span><span class="s13">Math</span><span class="s1">.floor(diff/</span><span class="s12">60</span><span class="s1">).toString().padStart(</span><span class="s12">2</span><span class="s1">,</span><span class="s9">'0'</span><span class="s1">)}</span><span class="s9">:</span><span class="s1">${(diff%</span><span class="s12">60</span><span class="s1">).toString().padStart(</span><span class="s12">2</span><span class="s1">,</span><span class="s9">'0'</span><span class="s1">)}</span><span class="s9">`</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}, </span><span class="s12">1000</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>} </span><span class="s7">else</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>clearInterval(timerInterval);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>timerRunning = </span><span class="s7">false</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s7">const</span><span class="s1"> total = </span><span class="s13">Math</span><span class="s1">.floor((</span><span class="s7">new</span><span class="s1"> </span><span class="s13">Date</span><span class="s1">() - startTime) / </span><span class="s12">1000</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>gainXP(</span><span class="s12">100</span><span class="s1">, </span><span class="s9">'Recovery'</span><span class="s1">, </span><span class="s9">`</span><span class="s1">${</span><span class="s13">Math</span><span class="s1">.floor(total/</span><span class="s12">60</span><span class="s1">)}</span><span class="s9">m </span><span class="s1">${total%</span><span class="s12">60</span><span class="s1">}</span><span class="s9">s`</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>closeModal();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s10"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>window.onload = initApp;</span></p>
-<p class="p2"><span class="s4"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s1">script</span><span class="s3">&gt;</span></p>
-<p class="p2"><span class="s3">&lt;/</span><span class="s1">body</span><span class="s3">&gt;</span></p>
-<p class="p2"><span class="s3">&lt;/</span><span class="s1">html</span><span class="s3">&gt;</span></p>
+<body class="p-4 md:p-8 max-w-4xl mx-auto min-h-screen flex flex-col">
+
+    <header class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="heading-font text-2xl font-bold text-blue-500 tracking-wider">APEX MIND</h1>
+            <p class="text-xs text-slate-500 uppercase tracking-widest">Protocol 6 v2.3</p>
+        </div>
+        <div class="flex items-center gap-4">
+            <button onclick="openModal('settings')" class="w-10 h-10 glass flex items-center justify-center text-slate-400 hover:text-white transition">
+                <i class="fa-solid fa-gear"></i>
+            </button>
+            <div class="text-right hidden md:block">
+                <div class="text-[10px] text-slate-500 uppercase tracking-widest">Streak</div>
+                <div class="heading-font text-lg"><i class="fa-solid fa-fire streak-fire mr-1"></i><span id="streak-display">0</span></div>
+            </div>
+            <div class="text-right">
+                <div class="text-xs text-slate-400 mb-1">XP: <span id="xp-display" class="text-blue-400 font-bold">0</span></div>
+                <div class="heading-font text-[10px] text-slate-500" id="rank-display">RANK: UNKNOWN</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="glass p-6 mb-8 relative overflow-hidden border-b-2 border-blue-500/20">
+        <div class="flex justify-between items-end mb-3">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-tighter text-blue-400 block mb-1">Current Protocol</span>
+                <span class="text-sm font-semibold uppercase tracking-wider text-white" id="current-phase-name">PHASE: THE OBSERVER</span>
+            </div>
+            <span class="text-[10px] text-slate-500 font-mono" id="next-phase-info">ANALYZING...</span>
+        </div>
+        <div class="xp-bar">
+            <div id="xp-bar-fill" class="xp-progress"></div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div class="md:col-span-2 glass p-6 border-l-4 border-blue-500">
+            <h2 class="heading-font text-[10px] text-slate-500 mb-2 flex items-center uppercase tracking-widest">
+                <i class="fa-solid fa-bolt text-yellow-500 mr-2"></i> Daily Intel
+            </h2>
+            <p class="text-md font-light leading-relaxed italic text-slate-200" id="daily-tip">"Syncing data..."</p>
+        </div>
+        <div id="daily-status-card" class="glass p-6 flex flex-col justify-center items-center text-center">
+            <h2 class="heading-font text-[10px] text-slate-500 mb-2 uppercase tracking-widest">Daily Logs</h2>
+            <div class="text-3xl font-bold text-white mb-1" id="daily-count">0 / 3</div>
+            <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold" id="daily-status-text">Active</p>
+        </div>
+    </div>
+
+    <div id="countdown-banner" class="hidden glass p-4 mb-8 border border-amber-500/30 bg-amber-500/5 animate-pulse">
+        <div class="flex items-center justify-between text-xs text-amber-200 font-mono">
+            <span><i class="fa-solid fa-hourglass-half mr-2"></i> PROTOCOL COMPLETE</span>
+            <span id="days-to-unlock">Analyzing unlock window...</span>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <div class="glass p-6 level-card" id="feat-scanner">
+            <div class="flex justify-between items-start mb-4">
+                <i class="fa-solid fa-eye text-2xl text-cyan-400"></i>
+                <span class="text-[10px] bg-cyan-900/30 text-cyan-400 px-2 py-1 rounded uppercase font-bold tracking-widest">Active</span>
+            </div>
+            <h3 class="heading-font text-md mb-2">Emotion Scanner</h3>
+            <p class="text-sm text-slate-400 mb-4">Identify emotions in media or people.</p>
+            <button id="btn-scanner" onclick="openModal('scanner')" class="w-full py-2 bg-cyan-600/20 border border-cyan-500/50 hover:bg-cyan-500/30 text-cyan-400 rounded-lg text-sm transition font-semibold">INITIALIZE SCAN</button>
+        </div>
+
+        <div class="glass p-6 level-card locked" id="feat-battery">
+            <div class="flex justify-between items-start mb-4">
+                <i class="fa-solid fa-battery-half text-2xl text-emerald-400"></i>
+                <span class="text-[10px] bg-slate-800 text-slate-500 px-2 py-1 rounded" id="label-battery">LOCKED: 500 XP</span>
+            </div>
+            <h3 class="heading-font text-md mb-2">Battery Check</h3>
+            <p class="text-sm text-slate-400 mb-4">Diagnostics: Track your own energy levels.</p>
+            <button id="btn-battery" class="w-full py-2 bg-slate-800 text-slate-500 rounded-lg text-sm cursor-not-allowed">LOCKED</button>
+        </div>
+
+        <div class="glass p-6 level-card locked" id="feat-repair">
+            <div class="flex justify-between items-start mb-4">
+                <i class="fa-solid fa-wrench text-2xl text-orange-400"></i>
+                <span class="text-[10px] bg-slate-800 text-slate-500 px-2 py-1 rounded" id="label-repair">LOCKED: 1500 XP</span>
+            </div>
+            <h3 class="heading-font text-md mb-2">Repair Lab</h3>
+            <p class="text-sm text-slate-400 mb-4">Scripts to fix social glitches.</p>
+            <button id="btn-repair" class="w-full py-2 bg-slate-800 text-slate-500 rounded-lg text-sm cursor-not-allowed">LOCKED</button>
+        </div>
+
+        <div class="glass p-6 level-card locked" id="feat-timer">
+            <div class="flex justify-between items-start mb-4">
+                <i class="fa-solid fa-stopwatch text-2xl text-red-400"></i>
+                <span class="text-[10px] bg-slate-800 text-slate-500 px-2 py-1 rounded" id="label-timer">LOCKED: 3000 XP</span>
+            </div>
+            <h3 class="heading-font text-md mb-2">Recovery Timer</h3>
+            <p class="text-sm text-slate-400 mb-4">Track bounce-back speed.</p>
+            <button id="btn-timer" class="w-full py-2 bg-slate-800 text-slate-500 rounded-lg text-sm cursor-not-allowed">LOCKED</button>
+        </div>
+    </div>
+
+    <div id="today-summary" class="hidden mb-8">
+        <h2 class="heading-font text-[10px] text-slate-500 mb-4 uppercase tracking-widest">Today's Data Logs</h2>
+        <div id="summary-list" class="space-y-2"></div>
+    </div>
+
+    <div id="modal-container" class="fixed inset-0 bg-black/95 backdrop-blur-md hidden flex items-center justify-center p-4 z-50">
+        <div class="glass w-full max-w-xl p-8 relative shadow-2xl border-slate-700">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 glass px-6 py-3 border-blue-500 border hidden text-blue-400 font-semibold text-sm z-[100] transition-all">
+        XP GAINED
+    </div>
+
+    <script>
+        let state = { xp: 0, logs: [], dailyCount: 0, dailyLimit: 3, streak: 0, lastDate: null, lastReset: null };
+        const PHASES = [
+            { name: "THE OBSERVER", threshold: 0 },
+            { name: "THE ARCHITECT", threshold: 500 },
+            { name: "THE DIPLOMAT", threshold: 1500 },
+            { name: "THE STRATEGIST", threshold: 3000 },
+            { name: "APEX MASTER", threshold: 5000 }
+        ];
+        const EMOTIONS = [
+            { name: "Frustrated", cat: "High Energy", color: "text-red-400" },
+            { name: "Excited", cat: "High Energy", color: "text-yellow-400" },
+            { name: "Bored", cat: "Low Energy", color: "text-slate-400" },
+            { name: "Anxious", cat: "High Energy", color: "text-orange-400" },
+            { name: "Focused", cat: "High Energy", color: "text-cyan-400" },
+            { name: "Calm", cat: "Low Energy", color: "text-emerald-400" },
+            { name: "Annoyed", cat: "Mid Energy", color: "text-pink-400" },
+            { name: "Proud", cat: "Mid Energy", color: "text-blue-400" },
+            { name: "Confused", cat: "Mid Energy", color: "text-purple-400" },
+            { name: "Lonely", cat: "Low Energy", color: "text-indigo-400" },
+            { name: "Content", cat: "Low Energy", color: "text-teal-400" },
+            { name: "Overwhelmed", cat: "Max Energy", color: "text-rose-500" }
+        ];
+        const TARGETS = [
+            { id: 'family', label: 'Family', icon: 'fa-house' },
+            { id: 'friend', label: 'Friend', icon: 'fa-user-group' },
+            { id: 'media', label: 'Video/Game', icon: 'fa-gamepad' },
+            { id: 'stranger', label: 'Other', icon: 'fa-user-secret' },
+            { id: 'self', label: 'Myself', icon: 'fa-fingerprint' }
+        ];
+        const DAILY_INTELS = [
+            "Losing is just data. Every time you lose, your brain maps out a mistake to avoid next time.",
+            "Repair Phrases are power moves. Apologizing first actually shows higher social status.",
+            "Physical hack: If your heart is racing, exhale twice as long as you inhale.",
+            "Peer pressure isn't an attack, it's a test of your internal core code.",
+            "Recovery speed is the ultimate flex. How fast can you go from 'Tilt' to 'Focus'?",
+            "If you're feeling 'cringe,' it usually just means your social awareness is upgrading.",
+            "Anger is a secondary emotion. It usually hides fear, embarrassment, or sadness.",
+            "Boundaries aren't walls to keep people out; they are gates to let the right ones in.",
+            "Active listening is like scouting in a game. You're gathering info others miss.",
+            "Your 'Operating System' is still being built. Be patient with your hardware lags."
+        ];
+
+        function initApp() {
+            const saved = localStorage.getItem('apex_mind_v2_3');
+            if (saved) state = JSON.parse(saved);
+            handleTimeLogic();
+            updateUI();
+            setDailyIntel();
+        }
+
+        function handleTimeLogic() {
+            const now = new Date();
+            const today = now.toDateString();
+            const yesterday = new Date(now);
+            yesterday.setDate(yesterday.getDate() - 1);
+            if (state.lastReset !== today) {
+                if (state.lastDate === yesterday.toDateString()) state.streak += 1;
+                else if (state.lastDate !== today) state.streak = 0;
+                state.dailyCount = 0;
+                state.lastReset = today;
+                save();
+            }
+        }
+
+        function save() { localStorage.setItem('apex_mind_v2_3', JSON.stringify(state)); }
+
+        function updateUI() {
+            document.getElementById('xp-display').innerText = state.xp;
+            document.getElementById('streak-display').innerText = state.streak;
+            document.getElementById('daily-count').innerText = `${state.dailyCount} / ${state.dailyLimit}`;
+            let currentPhase = PHASES[0], nextPhase = PHASES[1];
+            for (let i = PHASES.length - 1; i >= 0; i--) { if (state.xp >= PHASES[i].threshold) { currentPhase = PHASES[i]; nextPhase = PHASES[i+1] || PHASES[i]; break; } }
+            document.getElementById('rank-display').innerText = `RANK: ${currentPhase.name}`;
+            document.getElementById('current-phase-name').innerText = `PHASE: ${currentPhase.name}`;
+            const range = nextPhase.threshold - currentPhase.threshold;
+            const progress = range === 0 ? 100 : ((state.xp - currentPhase.threshold) / range) * 100;
+            document.getElementById('xp-bar-fill').style.width = `${Math.min(progress, 100)}%`;
+            const card = document.getElementById('daily-status-card'), banner = document.getElementById('countdown-banner'), scanBtn = document.getElementById('btn-scanner');
+            if (state.dailyCount >= state.dailyLimit) {
+                card.classList.add('protocol-complete');
+                document.getElementById('daily-status-text').innerText = "Complete";
+                banner.classList.remove('hidden');
+                const xpNeeded = nextPhase.threshold - state.xp;
+                document.getElementById('days-to-unlock').innerText = xpNeeded > 0 ? `ETA: ${Math.ceil(xpNeeded / 150)} days to ${nextPhase.name}` : "UNLOCKED!";
+                scanBtn.innerText = "VIEW DATA";
+                scanBtn.onclick = () => renderSummary();
+            } else {
+                card.classList.remove('protocol-complete');
+                document.getElementById('daily-status-text').innerText = "Active";
+                banner.classList.add('hidden');
+                scanBtn.innerText = "INITIALIZE SCAN";
+                scanBtn.onclick = () => openModal('scanner');
+            }
+            unlock(state.xp >= 500, 'feat-battery', 'btn-battery', 'label-battery', 'calibrate', 'emerald');
+            unlock(state.xp >= 1500, 'feat-repair', 'btn-repair', 'label-repair', 'access lab', 'orange');
+            unlock(state.xp >= 3000, 'feat-timer', 'btn-timer', 'label-timer', 'initialize tracker', 'red');
+            updateSummaryList();
+        }
+
+        function unlock(cond, cid, bid, lid, txt, col) {
+            if (cond) {
+                document.getElementById(cid).classList.remove('locked');
+                document.getElementById(lid).innerText = "UNLOCKED";
+                document.getElementById(lid).className = `text-[10px] bg-${col}-900/30 text-${col}-400 px-2 py-1 rounded font-bold uppercase tracking-widest`;
+                document.getElementById(bid).innerText = txt.toUpperCase();
+                document.getElementById(bid).className = `w-full py-2 bg-${col}-600/20 border border-${col}-500/50 hover:bg-${col}-500/30 text-${col}-400 rounded-lg text-sm transition font-semibold`;
+                document.getElementById(bid).onclick = () => openModal(cid.split('-')[1]);
+            }
+        }
+
+        function setDailyIntel() { const d = Math.floor(new Date().getTime() / 86400000); document.getElementById('daily-tip').innerText = `"${DAILY_INTELS[d % DAILY_INTELS.length]}"`; }
+
+        function gainXP(amt, type, val, target = null) {
+            if (state.dailyCount < state.dailyLimit) {
+                state.xp += amt; state.dailyCount += 1; state.lastDate = new Date().toDateString();
+                state.logs.push({ timestamp: new Date().toISOString(), date: new Date().toDateString(), type, value: val, target });
+                showToast(`+${amt} XP`); save(); updateUI();
+            }
+        }
+
+        function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 2500); }
+
+        function updateSummaryList() {
+            const today = new Date().toDateString(), logs = state.logs.filter(l => l.date === today);
+            const sum = document.getElementById('today-summary'), list = document.getElementById('summary-list');
+            if (logs.length > 0) {
+                sum.classList.remove('hidden');
+                list.innerHTML = logs.map(l => `<div class="glass p-3 flex justify-between items-center border-l-2 border-blue-500/50"><div class="flex flex-col"><span class="text-[8px] uppercase text-slate-500 font-bold">${l.type}</span><span class="text-sm font-semibold text-white">${l.value}</span></div>${l.target ? `<span class="text-[9px] bg-blue-900/30 text-blue-400 px-2 py-1 rounded uppercase font-bold">${l.target}</span>` : ''}</div>`).join('');
+            } else sum.classList.add('hidden');
+        }
+
+        function exportData() {
+            const s = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
+            const a = document.createElement('a'); a.setAttribute("href", s); a.setAttribute("download", "ApexMind_Backup.json"); a.click(); a.remove();
+        }
+
+        function handleImport(ev) {
+            const f = ev.target.files[0]; if (!f) return;
+            const r = new FileReader();
+            r.onload = (e) => { try { const s = JSON.parse(e.target.result); if (s.xp !== undefined) { state = s; save(); updateUI(); closeModal(); } } catch (x) {} };
+            r.readAsText(f);
+        }
+
+        function openModal(t) {
+            document.getElementById('modal-container').classList.remove('hidden');
+            const c = document.getElementById('modal-content');
+            if (t === 'scanner') renderEmotionGrid();
+            else if (t === 'battery') renderBattery();
+            else if (t === 'repair') renderRepair();
+            else if (t === 'timer') renderTimer();
+            else if (t === 'settings') renderSettings();
+        }
+
+        function closeModal() { document.getElementById('modal-container').classList.add('hidden'); }
+
+        function renderSettings() {
+            document.getElementById('modal-content').innerHTML = `
+                <h2 class="heading-font text-xl text-slate-200 mb-8 uppercase tracking-tighter">Settings</h2>
+                <div class="space-y-4">
+                    <button onclick="exportData()" class="w-full py-4 glass border border-blue-500/30 text-blue-400 font-bold">EXPORT BACKUP</button>
+                    <input type="file" id="import-input" class="hidden" accept=".json" onchange="handleImport(event)">
+                    <button onclick="document.getElementById('import-input').click()" class="w-full py-4 glass border border-amber-500/30 text-amber-400 font-bold">IMPORT BACKUP</button>
+                </div>
+            `;
+        }
+
+        function renderEmotionGrid() {
+            document.getElementById('modal-content').innerHTML = `
+                <div class="animate-slide"><h2 class="heading-font text-xl text-cyan-400 mb-6 uppercase">Step 1: Emotion</h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    ${EMOTIONS.map(e => `<button onclick="selectEmotion('${e.name}')" class="emo-btn p-4 rounded-xl text-left"><span class="text-sm font-semibold ${e.color}">${e.name}</span></button>`).join('')}
+                </div></div>`;
+        }
+
+        let curEmo = null;
+        function selectEmotion(e) { curEmo = e; renderTargetStep(); }
+
+        function renderTargetStep() {
+            document.getElementById('modal-content').innerHTML = `
+                <div class="animate-slide"><h2 class="heading-font text-xl text-cyan-400 mb-6 uppercase">Step 2: Source</h2>
+                <div class="grid grid-cols-1 gap-2">
+                    ${TARGETS.map(t => `<button onclick="gainXP(60, 'Scanner', curEmo, '${t.label}'); closeModal();" class="glass p-4 text-left font-bold text-slate-200 hover:border-cyan-500 transition">${t.label}</button>`).join('')}
+                    <button onclick="gainXP(50, 'Scanner', curEmo); closeModal();" class="mt-4 text-slate-500 text-xs uppercase">Skip Source</button>
+                </div></div>`;
+        }
+
+        function renderSummary() {
+            const today = new Date().toDateString(), logs = state.logs.filter(l => l.date === today);
+            document.getElementById('modal-content').innerHTML = `<h2 class="heading-font text-xl text-amber-400 mb-4 uppercase">Briefing</h2>
+                <div class="space-y-3">${logs.map(l => `<div class="p-4 glass flex justify-between"><span>${l.value}</span><span class="text-xs text-slate-500">${l.target||''}</span></div>`).join('')}</div>`;
+            document.getElementById('modal-container').classList.remove('hidden');
+        }
+
+        function renderBattery() {
+            document.getElementById('modal-content').innerHTML = `<h2 class="heading-font text-xl text-emerald-400 mb-8 uppercase">Battery</h2>
+                <input type="range" id="bslider" class="w-full accent-emerald-500 h-3" min="1" max="100">
+                <button onclick="gainXP(50, 'Battery', document.getElementById('bslider').value+'%'); closeModal();" class="mt-12 w-full py-4 bg-emerald-600 text-white font-bold rounded-xl">LOG (+50 XP)</button>`;
+        }
+
+        function renderRepair() {
+            document.getElementById('modal-content').innerHTML = `<h2 class="heading-font text-xl text-orange-400 mb-6 uppercase">Repair Lab</h2>
+                <div class="space-y-4">
+                    <div class="p-4 glass cursor-pointer" onclick="navigator.clipboard.writeText(this.innerText); showToast('COPIED'); gainXP(25, 'Repair', 'Script');">"I'm feeling tilted. Let's talk in 10 mins."</div>
+                    <div class="p-4 glass cursor-pointer" onclick="navigator.clipboard.writeText(this.innerText); showToast('COPIED'); gainXP(25, 'Repair', 'Script');">"I overreacted. My bad. Can we restart?"</div>
+                </div>`;
+        }
+
+        let tInt, sTime, tRun = false;
+        function renderTimer() {
+            document.getElementById('modal-content').innerHTML = `<h2 class="heading-font text-xl text-red-400 mb-8 uppercase text-center">Recovery</h2>
+                <div class="text-6xl heading-font mb-8 text-center" id="tdisp">00:00</div>
+                <button id="ttog" onclick="toggleT()" class="w-full py-6 bg-red-600/20 border border-red-500 text-red-500 font-bold">START</button>`;
+        }
+
+        function toggleT() {
+            const b = document.getElementById('ttog'), d = document.getElementById('tdisp');
+            if (!tRun) {
+                sTime = new Date(); tRun = true; b.innerText = "ACTIVE";
+                tInt = setInterval(() => { const f = Math.floor((new Date()-sTime)/1000); d.innerText = `${Math.floor(f/60).toString().padStart(2,'0')}:${(f%60).toString().padStart(2,'0')}`; }, 1000);
+            } else {
+                clearInterval(tInt); tRun = false; const f = Math.floor((new Date()-sTime)/1000);
+                gainXP(100, 'Recovery', `${Math.floor(f/60)}m ${f%60}s`); closeModal();
+            }
+        }
+        window.onload = initApp;
+    </script>
 </body>
-</html
+</html>
