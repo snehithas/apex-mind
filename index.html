@@ -1,435 +1,1162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apex Mind: Protocol 6</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap');
-        
-        body {
-            background-color: #0a0a0c;
-            color: #e2e8f0;
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX MIND: PROTOCOL 6</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #020617;
+  --bg2:     #0a1628;
+  --bg3:     #0f2040;
+  --bg4:     #1a2e4a;
+  --border:  #1e3a5f;
+  --border2: #2a4a72;
+  --blue:    #3b82f6;
+  --blue-b:  #60a5fa;
+  --blue-d:  #1d4ed8;
+  --emerald: #10b981;
+  --em-b:    #34d399;
+  --amber:   #f59e0b;
+  --amber-b: #fbbf24;
+  --red:     #ef4444;
+  --red-b:   #f87171;
+  --cyan:    #06b6d4;
+  --violet:  #8b5cf6;
+  --text:    #f1f5f9;
+  --text2:   #cbd5e1;
+  --text3:   #94a3b8;
+  --glow-b:  rgba(59,130,246,0.4);
+  --glow-e:  rgba(16,185,129,0.4);
+  --glow-a:  rgba(245,158,11,0.4);
+  --glow-v:  rgba(139,92,246,0.4);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Rajdhani',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(59,130,246,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(59,130,246,0.04) 1px,transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;z-index:0;
+}
+body::after{
+  content:'';position:fixed;
+  top:-20%;left:-10%;
+  width:60vw;height:60vw;
+  background:radial-gradient(circle,rgba(59,130,246,0.07) 0%,transparent 70%);
+  pointer-events:none;z-index:0;
+  animation:orb 20s ease-in-out infinite alternate;
+}
+@keyframes orb{0%{transform:translate(0,0)}100%{transform:translate(15vw,10vh)}}
+.scanlines{
+  position:fixed;inset:0;pointer-events:none;z-index:999;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 4px);
+}
+#app{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:16px 14px 100px;}
 
-        .heading-font { font-family: 'Orbitron', sans-serif; }
+/* HEADER */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 0 12px;border-bottom:1px solid var(--border);margin-bottom:18px;}
+.hdr-logo{font-family:'Orbitron',monospace;font-weight:900;font-size:14px;letter-spacing:3px;color:var(--blue-b);text-shadow:0 0 12px var(--blue);line-height:1.2;}
+.hdr-logo span{display:block;font-size:10px;color:var(--text3);letter-spacing:4px;margin-top:2px;}
+.hdr-right{display:flex;align-items:center;gap:10px;}
+.streak-badge{
+  background:linear-gradient(135deg,#78350f,#92400e);
+  border:1px solid var(--amber);border-radius:6px;padding:6px 12px;
+  font-family:'Orbitron',monospace;font-size:13px;font-weight:700;
+  color:var(--amber-b);box-shadow:0 0 10px rgba(245,158,11,0.3);
+  display:flex;align-items:center;gap:4px;
+}
+.gear-btn{background:none;border:1px solid var(--border2);border-radius:6px;padding:8px;color:var(--text2);cursor:pointer;transition:all .2s;font-size:18px;}
+.gear-btn:hover{border-color:var(--blue);color:var(--blue-b);}
 
-        .glass {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-        }
+/* XP BAR */
+.xp-section{margin-bottom:16px;}
+.xp-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.xp-phase{font-family:'Orbitron',monospace;font-size:12px;letter-spacing:2px;color:var(--em-b);}
+.xp-count{font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--blue-b);}
+.xp-bar-wrap{height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;border:1px solid var(--border);}
+.xp-bar-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--blue-d),var(--blue-b),var(--cyan));
+  border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 0 8px var(--blue);position:relative;
+}
+.xp-bar-fill::after{content:'';position:absolute;right:0;top:0;bottom:0;width:3px;background:white;opacity:.8;animation:barpulse 1.5s ease-in-out infinite;}
+@keyframes barpulse{0%,100%{opacity:.3}50%{opacity:1}}
 
-        .level-card {
-            transition: all 0.3s ease;
-        }
+/* INTEL CARD */
+.intel-card{
+  background:linear-gradient(135deg,var(--bg2) 0%,rgba(6,182,212,0.07) 100%);
+  border:1px solid var(--cyan);border-radius:12px;padding:14px 16px;margin-bottom:16px;
+  position:relative;overflow:hidden;
+  box-shadow:0 0 20px rgba(6,182,212,0.1),inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.intel-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);}
+.intel-tag{font-family:'Orbitron',monospace;font-size:10px;letter-spacing:3px;color:var(--cyan);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.intel-tag::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--cyan);animation:blink 1.5s step-end infinite;flex-shrink:0;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.intel-text{font-size:17px;font-weight:600;line-height:1.55;color:var(--text);}
+.intel-sub{font-size:13px;color:var(--text2);margin-top:6px;font-family:'Share Tech Mono',monospace;line-height:1.5;}
 
-        .level-card.locked {
-            opacity: 0.4;
-            filter: grayscale(1);
-            pointer-events: none;
-        }
+/* SECTION LABEL */
+.section-label{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:3px;color:var(--text2);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.section-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
 
-        .xp-bar {
-            height: 12px;
-            background: #1e293b;
-            border-radius: 6px;
-            overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
-        }
+/* DAILY CAP */
+.daily-cap-bar{display:flex;gap:6px;justify-content:center;margin-bottom:8px;}
+.cap-pip{width:60px;height:8px;border-radius:4px;background:var(--bg3);border:1px solid var(--border);transition:background .3s,box-shadow .3s;}
+.cap-pip.filled{background:var(--emerald);box-shadow:0 0 6px var(--glow-e);}
+.cap-pip.filled.r{background:var(--amber);box-shadow:0 0 6px var(--glow-a);}
+.cap-pip.filled.rr{background:var(--red);box-shadow:0 0 6px rgba(239,68,68,0.5);}
+.cap-label{text-align:center;font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--text2);margin-bottom:14px;}
 
-        .xp-progress {
-            height: 100%;
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
-            width: 0%;
-            transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
+/* STATS GRID */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.stat-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;}
+.stat-val{font-family:'Orbitron',monospace;font-size:28px;font-weight:900;color:var(--blue-b);line-height:1;}
+.stat-val.em{color:var(--em-b);}
+.stat-val.amber{color:var(--amber-b);}
+.stat-val.violet{color:#c4b5fd;}
+.stat-lbl{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2);margin-top:5px;letter-spacing:1px;}
 
-        .protocol-complete {
-            border-color: #fbbf24 !important;
-            background: rgba(251, 191, 36, 0.05) !important;
-        }
+/* CARD */
+.card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;
+  margin-bottom:14px;position:relative;overflow:hidden;
+  box-shadow:0 4px 24px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.03);
+  transition:border-color .2s;
+}
+.card:hover{border-color:var(--border2);}
+.card-accent-blue::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--blue),var(--cyan));border-radius:3px 0 0 3px;}
+.card-accent-em::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--emerald),var(--em-b));border-radius:3px 0 0 3px;}
+.card-accent-amber::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--amber),var(--amber-b));border-radius:3px 0 0 3px;}
+.card-accent-violet::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--violet),#c4b5fd);border-radius:3px 0 0 3px;}
+.card-title{font-family:'Orbitron',monospace;font-size:12px;letter-spacing:2px;color:var(--text2);margin-bottom:14px;padding-left:10px;}
 
-        .emo-btn {
-            background: rgba(30, 41, 59, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.2s;
-        }
-        .emo-btn:hover {
-            background: rgba(59, 130, 246, 0.2);
-            border-color: #3b82f6;
-            transform: translateY(-2px);
-        }
-        
-        .emo-btn.selected {
-            border-color: #3b82f6;
-            background: rgba(59, 130, 246, 0.3);
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
-        }
+/* PHASE ROADMAP */
+.phase-item{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;}
+.phase-pip-col{display:flex;flex-direction:column;align-items:center;padding-top:4px;}
+.phase-pip{width:13px;height:13px;border-radius:50%;border:2px solid var(--border);background:var(--bg3);flex-shrink:0;}
+.phase-pip.done{border-color:var(--emerald);background:var(--emerald);}
+.phase-pip.active{border-color:var(--blue-b);background:var(--blue);box-shadow:0 0 8px var(--blue);animation:pippulse 1.5s infinite;}
+@keyframes pippulse{0%,100%{box-shadow:0 0 4px var(--blue)}50%{box-shadow:0 0 14px var(--blue)}}
+.phase-line{width:2px;flex:1;min-height:14px;background:var(--border);margin:3px 0;}
+.phase-line.done{background:var(--emerald);}
+.phase-name{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;color:var(--text);letter-spacing:1px;}
+.phase-name.active{color:var(--blue-b);}
+.phase-name.done{color:var(--em-b);}
+.phase-range{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2);}
 
-        .streak-fire {
-            color: #ff4500;
-            filter: drop-shadow(0 0 5px rgba(255, 69, 0, 0.5));
-        }
+/* LOG ITEM */
+.log-item{display:flex;align-items:center;gap:10px;padding:12px;background:var(--bg3);border-radius:8px;margin-bottom:6px;border:1px solid var(--border);}
+.log-icon{font-size:22px;}
+.log-info{flex:1;}
+.log-name{font-size:15px;font-weight:700;color:var(--text);}
+.log-meta{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2);}
+.log-xp{font-family:'Orbitron',monospace;font-size:12px;color:var(--em-b);font-weight:700;}
 
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0a0a0c; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+/* NAV */
+.nav-bar{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:480px;
+  background:rgba(2,6,23,0.95);backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  display:flex;z-index:100;padding:8px 0 12px;
+}
+.nav-btn{flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;transition:all .2s;position:relative;}
+.nav-icon{font-size:20px;transition:transform .2s;filter:grayscale(1) brightness(.5);}
+.nav-label{font-family:'Orbitron',monospace;font-size:9px;letter-spacing:1px;color:var(--text2);transition:color .2s;}
+.nav-btn.active .nav-icon{filter:none;transform:scale(1.15);}
+.nav-btn.active .nav-label{color:var(--blue-b);}
+.nav-btn.locked{opacity:.3;cursor:not-allowed;}
+.nav-btn::after{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:2px;background:var(--blue);border-radius:0 0 4px 4px;transition:width .2s;}
+.nav-btn.active::after{width:32px;}
 
-        @keyframes slideIn {
-            from { transform: translateX(20px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        .animate-slide { animation: slideIn 0.3s ease-out forwards; }
-    </style>
+/* EMOTION SCANNER */
+.step-indicator{display:flex;gap:8px;margin-bottom:14px;}
+.step-dot{flex:1;height:3px;border-radius:2px;background:var(--bg3);transition:background .3s;}
+.step-dot.done{background:var(--blue);}
+
+.emotion-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.em-btn{
+  background:var(--bg3);border:1px solid var(--border);border-radius:10px;
+  padding:12px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;
+  transition:all .18s;-webkit-tap-highlight-color:transparent;
+}
+.em-btn:hover{transform:scale(1.04);border-color:var(--border2);}
+.em-btn.selected{transform:scale(1.06);border-color:var(--blue-b);background:rgba(59,130,246,0.15);box-shadow:0 0 16px var(--glow-b);}
+.em-emoji{font-size:30px;line-height:1;}
+.em-name{font-size:12px;font-weight:700;color:var(--text2);text-align:center;}
+
+.source-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.src-btn{
+  flex:1;min-width:70px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:8px;padding:10px 6px;cursor:pointer;text-align:center;
+  font-family:'Orbitron',monospace;font-size:11px;letter-spacing:1px;color:var(--text2);transition:all .18s;
+}
+.src-btn:hover,.src-btn.selected{border-color:var(--emerald);color:var(--em-b);background:rgba(16,185,129,0.1);box-shadow:0 0 10px var(--glow-e);}
+.src-icon{display:block;font-size:22px;margin-bottom:4px;}
+
+/* BUTTONS */
+.submit-btn{
+  width:100%;padding:16px;
+  background:linear-gradient(135deg,var(--blue-d),var(--blue));
+  border:1px solid var(--blue-b);border-radius:10px;
+  font-family:'Orbitron',monospace;font-size:13px;font-weight:700;letter-spacing:2px;
+  color:white;cursor:pointer;transition:all .2s;margin-top:14px;
+  box-shadow:0 0 20px rgba(59,130,246,0.3);position:relative;overflow:hidden;
+}
+.submit-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.1),transparent);}
+.submit-btn:hover{transform:translateY(-1px);box-shadow:0 0 30px rgba(59,130,246,0.5);}
+.submit-btn:active{transform:translateY(0);}
+.submit-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.submit-btn.green{background:linear-gradient(135deg,#065f46,var(--emerald));border-color:var(--em-b);box-shadow:0 0 20px rgba(16,185,129,0.3);}
+.submit-btn.green:hover{box-shadow:0 0 30px rgba(16,185,129,0.5);}
+.submit-btn.ghost{background:transparent;border-color:var(--border);box-shadow:none;color:var(--text3);}
+.submit-btn.ghost:hover{border-color:var(--border2);box-shadow:none;transform:none;}
+
+/* BATTERY */
+.battery-display{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.battery-pct{
+  font-family:'Orbitron',monospace;font-size:42px;font-weight:900;line-height:1;
+  background:linear-gradient(135deg,var(--em-b),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  min-width:90px;text-align:right;
+}
+.battery-status{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;color:var(--em-b);letter-spacing:1px;}
+.battery-tip{font-size:14px;color:var(--text2);margin-top:4px;line-height:1.5;}
+
+.slider-wrap{position:relative;margin-bottom:10px;}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;background:var(--bg3);border-radius:4px;outline:none;border:1px solid var(--border);}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--em-b),var(--cyan));cursor:pointer;box-shadow:0 0 12px var(--glow-e);border:2px solid var(--bg);transition:transform .15s;}
+input[type=range]::-webkit-slider-thumb:active{transform:scale(1.3);}
+.slider-track-fill{position:absolute;top:50%;left:0;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--emerald),var(--em-b));transform:translateY(-50%);pointer-events:none;box-shadow:0 0 8px var(--glow-e);transition:width .1s;}
+.slider-labels{display:flex;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2);margin-top:4px;}
+
+/* REPAIR LAB */
+.repair-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.filter-btn{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:7px 14px;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:1px;color:var(--text2);cursor:pointer;transition:all .18s;}
+.filter-btn.active{background:rgba(139,92,246,0.2);border-color:var(--violet);color:#c4b5fd;}
+
+.script-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px;transition:border-color .2s;}
+.script-card:hover{border-color:var(--violet);}
+.script-title{font-family:'Orbitron',monospace;font-size:12px;letter-spacing:1px;color:#c4b5fd;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;}
+.script-cat{font-size:10px;letter-spacing:2px;color:var(--text2);background:var(--bg4);border-radius:4px;padding:2px 8px;}
+.script-text{font-size:15px;color:var(--text);line-height:1.55;font-style:italic;margin:8px 0;}
+.copy-btn{background:rgba(139,92,246,0.15);border:1px solid var(--violet);border-radius:6px;padding:7px 14px;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:1px;color:#c4b5fd;cursor:pointer;transition:all .2s;margin-top:6px;}
+.copy-btn:hover{background:rgba(139,92,246,0.3);}
+.copy-btn.copied{background:rgba(16,185,129,0.2);border-color:var(--emerald);color:var(--em-b);}
+
+/* RECOVERY TIMER */
+.timer-display{text-align:center;padding:20px 0;}
+.timer-digits{
+  font-family:'Orbitron',monospace;font-size:56px;font-weight:900;
+  background:linear-gradient(135deg,var(--amber-b),var(--red-b));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:4px;line-height:1;
+}
+.timer-digits.running{animation:timerglow 1s ease-in-out infinite alternate;}
+@keyframes timerglow{from{filter:drop-shadow(0 0 4px var(--amber))}to{filter:drop-shadow(0 0 16px var(--red))}}
+.timer-label{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--text2);margin-top:6px;letter-spacing:2px;}
+.timer-btns{display:flex;gap:10px;margin-top:16px;}
+.timer-btn{flex:1;padding:16px;border-radius:10px;font-family:'Orbitron',monospace;font-size:12px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:all .2s;border:1px solid;}
+.timer-btn.start{background:linear-gradient(135deg,rgba(245,158,11,0.2),rgba(239,68,68,0.2));border-color:var(--amber);color:var(--amber-b);box-shadow:0 0 14px var(--glow-a);}
+.timer-btn.start:hover{box-shadow:0 0 24px rgba(245,158,11,0.5);}
+.timer-btn.start:disabled{opacity:.4;cursor:not-allowed;}
+.timer-btn.stop{background:linear-gradient(135deg,rgba(16,185,129,0.2),rgba(6,182,212,0.1));border-color:var(--emerald);color:var(--em-b);}
+.timer-btn.stop:disabled{opacity:.4;cursor:not-allowed;}
+.timer-btn.reset{background:var(--bg3);border-color:var(--border);color:var(--text2);flex:0 0 auto;padding:16px 18px;}
+
+.pr-section{background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:10px;padding:14px;margin-top:12px;text-align:center;}
+.pr-label{font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px;color:var(--amber);margin-bottom:4px;}
+.pr-time{font-family:'Orbitron',monospace;font-size:26px;font-weight:700;color:var(--amber-b);}
+.pr-sub{font-size:13px;color:var(--text2);margin-top:4px;}
+
+/* LOCK OVERLAY */
+.lock-overlay{text-align:center;padding:30px 20px;}
+.lock-icon{font-size:44px;margin-bottom:14px;}
+.lock-title{font-family:'Orbitron',monospace;font-size:15px;font-weight:700;color:var(--text);margin-bottom:10px;letter-spacing:2px;}
+.lock-desc{font-size:15px;color:var(--text2);line-height:1.6;}
+.lock-xp{margin-top:14px;font-family:'Orbitron',monospace;font-size:12px;color:var(--amber);}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:30px 20px;color:var(--text2);}
+.empty-icon{font-size:36px;margin-bottom:10px;opacity:.6;}
+.empty-text{font-size:14px;font-family:'Share Tech Mono',monospace;line-height:1.6;}
+
+/* XP POPUP */
+#xp-popup{
+  position:fixed;top:80px;left:50%;transform:translateX(-50%);
+  background:var(--bg2);border:1px solid var(--emerald);border-radius:10px;
+  padding:12px 22px;font-family:'Orbitron',monospace;font-size:14px;font-weight:700;
+  color:var(--em-b);box-shadow:0 0 24px var(--glow-e);z-index:500;
+  opacity:0;pointer-events:none;transition:opacity .3s;white-space:nowrap;
+}
+#xp-popup.show{opacity:1;}
+
+/* UNLOCK BANNER */
+#unlock-banner{
+  position:fixed;inset:0;background:rgba(0,0,0,0.85);
+  display:flex;align-items:center;justify-content:center;
+  z-index:900;opacity:0;pointer-events:none;transition:opacity .4s;
+  backdrop-filter:blur(10px);
+}
+#unlock-banner.show{opacity:1;pointer-events:all;}
+.unlock-box{
+  background:var(--bg2);border:2px solid var(--amber);border-radius:16px;
+  padding:36px 32px;text-align:center;max-width:340px;
+  box-shadow:0 0 60px rgba(245,158,11,0.3);
+  animation:unlockpop .5s cubic-bezier(.4,0,.2,1);
+}
+@keyframes unlockpop{0%{transform:scale(.7);opacity:0}100%{transform:scale(1);opacity:1}}
+.unlock-emoji{font-size:54px;margin-bottom:14px;}
+.unlock-title{font-family:'Orbitron',monospace;font-size:16px;font-weight:900;color:var(--amber-b);letter-spacing:2px;margin-bottom:10px;}
+.unlock-sub{font-size:15px;color:var(--text);line-height:1.5;margin-bottom:18px;}
+.unlock-close{background:linear-gradient(135deg,#78350f,var(--amber));border:none;border-radius:8px;padding:12px 28px;font-family:'Orbitron',monospace;font-size:12px;letter-spacing:2px;color:var(--bg);cursor:pointer;font-weight:700;}
+
+/* MODAL */
+#modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.8);
+  display:flex;align-items:flex-end;justify-content:center;
+  z-index:800;opacity:0;pointer-events:none;transition:opacity .3s;
+  backdrop-filter:blur(8px);
+}
+#modal-overlay.show{opacity:1;pointer-events:all;}
+.modal-sheet{
+  background:var(--bg2);border:1px solid var(--border);border-radius:20px 20px 0 0;
+  padding:24px 20px 40px;width:100%;max-width:480px;
+  transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);
+}
+#modal-overlay.show .modal-sheet{transform:translateY(0);}
+.modal-title{font-family:'Orbitron',monospace;font-size:15px;font-weight:700;color:var(--text);margin-bottom:16px;letter-spacing:2px;}
+.modal-action-row{display:flex;gap:10px;margin-top:14px;}
+.modal-btn{flex:1;padding:14px;border-radius:8px;font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;transition:all .2s;border:1px solid;}
+.modal-btn.primary{background:linear-gradient(135deg,rgba(59,130,246,0.3),rgba(59,130,246,0.1));border-color:var(--blue);color:var(--blue-b);}
+.modal-btn.danger{background:linear-gradient(135deg,rgba(239,68,68,0.2),rgba(239,68,68,0.05));border-color:var(--red);color:var(--red-b);}
+.modal-btn.neutral{background:var(--bg3);border-color:var(--border);color:var(--text2);}
+
+/* TOAST */
+#toast{
+  position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
+  background:var(--bg2);border:1px solid var(--border2);border-radius:8px;
+  padding:12px 20px;font-family:'Share Tech Mono',monospace;font-size:13px;
+  color:var(--text);z-index:600;opacity:0;pointer-events:none;
+  transition:opacity .3s;white-space:nowrap;
+}
+#toast.show{opacity:1;}
+
+.page{display:none;}
+.page.active{display:block;animation:fadein .3s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
 </head>
-<body class="p-4 md:p-8 max-w-4xl mx-auto min-h-screen flex flex-col">
+<body>
+<div class="scanlines"></div>
+<div id="xp-popup">⚡ +50 XP</div>
 
-    <header class="flex justify-between items-center mb-8">
-        <div>
-            <h1 class="heading-font text-2xl font-bold text-blue-500 tracking-wider">APEX MIND</h1>
-            <p class="text-xs text-slate-500 uppercase tracking-widest">Protocol 6 v2.3</p>
-        </div>
-        <div class="flex items-center gap-4">
-            <button onclick="openModal('settings')" class="w-10 h-10 glass flex items-center justify-center text-slate-400 hover:text-white transition">
-                <i class="fa-solid fa-gear"></i>
-            </button>
-            <div class="text-right hidden md:block">
-                <div class="text-[10px] text-slate-500 uppercase tracking-widest">Streak</div>
-                <div class="heading-font text-lg"><i class="fa-solid fa-fire streak-fire mr-1"></i><span id="streak-display">0</span></div>
-            </div>
-            <div class="text-right">
-                <div class="text-xs text-slate-400 mb-1">XP: <span id="xp-display" class="text-blue-400 font-bold">0</span></div>
-                <div class="heading-font text-[10px] text-slate-500" id="rank-display">RANK: UNKNOWN</div>
-            </div>
-        </div>
-    </header>
+<div id="unlock-banner">
+  <div class="unlock-box">
+    <div class="unlock-emoji" id="unlock-emoji">🔓</div>
+    <div class="unlock-title" id="unlock-title">PHASE UNLOCKED</div>
+    <div class="unlock-sub"   id="unlock-sub">New module deployed.</div>
+    <button class="unlock-close" onclick="closeUnlock()">ENGAGE PROTOCOL ▶</button>
+  </div>
+</div>
 
-    <div class="glass p-6 mb-8 relative overflow-hidden border-b-2 border-blue-500/20">
-        <div class="flex justify-between items-end mb-3">
-            <div>
-                <span class="text-xs font-bold uppercase tracking-tighter text-blue-400 block mb-1">Current Protocol</span>
-                <span class="text-sm font-semibold uppercase tracking-wider text-white" id="current-phase-name">PHASE: THE OBSERVER</span>
-            </div>
-            <span class="text-[10px] text-slate-500 font-mono" id="next-phase-info">ANALYZING...</span>
-        </div>
-        <div class="xp-bar">
-            <div id="xp-bar-fill" class="xp-progress"></div>
-        </div>
+<div id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal-sheet">
+    <div class="modal-title">⚙ SYSTEM SETTINGS</div>
+    <p style="font-size:15px;color:var(--text2);line-height:1.6;margin-bottom:4px">
+      <b>BACKUP</b> saves your XP, streak &amp; logs as a file you can restore anytime.<br><br>
+      <b>RESTORE</b> loads a previously saved backup.<br><br>
+      <b>RESET</b> wipes all data and restarts Protocol 6 from zero.
+    </p>
+    <div class="modal-action-row">
+      <button class="modal-btn primary" onclick="exportData()">📥 BACKUP</button>
+      <button class="modal-btn neutral" onclick="document.getElementById('restore-input').click()">📤 RESTORE</button>
+    </div>
+    <div class="modal-action-row">
+      <button class="modal-btn danger"  onclick="confirmReset()">⚠ FULL RESET</button>
+      <button class="modal-btn neutral" onclick="closeModal()">CANCEL</button>
+    </div>
+    <input type="file" id="restore-input" accept=".json" style="display:none" onchange="importData(event)">
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<div id="app">
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="hdr-logo">APEX MIND<span>PROTOCOL SIX</span></div>
+    <div class="hdr-right">
+      <div class="streak-badge">🔥 <span id="streak-count">0</span> DAY</div>
+      <button class="gear-btn" onclick="openModal()">⚙</button>
+    </div>
+  </div>
+
+  <!-- XP BAR -->
+  <div class="xp-section">
+    <div class="xp-meta">
+      <div class="xp-phase" id="phase-label">THE OBSERVER</div>
+      <div class="xp-count"><span id="xp-display">0</span> / <span id="xp-next">500</span> XP</div>
+    </div>
+    <div class="xp-bar-wrap"><div class="xp-bar-fill" id="xp-bar" style="width:0%"></div></div>
+  </div>
+
+  <!-- ═══ HOME ═══ -->
+  <div class="page active" id="page-home">
+    <div class="intel-card">
+      <div class="intel-tag" id="intel-tag">📡 DAILY INTEL</div>
+      <div class="intel-text" id="intel-text">Initializing neural feed...</div>
+      <div class="intel-sub"  id="intel-sub"></div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div class="md:col-span-2 glass p-6 border-l-4 border-blue-500">
-            <h2 class="heading-font text-[10px] text-slate-500 mb-2 flex items-center uppercase tracking-widest">
-                <i class="fa-solid fa-bolt text-yellow-500 mr-2"></i> Daily Intel
-            </h2>
-            <p class="text-md font-light leading-relaxed italic text-slate-200" id="daily-tip">"Syncing data..."</p>
-        </div>
-        <div id="daily-status-card" class="glass p-6 flex flex-col justify-center items-center text-center">
-            <h2 class="heading-font text-[10px] text-slate-500 mb-2 uppercase tracking-widest">Daily Logs</h2>
-            <div class="text-3xl font-bold text-white mb-1" id="daily-count">0 / 3</div>
-            <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold" id="daily-status-text">Active</p>
-        </div>
+    <div class="section-label">DAILY QUOTA</div>
+    <div class="daily-cap-bar">
+      <div class="cap-pip" id="pip-1"></div>
+      <div class="cap-pip" id="pip-2"></div>
+      <div class="cap-pip" id="pip-3"></div>
+    </div>
+    <div class="cap-label" id="cap-label">0 / 3 ENTRIES LOGGED TODAY</div>
+
+    <div class="section-label">SYSTEM STATUS</div>
+    <div class="stats-grid">
+      <div class="stat-box"><div class="stat-val" id="stat-xp">0</div><div class="stat-lbl">TOTAL XP</div></div>
+      <div class="stat-box"><div class="stat-val em" id="stat-streak">0</div><div class="stat-lbl">DAY STREAK</div></div>
+      <div class="stat-box"><div class="stat-val amber" id="stat-scans">0</div><div class="stat-lbl">SCANS LOGGED</div></div>
+      <div class="stat-box"><div class="stat-val violet" id="stat-pr">--</div><div class="stat-lbl">BEST RECOVERY</div></div>
     </div>
 
-    <div id="countdown-banner" class="hidden glass p-4 mb-8 border border-amber-500/30 bg-amber-500/5 animate-pulse">
-        <div class="flex items-center justify-between text-xs text-amber-200 font-mono">
-            <span><i class="fa-solid fa-hourglass-half mr-2"></i> PROTOCOL COMPLETE</span>
-            <span id="days-to-unlock">Analyzing unlock window...</span>
-        </div>
+    <div class="section-label">PROTOCOL ROADMAP</div>
+    <div class="card card-accent-blue" id="roadmap-card"></div>
+
+    <div class="section-label">RECENT INTEL</div>
+    <div id="recent-logs">
+      <div class="empty-state"><div class="empty-icon">📡</div><div class="empty-text">NO DATA LOGGED YET<br>COMPLETE YOUR FIRST SCAN</div></div>
+    </div>
+  </div>
+
+  <!-- ═══ SCANNER ═══ -->
+  <div class="page" id="page-scanner">
+    <div class="step-indicator">
+      <div class="step-dot done" id="step-dot-1"></div>
+      <div class="step-dot"      id="step-dot-2"></div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        <div class="glass p-6 level-card" id="feat-scanner">
-            <div class="flex justify-between items-start mb-4">
-                <i class="fa-solid fa-eye text-2xl text-cyan-400"></i>
-                <span class="text-[10px] bg-cyan-900/30 text-cyan-400 px-2 py-1 rounded uppercase font-bold tracking-widest">Active</span>
-            </div>
-            <h3 class="heading-font text-md mb-2">Emotion Scanner</h3>
-            <p class="text-sm text-slate-400 mb-4">Identify emotions in media or people.</p>
-            <button id="btn-scanner" onclick="openModal('scanner')" class="w-full py-2 bg-cyan-600/20 border border-cyan-500/50 hover:bg-cyan-500/30 text-cyan-400 rounded-lg text-sm transition font-semibold">INITIALIZE SCAN</button>
-        </div>
-
-        <div class="glass p-6 level-card locked" id="feat-battery">
-            <div class="flex justify-between items-start mb-4">
-                <i class="fa-solid fa-battery-half text-2xl text-emerald-400"></i>
-                <span class="text-[10px] bg-slate-800 text-slate-500 px-2 py-1 rounded" id="label-battery">LOCKED: 500 XP</span>
-            </div>
-            <h3 class="heading-font text-md mb-2">Battery Check</h3>
-            <p class="text-sm text-slate-400 mb-4">Diagnostics: Track your own energy levels.</p>
-            <button id="btn-battery" class="w-full py-2 bg-slate-800 text-slate-500 rounded-lg text-sm cursor-not-allowed">LOCKED</button>
-        </div>
-
-        <div class="glass p-6 level-card locked" id="feat-repair">
-            <div class="flex justify-between items-start mb-4">
-                <i class="fa-solid fa-wrench text-2xl text-orange-400"></i>
-                <span class="text-[10px] bg-slate-800 text-slate-500 px-2 py-1 rounded" id="label-repair">LOCKED: 1500 XP</span>
-            </div>
-            <h3 class="heading-font text-md mb-2">Repair Lab</h3>
-            <p class="text-sm text-slate-400 mb-4">Scripts to fix social glitches.</p>
-            <button id="btn-repair" class="w-full py-2 bg-slate-800 text-slate-500 rounded-lg text-sm cursor-not-allowed">LOCKED</button>
-        </div>
-
-        <div class="glass p-6 level-card locked" id="feat-timer">
-            <div class="flex justify-between items-start mb-4">
-                <i class="fa-solid fa-stopwatch text-2xl text-red-400"></i>
-                <span class="text-[10px] bg-slate-800 text-slate-500 px-2 py-1 rounded" id="label-timer">LOCKED: 3000 XP</span>
-            </div>
-            <h3 class="heading-font text-md mb-2">Recovery Timer</h3>
-            <p class="text-sm text-slate-400 mb-4">Track bounce-back speed.</p>
-            <button id="btn-timer" class="w-full py-2 bg-slate-800 text-slate-500 rounded-lg text-sm cursor-not-allowed">LOCKED</button>
-        </div>
+    <div id="scanner-s1">
+      <div class="intel-card" style="border-color:var(--blue);box-shadow:0 0 20px rgba(59,130,246,0.12)">
+        <div class="intel-tag" style="color:var(--blue-b)">EMOTION SCANNER — STEP 1 OF 2</div>
+        <div class="intel-text">Pick the one that best matches how you're feeling right now.</div>
+      </div>
+      <div class="card card-accent-blue">
+        <div class="card-title">HOW ARE YOU FEELING?</div>
+        <div class="emotion-grid" id="grid-emotions"></div>
+      </div>
+      <button class="submit-btn" id="scanner-next-btn" disabled onclick="scannerStep2()">NEXT → TAG SOURCE</button>
     </div>
 
-    <div id="today-summary" class="hidden mb-8">
-        <h2 class="heading-font text-[10px] text-slate-500 mb-4 uppercase tracking-widest">Today's Data Logs</h2>
-        <div id="summary-list" class="space-y-2"></div>
-    </div>
-
-    <div id="modal-container" class="fixed inset-0 bg-black/95 backdrop-blur-md hidden flex items-center justify-center p-4 z-50">
-        <div class="glass w-full max-w-xl p-8 relative shadow-2xl border-slate-700">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-            <div id="modal-content"></div>
+    <div id="scanner-s2" style="display:none">
+      <div class="intel-card" style="border-color:var(--emerald);box-shadow:0 0 20px var(--glow-e)">
+        <div class="intel-tag" style="color:var(--em-b)">EMOTION SCANNER — STEP 2 OF 2</div>
+        <div class="intel-text" id="step2-emotion">Signal Tagged: —</div>
+        <div class="intel-sub">Tag the source for a +15 XP Context Bonus.</div>
+      </div>
+      <div class="card card-accent-em">
+        <div class="card-title">📡 SOURCE IDENTIFICATION</div>
+        <div class="source-row">
+          <button class="src-btn" data-src="Family" onclick="selectSource(this)"><span class="src-icon">🏠</span>FAMILY</button>
+          <button class="src-btn" data-src="Friend" onclick="selectSource(this)"><span class="src-icon">🤝</span>FRIEND</button>
+          <button class="src-btn" data-src="Media"  onclick="selectSource(this)"><span class="src-icon">📱</span>MEDIA</button>
+          <button class="src-btn" data-src="Self"   onclick="selectSource(this)"><span class="src-icon">🧠</span>SELF</button>
         </div>
+      </div>
+      <button class="submit-btn green" id="scanner-submit-btn" disabled onclick="submitScan()">⚡ SUBMIT SCAN</button>
+      <button class="submit-btn ghost" onclick="scannerBack()" style="margin-top:8px">← BACK</button>
     </div>
+  </div>
 
-    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 glass px-6 py-3 border-blue-500 border hidden text-blue-400 font-semibold text-sm z-[100] transition-all">
-        XP GAINED
+  <!-- ═══ BATTERY ═══ -->
+  <div class="page" id="page-battery">
+    <div id="bat-locked" style="display:none">
+      <div class="card card-accent-amber">
+        <div class="lock-overlay">
+          <div class="lock-icon">🔒</div>
+          <div class="lock-title">ARCHITECT MODE LOCKED</div>
+          <div class="lock-desc">Internal diagnostics unlock at 500 XP. Keep scanning to power up the system.</div>
+          <div class="lock-xp">NEED <span id="bat-xp-need">500</span> XP · CURRENT: <span id="bat-xp-cur">0</span> XP</div>
+        </div>
+      </div>
     </div>
+    <div id="bat-unlocked" style="display:none">
+      <div class="intel-card" style="border-color:var(--emerald);box-shadow:0 0 20px var(--glow-e)">
+        <div class="intel-tag" style="color:var(--em-b)">BATTERY CHECK — INTERNAL DIAGNOSTICS</div>
+        <div class="intel-text">Calibrate your internal energy reading. Where is the system at right now?</div>
+      </div>
+      <div class="card card-accent-em">
+        <div class="card-title">⚡ POWER LEVEL</div>
+        <div class="battery-display">
+          <div class="battery-pct" id="bat-pct">72%</div>
+          <div>
+            <div class="battery-status" id="bat-status">NOMINAL</div>
+            <div class="battery-tip"   id="bat-tip">System running well. Minor optimization may help.</div>
+          </div>
+        </div>
+        <div class="slider-wrap">
+          <div class="slider-track-fill" id="slider-fill" style="width:72%"></div>
+          <input type="range" id="bat-slider" min="1" max="100" value="72" oninput="updateBattery(this.value)">
+        </div>
+        <div class="slider-labels"><span>1% DRAINED</span><span>50% HALF</span><span>100% OPTIMAL</span></div>
+      </div>
+      <button class="submit-btn green" onclick="submitBattery()">⚡ LOG BATTERY LEVEL</button>
+    </div>
+  </div>
 
-    <script>
-        let state = { xp: 0, logs: [], dailyCount: 0, dailyLimit: 3, streak: 0, lastDate: null, lastReset: null };
-        const PHASES = [
-            { name: "THE OBSERVER", threshold: 0 },
-            { name: "THE ARCHITECT", threshold: 500 },
-            { name: "THE DIPLOMAT", threshold: 1500 },
-            { name: "THE STRATEGIST", threshold: 3000 },
-            { name: "APEX MASTER", threshold: 5000 }
-        ];
-        const EMOTIONS = [
-            { name: "Frustrated", cat: "High Energy", color: "text-red-400" },
-            { name: "Excited", cat: "High Energy", color: "text-yellow-400" },
-            { name: "Bored", cat: "Low Energy", color: "text-slate-400" },
-            { name: "Anxious", cat: "High Energy", color: "text-orange-400" },
-            { name: "Focused", cat: "High Energy", color: "text-cyan-400" },
-            { name: "Calm", cat: "Low Energy", color: "text-emerald-400" },
-            { name: "Annoyed", cat: "Mid Energy", color: "text-pink-400" },
-            { name: "Proud", cat: "Mid Energy", color: "text-blue-400" },
-            { name: "Confused", cat: "Mid Energy", color: "text-purple-400" },
-            { name: "Lonely", cat: "Low Energy", color: "text-indigo-400" },
-            { name: "Content", cat: "Low Energy", color: "text-teal-400" },
-            { name: "Overwhelmed", cat: "Max Energy", color: "text-rose-500" }
-        ];
-        const TARGETS = [
-            { id: 'family', label: 'Family', icon: 'fa-house' },
-            { id: 'friend', label: 'Friend', icon: 'fa-user-group' },
-            { id: 'media', label: 'Video/Game', icon: 'fa-gamepad' },
-            { id: 'stranger', label: 'Other', icon: 'fa-user-secret' },
-            { id: 'self', label: 'Myself', icon: 'fa-fingerprint' }
-        ];
-        const DAILY_INTELS = [
-            "Losing is just data. Every time you lose, your brain maps out a mistake to avoid next time.",
-            "Repair Phrases are power moves. Apologizing first actually shows higher social status.",
-            "Physical hack: If your heart is racing, exhale twice as long as you inhale.",
-            "Peer pressure isn't an attack, it's a test of your internal core code.",
-            "Recovery speed is the ultimate flex. How fast can you go from 'Tilt' to 'Focus'?",
-            "If you're feeling 'cringe,' it usually just means your social awareness is upgrading.",
-            "Anger is a secondary emotion. It usually hides fear, embarrassment, or sadness.",
-            "Boundaries aren't walls to keep people out; they are gates to let the right ones in.",
-            "Active listening is like scouting in a game. You're gathering info others miss.",
-            "Your 'Operating System' is still being built. Be patient with your hardware lags."
-        ];
+  <!-- ═══ REPAIR LAB ═══ -->
+  <div class="page" id="page-repair">
+    <div id="rep-locked" style="display:none">
+      <div class="card card-accent-violet">
+        <div class="lock-overlay">
+          <div class="lock-icon">🔒</div>
+          <div class="lock-title">DIPLOMAT MODE LOCKED</div>
+          <div class="lock-desc">Social patches deploy at 1,500 XP. The Repair Lab holds tactical scripts to fix communication glitches in real-world chats.</div>
+          <div class="lock-xp">NEED <span id="rep-xp-need">1500</span> XP · CURRENT: <span id="rep-xp-cur">0</span> XP</div>
+        </div>
+      </div>
+    </div>
+    <div id="rep-unlocked" style="display:none">
+      <div class="intel-card" style="border-color:var(--violet);box-shadow:0 0 20px var(--glow-v)">
+        <div class="intel-tag" style="color:#c4b5fd">REPAIR LAB — SOCIAL PATCH LIBRARY</div>
+        <div class="intel-text">Select a script. Tap COPY PATCH → deploy in real chats or texts.</div>
+      </div>
+      <div class="repair-filter" id="repair-filters">
+        <button class="filter-btn active" onclick="filterScripts('all',this)">ALL</button>
+        <button class="filter-btn" onclick="filterScripts('TILT',this)">TILT</button>
+        <button class="filter-btn" onclick="filterScripts('BOUNDARY',this)">BOUNDARY</button>
+        <button class="filter-btn" onclick="filterScripts('REPAIR',this)">REPAIR</button>
+        <button class="filter-btn" onclick="filterScripts('ASSERT',this)">ASSERT</button>
+      </div>
+      <div id="scripts-list"></div>
+    </div>
+  </div>
 
-        function initApp() {
-            const saved = localStorage.getItem('apex_mind_v2_3');
-            if (saved) state = JSON.parse(saved);
-            handleTimeLogic();
-            updateUI();
-            setDailyIntel();
-        }
+  <!-- ═══ RECOVERY ═══ -->
+  <div class="page" id="page-recovery">
+    <div id="rec-locked" style="display:none">
+      <div class="card card-accent-amber">
+        <div class="lock-overlay">
+          <div class="lock-icon">🔒</div>
+          <div class="lock-title">STRATEGIST MODE LOCKED</div>
+          <div class="lock-desc">Recovery Timer unlocks at 3,000 XP. Gamify your bounce-back time and beat your personal record after every tilt.</div>
+          <div class="lock-xp">NEED <span id="rec-xp-need">3000</span> XP · CURRENT: <span id="rec-xp-cur">0</span> XP</div>
+        </div>
+      </div>
+    </div>
+    <div id="rec-unlocked" style="display:none">
+      <div class="intel-card" style="border-color:var(--amber);box-shadow:0 0 20px var(--glow-a)">
+        <div class="intel-tag" style="color:var(--amber-b)">RECOVERY TIMER — BOUNCE-BACK PROTOCOL</div>
+        <div class="intel-text">Hit START when tilt hits. Hit CENTERED when your system is fully neutral. Beat your PR.</div>
+      </div>
+      <div class="card card-accent-amber">
+        <div class="card-title">⏱ TILT RECOVERY STOPWATCH</div>
+        <div class="timer-display">
+          <div class="timer-digits" id="timer-digits">00:00</div>
+          <div class="timer-label"  id="timer-label">READY TO TRACK</div>
+        </div>
+        <div class="timer-btns">
+          <button class="timer-btn start"  id="timer-start-btn" onclick="timerStart()">▶ START TILT</button>
+          <button class="timer-btn stop"   id="timer-stop-btn"  onclick="timerStop()" disabled>■ CENTERED</button>
+          <button class="timer-btn reset"  onclick="timerReset()">↺</button>
+        </div>
+      </div>
+      <div class="pr-section">
+        <div class="pr-label">⚡ PERSONAL RECORD</div>
+        <div class="pr-time" id="pr-display">--:--</div>
+        <div class="pr-sub"  id="pr-sub">No PR set yet — run your first session</div>
+      </div>
+      <div class="card card-accent-amber" style="margin-top:14px">
+        <div class="card-title">📊 SESSION LOG</div>
+        <div id="recovery-log-list">
+          <div class="empty-state" style="padding:16px 0"><div class="empty-icon" style="font-size:24px">⏱</div><div class="empty-text">NO SESSIONS LOGGED</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-        function handleTimeLogic() {
-            const now = new Date();
-            const today = now.toDateString();
-            const yesterday = new Date(now);
-            yesterday.setDate(yesterday.getDate() - 1);
-            if (state.lastReset !== today) {
-                if (state.lastDate === yesterday.toDateString()) state.streak += 1;
-                else if (state.lastDate !== today) state.streak = 0;
-                state.dailyCount = 0;
-                state.lastReset = today;
-                save();
-            }
-        }
+<!-- NAV BAR -->
+<div class="nav-bar">
+  <button class="nav-btn active" id="nav-home"     onclick="navigate('home')"><span class="nav-icon">🏠</span><span class="nav-label">HOME</span></button>
+  <button class="nav-btn"        id="nav-scanner"  onclick="navigate('scanner')"><span class="nav-icon">🔍</span><span class="nav-label">SCANNER</span></button>
+  <button class="nav-btn"        id="nav-battery"  onclick="navigate('battery')"><span class="nav-icon">⚡</span><span class="nav-label">BATTERY</span></button>
+  <button class="nav-btn"        id="nav-repair"   onclick="navigate('repair')"><span class="nav-icon">🔧</span><span class="nav-label">REPAIR</span></button>
+  <button class="nav-btn"        id="nav-recovery" onclick="navigate('recovery')"><span class="nav-icon">⏱</span><span class="nav-label">RECOVERY</span></button>
+</div>
 
-        function save() { localStorage.setItem('apex_mind_v2_3', JSON.stringify(state)); }
+<script>
+// ══════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════
+const PHASES = [
+  {name:'THE OBSERVER',   minXP:0,    maxXP:500,  desc:'Emotional Literacy & Pattern Recognition',    emoji:'👁'},
+  {name:'THE ARCHITECT',  minXP:500,  maxXP:1500, desc:'Self-Awareness & Physiological Regulation',   emoji:'⚡'},
+  {name:'THE DIPLOMAT',   minXP:1500, maxXP:3000, desc:'Assertiveness, Boundaries & Social Repair',   emoji:'🔧'},
+  {name:'THE STRATEGIST', minXP:3000, maxXP:5000, desc:'Resilience, Recovery Speed & Calm Under Fire',emoji:'🎯'},
+];
 
-        function updateUI() {
-            document.getElementById('xp-display').innerText = state.xp;
-            document.getElementById('streak-display').innerText = state.streak;
-            document.getElementById('daily-count').innerText = `${state.dailyCount} / ${state.dailyLimit}`;
-            let currentPhase = PHASES[0], nextPhase = PHASES[1];
-            for (let i = PHASES.length - 1; i >= 0; i--) { if (state.xp >= PHASES[i].threshold) { currentPhase = PHASES[i]; nextPhase = PHASES[i+1] || PHASES[i]; break; } }
-            document.getElementById('rank-display').innerText = `RANK: ${currentPhase.name}`;
-            document.getElementById('current-phase-name').innerText = `PHASE: ${currentPhase.name}`;
-            const range = nextPhase.threshold - currentPhase.threshold;
-            const progress = range === 0 ? 100 : ((state.xp - currentPhase.threshold) / range) * 100;
-            document.getElementById('xp-bar-fill').style.width = `${Math.min(progress, 100)}%`;
-            const card = document.getElementById('daily-status-card'), banner = document.getElementById('countdown-banner'), scanBtn = document.getElementById('btn-scanner');
-            if (state.dailyCount >= state.dailyLimit) {
-                card.classList.add('protocol-complete');
-                document.getElementById('daily-status-text').innerText = "Complete";
-                banner.classList.remove('hidden');
-                const xpNeeded = nextPhase.threshold - state.xp;
-                document.getElementById('days-to-unlock').innerText = xpNeeded > 0 ? `ETA: ${Math.ceil(xpNeeded / 150)} days to ${nextPhase.name}` : "UNLOCKED!";
-                scanBtn.innerText = "VIEW DATA";
-                scanBtn.onclick = () => renderSummary();
-            } else {
-                card.classList.remove('protocol-complete');
-                document.getElementById('daily-status-text').innerText = "Active";
-                banner.classList.add('hidden');
-                scanBtn.innerText = "INITIALIZE SCAN";
-                scanBtn.onclick = () => openModal('scanner');
-            }
-            unlock(state.xp >= 500, 'feat-battery', 'btn-battery', 'label-battery', 'calibrate', 'emerald');
-            unlock(state.xp >= 1500, 'feat-repair', 'btn-repair', 'label-repair', 'access lab', 'orange');
-            unlock(state.xp >= 3000, 'feat-timer', 'btn-timer', 'label-timer', 'initialize tracker', 'red');
-            updateSummaryList();
-        }
+const INTEL = [
+  {text:"Every time you lose, you're getting a free tutorial. Most people just skip it.", sub:"Winners replay the loss. Everyone else replays the excuses. Go back and find the one thing you'd change."},
+  {text:"Breathe in for 4 seconds. Breathe out for 8. That's it. You'll feel it working within 60 seconds.", sub:"Try it next time you're about to say something you'll regret. The long exhale is like hitting pause on your own reaction."},
+  {text:"If someone is annoying you, wait 90 seconds before doing anything. The feeling peaks and crashes on its own.", sub:"If you're still mad after 90 seconds, it's because you kept feeding it. That part is always a choice."},
+  {text:"Calling out what you feel — even just in your head — actually makes it less intense. One word is enough.", sub:"Stuck on 'bad'? Get more specific. Embarrassed? Annoyed? Drained? The more accurate the word, the faster it clears."},
+  {text:"Running a play in your head counts as practice. Not just mentally — your muscles literally rehearse it.", sub:"Before a test, game, or tough conversation: play it through in your head first. Your performance actually improves."},
+  {text:"Being left out or rejected hurts the same way a twisted ankle does. It's a real signal, not you being soft.", sub:"So when it hits hard, treat it like an injury. Rest, don't poke at it, and let it actually heal before going back in."},
+  {text:"Sleep is the cheat code. Reaction time, mood, focus, memory — every single stat goes up with 8+ hours.", sub:"You can't grind your way out of being under-slept. Every athlete, every pro gamer, every top student prioritizes this."},
+  {text:"Your first reaction to anything — anger, embarrassment, fear — is automatic. What you do next is the skill.", sub:"You can't control the first 2 seconds. Everything after that is trainable. That's what this protocol is building."},
+  {text:"Watching someone go through something really does affect you — even if it didn't happen to you.", sub:"This is why you feel weird after watching something intense. Your system ran the whole emotional simulation for the character."},
+  {text:"The hype before something exciting? That's usually better than the thing itself. Your system is wired for the chase.", sub:"The countdown, the buildup, the anticipation — that's peak. Use it. Enjoy the run-up as much as the arrival."},
+  {text:"Replaying bad stuff on a loop is the one thing guaranteed to make your recovery take forever.", sub:"One watch, learn what you can, then close the tab. The people who bounce back fast are the ones who stop the replay."},
+  {text:"The best competitors focus on their next move — not the scoreboard. One play at a time beats panicking about the score.", sub:"When you're trailing, shrinking your focus to the next 30 seconds actually makes you perform better. Zoom in, not out."},
+  {text:"Telling someone you trust what's actually going on isn't a sign you're struggling — it's a power move.", sub:"The strongest people in any room know who they can talk to. Building that trust early is a long-game advantage."},
+  {text:"How you hold your body right now is sending signals to your own head. Good posture isn't just for photos.", sub:"Try it: sit up, take up space, chin level. Give it 2 minutes. Your own system responds to the signal you're sending it."},
+  {text:"Boredom means your brain just shifted into its most creative mode. Don't rush to fill it.", sub:"The random idea that hits when you're doing nothing? That's not an accident. Downtime is where breakthroughs happen."},
+];
 
-        function unlock(cond, cid, bid, lid, txt, col) {
-            if (cond) {
-                document.getElementById(cid).classList.remove('locked');
-                document.getElementById(lid).innerText = "UNLOCKED";
-                document.getElementById(lid).className = `text-[10px] bg-${col}-900/30 text-${col}-400 px-2 py-1 rounded font-bold uppercase tracking-widest`;
-                document.getElementById(bid).innerText = txt.toUpperCase();
-                document.getElementById(bid).className = `w-full py-2 bg-${col}-600/20 border border-${col}-500/50 hover:bg-${col}-500/30 text-${col}-400 rounded-lg text-sm transition font-semibold`;
-                document.getElementById(bid).onclick = () => openModal(cid.split('-')[1]);
-            }
-        }
 
-        function setDailyIntel() { const d = Math.floor(new Date().getTime() / 86400000); document.getElementById('daily-tip').innerText = `"${DAILY_INTELS[d % DAILY_INTELS.length]}"`; }
+const EMOTIONS = [
+  {emoji:'🤩',name:'Excited',      key:'excited'},
+  {emoji:'😄',name:'Happy',        key:'happy'},
+  {emoji:'😎',name:'Confident',    key:'confident'},
+  {emoji:'😌',name:'Calm',         key:'calm'},
+  {emoji:'😐',name:'Neutral',      key:'neutral'},
+  {emoji:'😬',name:'Anxious',      key:'anxious'},
+  {emoji:'😤',name:'Frustrated',   key:'frustrated'},
+  {emoji:'😡',name:'Angry',        key:'angry'},
+  {emoji:'😢',name:'Sad',          key:'sad'},
+  {emoji:'😞',name:'Disappointed', key:'disappointed'},
+  {emoji:'🤯',name:'Overwhelmed',  key:'overwhelmed'},
+  {emoji:'😔',name:'Drained',      key:'drained'},
+  {emoji:'😳',name:'Embarrassed',  key:'embarrassed'},
+  {emoji:'🥺',name:'Lonely',       key:'lonely'},
+  {emoji:'😴',name:'Bored',        key:'bored'},
+  {emoji:'🫶',name:'Proud',        key:'proud'},
+];
 
-        function gainXP(amt, type, val, target = null) {
-            if (state.dailyCount < state.dailyLimit) {
-                state.xp += amt; state.dailyCount += 1; state.lastDate = new Date().toDateString();
-                state.logs.push({ timestamp: new Date().toISOString(), date: new Date().toDateString(), type, value: val, target });
-                showToast(`+${amt} XP`); save(); updateUI();
-            }
-        }
+const SCRIPTS = [
+  {id:1,cat:'TILT',    title:'The Tilt Reset',         text:"I need 5 minutes before I respond. My system is running hot and I don't want to say something I'll regret.",    when:'When you\'re about to react in a way you\'ll regret'},
+  {id:2,cat:'REPAIR',  title:'The Social Error Fix',   text:"Hey — I think what I said earlier came out wrong. That's not what I meant. Can we reset?",                       when:'After saying something that landed badly'},
+  {id:3,cat:'BOUNDARY',title:'The Hard No',            text:"I'm not going to do that. I'm not changing my answer on this one.",                                               when:'When someone keeps pushing after you\'ve already said no'},
+  {id:4,cat:'ASSERT',  title:'The Calm Request',       text:"I need to tell you something and I want you to hear it before you respond. Is that okay?",                        when:'Before bringing up something difficult'},
+  {id:5,cat:'TILT',    title:'The Cooldown Signal',    text:"I'm too activated to have this conversation right now without it going sideways. Give me an hour.",               when:'Mid-argument when logic has already left the room'},
+  {id:6,cat:'REPAIR',  title:'The Check-In Repair',    text:"I've been off lately and I think it affected how I treated you. I wanted to own that.",                           when:'Reconnecting after a period of tension or distance'},
+  {id:7,cat:'BOUNDARY',title:'The Soft Exit',          text:"I'm going to tap out of this topic. It's not a big deal — I just don't want to keep going here.",                 when:'Redirecting a conversation without escalating it'},
+  {id:8,cat:'ASSERT',  title:'The Disagreement Hold',  text:"I hear you. I still see it differently. I'm not trying to fight — I just don't agree.",                           when:'Holding your ground without shutting the other person down'},
+  {id:9,cat:'TILT',    title:'The Loss Acknowledgment',text:"That was rough. I'm not going to pretend it's fine right now, but I'll process it and come back stronger.",       when:'After a loss, rejection, or major setback'},
+  {id:10,cat:'REPAIR', title:'The Misread Fix',        text:"I think that came across differently than I intended. Here's what I actually meant:",                             when:'When your message or action was completely misinterpreted'},
+  {id:11,cat:'BOUNDARY',title:'The Info Firewall',     text:"That's not something I share. Not because of anything weird — I just keep that private.",                         when:'When someone asks for info you\'re not comfortable giving'},
+  {id:12,cat:'ASSERT', title:'The Credit Claim',       text:"I want to be clear — that idea came from me and I want to make sure that's on the record.",                       when:'When your contribution is being overlooked or taken'},
+];
 
-        function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 2500); }
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+const DEFAULT_STATE = {
+  xp:0, streak:0, lastLogDate:null,
+  todayEntries:0, todayDate:null,
+  totalScans:0, logs:[],
+  recoveryPR:null, recoverySessions:[],
+};
 
-        function updateSummaryList() {
-            const today = new Date().toDateString(), logs = state.logs.filter(l => l.date === today);
-            const sum = document.getElementById('today-summary'), list = document.getElementById('summary-list');
-            if (logs.length > 0) {
-                sum.classList.remove('hidden');
-                list.innerHTML = logs.map(l => `<div class="glass p-3 flex justify-between items-center border-l-2 border-blue-500/50"><div class="flex flex-col"><span class="text-[8px] uppercase text-slate-500 font-bold">${l.type}</span><span class="text-sm font-semibold text-white">${l.value}</span></div>${l.target ? `<span class="text-[9px] bg-blue-900/30 text-blue-400 px-2 py-1 rounded uppercase font-bold">${l.target}</span>` : ''}</div>`).join('');
-            } else sum.classList.add('hidden');
-        }
+let S = {...DEFAULT_STATE};
 
-        function exportData() {
-            const s = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
-            const a = document.createElement('a'); a.setAttribute("href", s); a.setAttribute("download", "ApexMind_Backup.json"); a.click(); a.remove();
-        }
+function loadState(){
+  try {
+    const raw = localStorage.getItem('apexmind_p6');
+    if(raw) S = {...DEFAULT_STATE,...JSON.parse(raw)};
+  } catch(e){}
+  const today = todayStr();
+  if(S.todayDate !== today){ S.todayDate = today; S.todayEntries = 0; }
+  // Streak check
+  if(S.lastLogDate){
+    const last = new Date(S.lastLogDate);
+    const now  = new Date(today);
+    const diff = Math.floor((now-last)/86400000);
+    if(diff > 1) S.streak = 0;
+  }
+}
+function save(){ localStorage.setItem('apexmind_p6', JSON.stringify(S)); }
+function todayStr(){ return new Date().toISOString().slice(0,10); }
 
-        function handleImport(ev) {
-            const f = ev.target.files[0]; if (!f) return;
-            const r = new FileReader();
-            r.onload = (e) => { try { const s = JSON.parse(e.target.result); if (s.xp !== undefined) { state = s; save(); updateUI(); closeModal(); } } catch (x) {} };
-            r.readAsText(f);
-        }
+// ══════════════════════════════════════════
+// PHASE / XP
+// ══════════════════════════════════════════
+function phaseIdx(){
+  for(let i=PHASES.length-1;i>=0;i--) if(S.xp>=PHASES[i].minXP) return i;
+  return 0;
+}
+function addXP(amt, label){
+  const oldP = phaseIdx();
+  S.xp = Math.max(0, S.xp + amt);
+  const newP = phaseIdx();
+  save(); renderAll();
+  showXPPopup(amt, label);
+  if(newP > oldP) setTimeout(()=>showUnlock(newP), 700);
+}
+function showXPPopup(amt, label){
+  const el = document.getElementById('xp-popup');
+  el.textContent = `⚡ +${amt} XP — ${label||'UPGRADE'}`;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), 2400);
+}
+function showUnlock(idx){
+  const p = PHASES[idx];
+  document.getElementById('unlock-emoji').textContent = p.emoji;
+  document.getElementById('unlock-title').textContent = p.name+' UNLOCKED';
+  document.getElementById('unlock-sub').textContent   = 'Protocol deployed: '+p.desc;
+  document.getElementById('unlock-banner').classList.add('show');
+}
+function closeUnlock(){ document.getElementById('unlock-banner').classList.remove('show'); }
 
-        function openModal(t) {
-            document.getElementById('modal-container').classList.remove('hidden');
-            const c = document.getElementById('modal-content');
-            if (t === 'scanner') renderEmotionGrid();
-            else if (t === 'battery') renderBattery();
-            else if (t === 'repair') renderRepair();
-            else if (t === 'timer') renderTimer();
-            else if (t === 'settings') renderSettings();
-        }
+function showCustomUnlock(emoji, title, sub){
+  document.getElementById('unlock-emoji').textContent = emoji;
+  document.getElementById('unlock-title').textContent = title;
+  document.getElementById('unlock-sub').textContent   = sub;
+  document.getElementById('unlock-banner').classList.add('show');
+}
 
-        function closeModal() { document.getElementById('modal-container').classList.add('hidden'); }
+// ══════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════
+function renderAll(){
+  const xp   = S.xp;
+  const pi   = phaseIdx();
+  const ph   = PHASES[pi];
+  const next = pi < PHASES.length-1 ? PHASES[pi+1].minXP : 5000;
+  const pct  = Math.min(100,((xp-ph.minXP)/(next-ph.minXP))*100);
 
-        function renderSettings() {
-            document.getElementById('modal-content').innerHTML = `
-                <h2 class="heading-font text-xl text-slate-200 mb-8 uppercase tracking-tighter">Settings</h2>
-                <div class="space-y-4">
-                    <button onclick="exportData()" class="w-full py-4 glass border border-blue-500/30 text-blue-400 font-bold">EXPORT BACKUP</button>
-                    <input type="file" id="import-input" class="hidden" accept=".json" onchange="handleImport(event)">
-                    <button onclick="document.getElementById('import-input').click()" class="w-full py-4 glass border border-amber-500/30 text-amber-400 font-bold">IMPORT BACKUP</button>
-                </div>
-            `;
-        }
+  document.getElementById('phase-label').textContent = ph.name;
+  document.getElementById('xp-display').textContent  = xp.toLocaleString();
+  document.getElementById('xp-next').textContent     = next.toLocaleString();
+  document.getElementById('xp-bar').style.width      = pct+'%';
+  document.getElementById('streak-count').textContent= S.streak;
 
-        function renderEmotionGrid() {
-            document.getElementById('modal-content').innerHTML = `
-                <div class="animate-slide"><h2 class="heading-font text-xl text-cyan-400 mb-6 uppercase">Step 1: Emotion</h2>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    ${EMOTIONS.map(e => `<button onclick="selectEmotion('${e.name}')" class="emo-btn p-4 rounded-xl text-left"><span class="text-sm font-semibold ${e.color}">${e.name}</span></button>`).join('')}
-                </div></div>`;
-        }
+  // Stats
+  document.getElementById('stat-xp').textContent    = xp.toLocaleString();
+  document.getElementById('stat-streak').textContent= S.streak;
+  document.getElementById('stat-scans').textContent = S.totalScans;
+  document.getElementById('stat-pr').textContent    = S.recoveryPR ? fmtTime(S.recoveryPR) : '--';
 
-        let curEmo = null;
-        function selectEmotion(e) { curEmo = e; renderTargetStep(); }
+  // Daily cap pips
+  const e = Math.min(S.todayEntries, 3);
+  for(let i=1;i<=3;i++){
+    const pip = document.getElementById('pip-'+i);
+    pip.className = 'cap-pip'+(i<=e?' filled':'');
+    if(i<=e){
+      if(i===2) pip.classList.add('r');
+      if(i===3) pip.classList.add('rr');
+    }
+  }
+  document.getElementById('cap-label').textContent = `${e} / 3 ENTRIES LOGGED TODAY`;
 
-        function renderTargetStep() {
-            document.getElementById('modal-content').innerHTML = `
-                <div class="animate-slide"><h2 class="heading-font text-xl text-cyan-400 mb-6 uppercase">Step 2: Source</h2>
-                <div class="grid grid-cols-1 gap-2">
-                    ${TARGETS.map(t => `<button onclick="gainXP(60, 'Scanner', curEmo, '${t.label}'); closeModal();" class="glass p-4 text-left font-bold text-slate-200 hover:border-cyan-500 transition">${t.label}</button>`).join('')}
-                    <button onclick="gainXP(50, 'Scanner', curEmo); closeModal();" class="mt-4 text-slate-500 text-xs uppercase">Skip Source</button>
-                </div></div>`;
-        }
+  // Nav locks
+  ['battery','repair','recovery'].forEach((page,i)=>{
+    const threshold = [500,1500,3000][i];
+    const btn = document.getElementById('nav-'+page);
+    btn.classList.toggle('locked', xp < threshold);
+  });
 
-        function renderSummary() {
-            const today = new Date().toDateString(), logs = state.logs.filter(l => l.date === today);
-            document.getElementById('modal-content').innerHTML = `<h2 class="heading-font text-xl text-amber-400 mb-4 uppercase">Briefing</h2>
-                <div class="space-y-3">${logs.map(l => `<div class="p-4 glass flex justify-between"><span>${l.value}</span><span class="text-xs text-slate-500">${l.target||''}</span></div>`).join('')}</div>`;
-            document.getElementById('modal-container').classList.remove('hidden');
-        }
+  // Section visibility
+  sv('bat-locked',   xp<500);  sv('bat-unlocked',  xp>=500);
+  sv('rep-locked',   xp<1500); sv('rep-unlocked',  xp>=1500);
+  sv('rec-locked',   xp<3000); sv('rec-unlocked',  xp>=3000);
 
-        function renderBattery() {
-            document.getElementById('modal-content').innerHTML = `<h2 class="heading-font text-xl text-emerald-400 mb-8 uppercase">Battery</h2>
-                <input type="range" id="bslider" class="w-full accent-emerald-500 h-3" min="1" max="100">
-                <button onclick="gainXP(50, 'Battery', document.getElementById('bslider').value+'%'); closeModal();" class="mt-12 w-full py-4 bg-emerald-600 text-white font-bold rounded-xl">LOG (+50 XP)</button>`;
-        }
+  // XP needed labels
+  setT('bat-xp-need', Math.max(0,500-xp));  setT('bat-xp-cur',xp);
+  setT('rep-xp-need', Math.max(0,1500-xp)); setT('rep-xp-cur',xp);
+  setT('rec-xp-need', Math.max(0,3000-xp)); setT('rec-xp-cur',xp);
 
-        function renderRepair() {
-            document.getElementById('modal-content').innerHTML = `<h2 class="heading-font text-xl text-orange-400 mb-6 uppercase">Repair Lab</h2>
-                <div class="space-y-4">
-                    <div class="p-4 glass cursor-pointer" onclick="navigator.clipboard.writeText(this.innerText); showToast('COPIED'); gainXP(25, 'Repair', 'Script');">"I'm feeling tilted. Let's talk in 10 mins."</div>
-                    <div class="p-4 glass cursor-pointer" onclick="navigator.clipboard.writeText(this.innerText); showToast('COPIED'); gainXP(25, 'Repair', 'Script');">"I overreacted. My bad. Can we restart?"</div>
-                </div>`;
-        }
+  renderRoadmap(pi);
+  renderRecentLogs();
+  renderRecoveryLog();
+}
 
-        let tInt, sTime, tRun = false;
-        function renderTimer() {
-            document.getElementById('modal-content').innerHTML = `<h2 class="heading-font text-xl text-red-400 mb-8 uppercase text-center">Recovery</h2>
-                <div class="text-6xl heading-font mb-8 text-center" id="tdisp">00:00</div>
-                <button id="ttog" onclick="toggleT()" class="w-full py-6 bg-red-600/20 border border-red-500 text-red-500 font-bold">START</button>`;
-        }
+function sv(id,show){ const el=document.getElementById(id); if(el) el.style.display=show?'block':'none'; }
+function setT(id,val){ const el=document.getElementById(id); if(el) el.textContent=val; }
 
-        function toggleT() {
-            const b = document.getElementById('ttog'), d = document.getElementById('tdisp');
-            if (!tRun) {
-                sTime = new Date(); tRun = true; b.innerText = "ACTIVE";
-                tInt = setInterval(() => { const f = Math.floor((new Date()-sTime)/1000); d.innerText = `${Math.floor(f/60).toString().padStart(2,'0')}:${(f%60).toString().padStart(2,'0')}`; }, 1000);
-            } else {
-                clearInterval(tInt); tRun = false; const f = Math.floor((new Date()-sTime)/1000);
-                gainXP(100, 'Recovery', `${Math.floor(f/60)}m ${f%60}s`); closeModal();
-            }
-        }
-        window.onload = initApp;
-    </script>
+function renderRoadmap(pi){
+  const c = document.getElementById('roadmap-card');
+  c.innerHTML = '<div class="card-title">🗺 PHASE ROADMAP</div>';
+  PHASES.forEach((p,i)=>{
+    const done   = i < pi;
+    const active = i === pi;
+    const hasLine = i < PHASES.length-1;
+    c.innerHTML += `
+      <div class="phase-item">
+        <div class="phase-pip-col">
+          <div class="phase-pip ${done?'done':active?'active':''}"></div>
+          ${hasLine?`<div class="phase-line ${done?'done':''}"></div>`:''}
+        </div>
+        <div style="padding-bottom:${hasLine?10:0}px">
+          <div class="phase-name ${done?'done':active?'active':''}">${p.emoji} ${p.name}</div>
+          <div class="phase-range">${p.minXP.toLocaleString()}–${p.maxXP.toLocaleString()} XP · ${active?'⚡ ACTIVE':done?'✅ COMPLETE':'🔒 LOCKED'}</div>
+        </div>
+      </div>`;
+  });
+}
+
+function renderRecentLogs(){
+  const c = document.getElementById('recent-logs');
+  const logs = (S.logs||[]).slice(-5).reverse();
+  if(!logs.length){
+    c.innerHTML=`<div class="empty-state"><div class="empty-icon">📡</div><div class="empty-text">NO DATA LOGGED YET<br>COMPLETE YOUR FIRST SCAN</div></div>`;
+    return;
+  }
+  c.innerHTML = logs.map(l=>`
+    <div class="log-item">
+      <div class="log-icon">${l.icon||'📊'}</div>
+      <div class="log-info">
+        <div class="log-name">${l.name}</div>
+        <div class="log-meta">${l.meta} · ${l.time}</div>
+      </div>
+      <div class="log-xp">+${l.xp} XP</div>
+    </div>`).join('');
+}
+
+function renderRecoveryLog(){
+  const c = document.getElementById('recovery-log-list');
+  if(!c) return;
+  const sessions = (S.recoverySessions||[]).slice(-5).reverse();
+  if(!sessions.length){
+    c.innerHTML=`<div class="empty-state" style="padding:16px 0"><div class="empty-icon" style="font-size:24px">⏱</div><div class="empty-text">NO SESSIONS LOGGED</div></div>`;
+  } else {
+    c.innerHTML = sessions.map(s=>`
+      <div class="log-item">
+        <div class="log-icon">${s.isPR?'🏆':'⏱'}</div>
+        <div class="log-info">
+          <div class="log-name">${fmtTime(s.ms)}</div>
+          <div class="log-meta">${s.date}${s.isPR?' · 🏆 NEW PR':''}</div>
+        </div>
+        <div class="log-xp">+60 XP</div>
+      </div>`).join('');
+  }
+  const pr = S.recoveryPR;
+  document.getElementById('pr-display').textContent = pr ? fmtTime(pr) : '--:--';
+  document.getElementById('pr-sub').textContent     = pr ? `Beat ${fmtTime(pr)} to set a new record` : 'No PR set yet — run your first session';
+}
+
+// ══════════════════════════════════════════
+// DAILY INTEL
+// ══════════════════════════════════════════
+function loadIntel(){
+  const d   = new Date();
+  const doy = Math.floor((d - new Date(d.getFullYear(),0,0))/86400000);
+  const item = INTEL[doy % INTEL.length];
+  document.getElementById('intel-tag').textContent  = '📡 DAILY INTEL — DAY '+doy;
+  document.getElementById('intel-text').textContent = item.text;
+  document.getElementById('intel-sub').textContent  = item.sub;
+}
+
+// ══════════════════════════════════════════
+// NAV
+// ══════════════════════════════════════════
+function navigate(page){
+  if(page==='battery'  && S.xp<500)  return;
+  if(page==='repair'   && S.xp<1500) return;
+  if(page==='recovery' && S.xp<3000) return;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.getElementById('nav-'+page).classList.add('active');
+  if(page==='scanner') resetScanner();
+  if(page==='repair')  buildScripts();
+}
+
+// ══════════════════════════════════════════
+// SCANNER
+// ══════════════════════════════════════════
+let selEmotion = null;
+let selSource  = null;
+
+function buildEmotionGrids(){
+  const g = document.getElementById('grid-emotions');
+  g.innerHTML = EMOTIONS.map(e=>`
+    <button class="em-btn" data-key="${e.key}" onclick="selectEmotion(this,'${e.key}','${e.name}')">
+      <div class="em-emoji">${e.emoji}</div>
+      <div class="em-name">${e.name}</div>
+    </button>`).join('');
+}
+
+function selectEmotion(btn, key, name){
+  document.querySelectorAll('.em-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selEmotion = {key, name};
+  document.getElementById('scanner-next-btn').disabled = false;
+}
+
+function scannerStep2(){
+  if(!selEmotion) return;
+  document.getElementById('scanner-s1').style.display = 'none';
+  document.getElementById('scanner-s2').style.display = 'block';
+  document.getElementById('step-dot-2').classList.add('done');
+  document.getElementById('step2-emotion').textContent = `Signal Tagged: ${selEmotion.name}`;
+  selSource = null;
+  document.getElementById('scanner-submit-btn').disabled = true;
+  document.querySelectorAll('.src-btn').forEach(b=>b.classList.remove('selected'));
+}
+
+function scannerBack(){
+  document.getElementById('scanner-s2').style.display = 'none';
+  document.getElementById('scanner-s1').style.display = 'block';
+  document.getElementById('step-dot-2').classList.remove('done');
+}
+
+function selectSource(btn){
+  document.querySelectorAll('.src-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selSource = btn.dataset.src;
+  document.getElementById('scanner-submit-btn').disabled = false;
+}
+
+function submitScan(){
+  if(!selEmotion || !selSource) return;
+  if(S.todayEntries >= 3){ showToast('⚠ DAILY CAP REACHED — 3 entries max'); return; }
+  const xp = 65;
+  S.todayEntries++;
+  S.totalScans++;
+  const positiveKeys = ['excited','happy','confident','calm','proud'];
+  const negativeKeys = ['angry','overwhelmed','frustrated','drained','lonely','sad','disappointed','embarrassed','anxious'];
+  const icon = positiveKeys.includes(selEmotion.key) ? '🟢' : negativeKeys.includes(selEmotion.key) ? '🔴' : '🟡';
+  S.logs.push({
+    icon,
+    name: `Scan: ${selEmotion.name}`,
+    meta: `Source: ${selSource} · +15 XP context bonus`,
+    time: new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),
+    xp, type:'scan'
+  });
+  markDailyLog();
+  addXP(xp, 'SCAN COMPLETE');
+  navigate('home');
+  resetScanner();
+}
+
+function resetScanner(){
+  selEmotion = null; selSource = null;
+  document.getElementById('scanner-s1').style.display = 'block';
+  document.getElementById('scanner-s2').style.display = 'none';
+  document.getElementById('step-dot-2').classList.remove('done');
+  document.getElementById('scanner-next-btn').disabled = true;
+  document.querySelectorAll('.em-btn,.src-btn').forEach(b=>b.classList.remove('selected'));
+}
+
+// ══════════════════════════════════════════
+// BATTERY
+// ══════════════════════════════════════════
+function updateBattery(val){
+  val = parseInt(val);
+  document.getElementById('slider-fill').style.width = val+'%';
+  document.getElementById('bat-pct').textContent = val+'%';
+  const pct = document.getElementById('bat-pct');
+  let status, tip;
+  if(val>=80){
+    status='OPTIMAL'; tip='System fully charged. Prime window for high-output performance.';
+    pct.style.background='linear-gradient(135deg,var(--em-b),var(--cyan))';
+  } else if(val>=50){
+    status='NOMINAL'; tip='System running well. Minor optimization may help output.';
+    pct.style.background='linear-gradient(135deg,var(--blue-b),var(--em-b))';
+  } else if(val>=25){
+    status='LOW POWER'; tip='Energy reserve limited. Prioritize recovery inputs: sleep, food, downtime.';
+    pct.style.background='linear-gradient(135deg,var(--amber),var(--blue-b))';
+  } else {
+    status='CRITICAL'; tip='System in emergency mode. Do not make major decisions. Rest first.';
+    pct.style.background='linear-gradient(135deg,var(--red-b),var(--amber))';
+  }
+  pct.style.webkitBackgroundClip='text'; pct.style.webkitTextFillColor='transparent';
+  pct.style.backgroundClip='text';
+  document.getElementById('bat-status').textContent = status;
+  document.getElementById('bat-tip').textContent    = tip;
+}
+
+function submitBattery(){
+  if(S.todayEntries>=3){ showToast('⚠ DAILY CAP REACHED — 3 entries max'); return; }
+  const val = parseInt(document.getElementById('bat-slider').value);
+  const xp  = 60;
+  S.todayEntries++;
+  S.logs.push({
+    icon: val>=80?'🟢':val>=50?'🟡':val>=25?'🟠':'🔴',
+    name: `Battery: ${val}% — ${document.getElementById('bat-status').textContent}`,
+    meta: 'Internal Diagnostic',
+    time: new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),
+    xp, type:'battery'
+  });
+  markDailyLog();
+  addXP(xp, 'BATTERY LOGGED');
+  navigate('home');
+}
+
+// ══════════════════════════════════════════
+// REPAIR LAB
+// ══════════════════════════════════════════
+let activeFilter = 'all';
+
+function buildScripts(){
+  const list = document.getElementById('scripts-list');
+  if(!list) return;
+  const filtered = activeFilter==='all' ? SCRIPTS : SCRIPTS.filter(s=>s.cat===activeFilter);
+  list.innerHTML = filtered.map(s=>`
+    <div class="script-card">
+      <div class="script-title">${s.title}<span class="script-cat">${s.cat}</span></div>
+      <div class="script-text">"${s.text}"</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:6px">▶ Use when: ${s.when}</div>
+      <button class="copy-btn" onclick="copyScript(event,${s.id},\`${s.text.replace(/`/g,"'")}\`)">📋 COPY PATCH</button>
+    </div>`).join('');
+}
+
+function filterScripts(cat, btn){
+  activeFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  buildScripts();
+}
+
+function copyScript(e, id, text){
+  e.stopPropagation();
+  const btn = e.target;
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='✅ COPIED'; btn.classList.add('copied');
+    showToast('📋 Patch copied — ready to deploy');
+    const key = 'repair_'+todayStr();
+    if(!localStorage.getItem(key)){
+      localStorage.setItem(key,'1');
+      addXP(25, 'PATCH DEPLOYED');
+    }
+    setTimeout(()=>{ btn.textContent='📋 COPY PATCH'; btn.classList.remove('copied'); }, 2000);
+  }).catch(()=>showToast('⚠ Clipboard access denied'));
+}
+
+// ══════════════════════════════════════════
+// RECOVERY TIMER
+// ══════════════════════════════════════════
+let timerIv = null, timerStart0 = null, timerElapsed = 0, timerRunning = false;
+
+function timerStart(){
+  if(timerRunning) return;
+  timerRunning = true;
+  timerStart0  = Date.now() - timerElapsed;
+  document.getElementById('timer-start-btn').disabled = true;
+  document.getElementById('timer-stop-btn').disabled  = false;
+  document.getElementById('timer-label').textContent  = 'TILT IN PROGRESS...';
+  document.getElementById('timer-digits').classList.add('running');
+  timerIv = setInterval(()=>{
+    timerElapsed = Date.now()-timerStart0;
+    document.getElementById('timer-digits').textContent = fmtTime(timerElapsed);
+  },100);
+}
+
+function timerStop(){
+  if(!timerRunning) return;
+  clearInterval(timerIv); timerRunning = false;
+  document.getElementById('timer-start-btn').disabled = false;
+  document.getElementById('timer-stop-btn').disabled  = true;
+  document.getElementById('timer-digits').classList.remove('running');
+  document.getElementById('timer-label').textContent  = 'CENTERED ✓ SESSION COMPLETE';
+  const ms = timerElapsed;
+  let isPR = false;
+  if(!S.recoveryPR || ms < S.recoveryPR){ S.recoveryPR = ms; isPR = true; }
+  if(!S.recoverySessions) S.recoverySessions = [];
+  S.recoverySessions.push({ms, isPR, date:new Date().toLocaleDateString()});
+  if(S.todayEntries < 3){
+    S.todayEntries++;
+    S.logs.push({icon:'⏱',name:`Recovery: ${fmtTime(ms)}`,meta:isPR?'🏆 PERSONAL RECORD':'Bounce-Back Session',
+      time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),xp:60,type:'recovery'});
+    markDailyLog();
+    addXP(60, isPR?'NEW PERSONAL RECORD':'RECOVERY LOGGED');
+  }
+  save(); renderAll();
+  if(isPR) setTimeout(()=>showCustomUnlock('🏆','NEW PERSONAL RECORD!',`Bounced back in ${fmtTime(ms)}. Faster every time.`), 400);
+}
+
+function timerReset(){
+  clearInterval(timerIv); timerRunning=false; timerElapsed=0; timerStart0=null;
+  document.getElementById('timer-digits').textContent = '00:00';
+  document.getElementById('timer-digits').classList.remove('running');
+  document.getElementById('timer-label').textContent  = 'READY TO TRACK';
+  document.getElementById('timer-start-btn').disabled = false;
+  document.getElementById('timer-stop-btn').disabled  = true;
+}
+
+function fmtTime(ms){
+  const s = Math.floor(ms/1000);
+  return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+}
+
+// ══════════════════════════════════════════
+// STREAK
+// ══════════════════════════════════════════
+function markDailyLog(){
+  const today = todayStr();
+  if(S.lastLogDate !== today){
+    const yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
+    const yStr = yesterday.toISOString().slice(0,10);
+    S.streak = (S.lastLogDate === yStr) ? S.streak+1 : 1;
+    S.lastLogDate = today;
+  }
+}
+
+// ══════════════════════════════════════════
+// IMPORT / EXPORT
+// ══════════════════════════════════════════
+function exportData(){
+  const blob = new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+  const a = Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:`apexmind_backup_${todayStr()}.json`});
+  a.click(); URL.revokeObjectURL(a.href);
+  showToast('✅ Backup saved'); closeModal();
+}
+function importData(ev){
+  const file = ev.target.files[0]; if(!file) return;
+  const r = new FileReader();
+  r.onload = e => {
+    try { S={...DEFAULT_STATE,...JSON.parse(e.target.result)}; save(); renderAll(); showToast('✅ Data restored'); closeModal(); }
+    catch { showToast('⚠ Invalid backup file'); }
+  };
+  r.readAsText(file);
+}
+function confirmReset(){
+  if(confirm('FULL RESET: Wipes ALL XP, streaks, and logs. Cannot be undone. Continue?')){
+    localStorage.removeItem('apexmind_p6'); location.reload();
+  }
+}
+
+// ══════════════════════════════════════════
+// MODAL / TOAST
+// ══════════════════════════════════════════
+function openModal()  { document.getElementById('modal-overlay').classList.add('show'); }
+function closeModal() { document.getElementById('modal-overlay').classList.remove('show'); }
+let _toast;
+function showToast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(_toast); _toast = setTimeout(()=>el.classList.remove('show'), 2600);
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+loadState();
+loadIntel();
+buildEmotionGrids();
+updateBattery(72);
+buildScripts();
+renderAll();
+</script>
 </body>
 </html>
