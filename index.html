@@ -4,826 +4,1324 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>APEX MIND: PROTOCOL 6</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:      #020617;
-  --bg2:     #0a1628;
-  --bg3:     #0f2040;
-  --bg4:     #1a2e4a;
-  --border:  #1e3a5f;
-  --border2: #2a4a72;
-  --blue:    #3b82f6;
-  --blue-b:  #60a5fa;
-  --blue-d:  #1d4ed8;
-  --emerald: #10b981;
-  --em-b:    #34d399;
+/* ── RESET & ROOT ─────────────────────────────── */
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:      #0d0d14;
+  --bg2:     #13131f;
+  --bg3:     #1a1a2e;
+  --bg4:     #22223a;
+  --border:  rgba(139,92,246,0.2);
+  --border2: rgba(139,92,246,0.45);
+  --purple:  #8b5cf6;
+  --purple-b:#a78bfa;
+  --purple-d:#6d28d9;
+  --pink:    #ec4899;
+  --pink-b:  #f472b6;
+  --cyan:    #06b6d4;
+  --cyan-b:  #22d3ee;
+  --green:   #10b981;
+  --green-b: #34d399;
   --amber:   #f59e0b;
   --amber-b: #fbbf24;
   --red:     #ef4444;
-  --red-b:   #f87171;
-  --cyan:    #06b6d4;
-  --violet:  #8b5cf6;
   --text:    #f1f5f9;
   --text2:   #cbd5e1;
   --text3:   #94a3b8;
-  --glow-b:  rgba(59,130,246,0.4);
-  --glow-e:  rgba(16,185,129,0.4);
-  --glow-a:  rgba(245,158,11,0.4);
-  --glow-v:  rgba(139,92,246,0.4);
+  --glow-p:  rgba(139,92,246,0.35);
+  --glow-pk: rgba(236,72,153,0.35);
+  --glow-c:  rgba(6,182,212,0.35);
+  --glow-g:  rgba(16,185,129,0.35);
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
+html,body{height:100%;overflow:hidden;}
 body{
-  font-family:'Rajdhani',sans-serif;
+  font-family:'Inter',sans-serif;
   background:var(--bg);
   color:var(--text);
-  min-height:100vh;
-  overflow-x:hidden;
+  display:flex;
 }
+
+/* ── ANIMATED BG ──────────────────────────────── */
 body::before{
   content:'';position:fixed;inset:0;
-  background-image:
-    linear-gradient(rgba(59,130,246,0.04) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(59,130,246,0.04) 1px,transparent 1px);
-  background-size:40px 40px;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 50%, rgba(139,92,246,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 80% 20%, rgba(236,72,153,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 60% 80%, rgba(6,182,212,0.05) 0%, transparent 60%);
   pointer-events:none;z-index:0;
+  animation:bgshift 15s ease-in-out infinite alternate;
 }
+@keyframes bgshift{
+  0%{opacity:1}
+  100%{opacity:.6;background-position:10px 10px;}
+}
+/* subtle grid */
 body::after{
-  content:'';position:fixed;
-  top:-20%;left:-10%;
-  width:60vw;height:60vw;
-  background:radial-gradient(circle,rgba(59,130,246,0.07) 0%,transparent 70%);
+  content:'';position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(139,92,246,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(139,92,246,0.04) 1px,transparent 1px);
+  background-size:50px 50px;
   pointer-events:none;z-index:0;
-  animation:orb 20s ease-in-out infinite alternate;
 }
-@keyframes orb{0%{transform:translate(0,0)}100%{transform:translate(15vw,10vh)}}
-.scanlines{
-  position:fixed;inset:0;pointer-events:none;z-index:999;
-  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 4px);
-}
-#app{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:16px 14px 100px;}
 
-/* HEADER */
-.hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 0 12px;border-bottom:1px solid var(--border);margin-bottom:18px;}
-.hdr-logo{font-family:'Orbitron',monospace;font-weight:900;font-size:14px;letter-spacing:3px;color:var(--blue-b);text-shadow:0 0 12px var(--blue);line-height:1.2;}
-.hdr-logo span{display:block;font-size:10px;color:var(--text3);letter-spacing:4px;margin-top:2px;}
-.hdr-right{display:flex;align-items:center;gap:10px;}
-.streak-badge{
-  background:linear-gradient(135deg,#78350f,#92400e);
-  border:1px solid var(--amber);border-radius:6px;padding:6px 12px;
-  font-family:'Orbitron',monospace;font-size:13px;font-weight:700;
-  color:var(--amber-b);box-shadow:0 0 10px rgba(245,158,11,0.3);
-  display:flex;align-items:center;gap:4px;
+/* ── SIDEBAR ──────────────────────────────────── */
+.sidebar{
+  position:relative;z-index:10;
+  width:220px;min-width:220px;
+  background:var(--bg2);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  padding:24px 0;
+  height:100vh;
+  overflow:hidden;
 }
-.gear-btn{background:none;border:1px solid var(--border2);border-radius:6px;padding:8px;color:var(--text2);cursor:pointer;transition:all .2s;font-size:18px;}
-.gear-btn:hover{border-color:var(--blue);color:var(--blue-b);}
+.sidebar-logo{
+  padding:0 20px 24px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:16px;
+}
+.logo-title{
+  font-family:'Orbitron',monospace;
+  font-size:15px;font-weight:900;
+  letter-spacing:2px;
+  background:linear-gradient(135deg,var(--purple-b),var(--pink-b));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  text-shadow:none;
+  line-height:1.2;
+}
+.logo-sub{
+  font-size:10px;letter-spacing:3px;
+  color:var(--text3);margin-top:3px;
+  font-family:'JetBrains Mono',monospace;
+}
 
-/* XP BAR */
-.xp-section{margin-bottom:16px;}
-.xp-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
-.xp-phase{font-family:'Orbitron',monospace;font-size:12px;letter-spacing:2px;color:var(--em-b);}
-.xp-count{font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--blue-b);}
-.xp-bar-wrap{height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;border:1px solid var(--border);}
-.xp-bar-fill{
+/* Streak pill in sidebar */
+.streak-pill{
+  margin:0 16px 16px;
+  background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.08));
+  border:1px solid rgba(245,158,11,0.4);
+  border-radius:10px;padding:10px 14px;
+  display:flex;align-items:center;gap:8px;
+}
+.streak-fire{font-size:20px;}
+.streak-info{}
+.streak-num{
+  font-family:'Orbitron',monospace;
+  font-size:18px;font-weight:900;
+  color:var(--amber-b);line-height:1;
+}
+.streak-lbl{font-size:11px;color:var(--text3);margin-top:1px;}
+
+/* XP in sidebar */
+.xp-block{padding:0 16px 16px;border-bottom:1px solid var(--border);margin-bottom:16px;}
+.xp-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.xp-phase{
+  font-family:'Orbitron',monospace;
+  font-size:9px;letter-spacing:2px;
+  color:var(--purple-b);
+}
+.xp-nums{font-size:12px;color:var(--text2);font-family:'JetBrains Mono',monospace;}
+.xp-bar{height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;}
+.xp-fill{
   height:100%;
-  background:linear-gradient(90deg,var(--blue-d),var(--blue-b),var(--cyan));
-  border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1);
-  box-shadow:0 0 8px var(--blue);position:relative;
+  background:linear-gradient(90deg,var(--purple-d),var(--purple-b),var(--pink-b));
+  border-radius:3px;
+  transition:width .6s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 0 8px var(--glow-p);
 }
-.xp-bar-fill::after{content:'';position:absolute;right:0;top:0;bottom:0;width:3px;background:white;opacity:.8;animation:barpulse 1.5s ease-in-out infinite;}
-@keyframes barpulse{0%,100%{opacity:.3}50%{opacity:1}}
 
-/* INTEL CARD */
-.intel-card{
-  background:linear-gradient(135deg,var(--bg2) 0%,rgba(6,182,212,0.07) 100%);
-  border:1px solid var(--cyan);border-radius:12px;padding:14px 16px;margin-bottom:16px;
-  position:relative;overflow:hidden;
-  box-shadow:0 0 20px rgba(6,182,212,0.1),inset 0 1px 0 rgba(255,255,255,0.04);
+/* Nav links */
+.nav-section{flex:1;overflow-y:auto;padding:0 10px;}
+.nav-group-label{
+  font-size:10px;letter-spacing:2px;color:var(--text3);
+  padding:8px 10px 4px;
+  font-family:'JetBrains Mono',monospace;
 }
-.intel-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);}
-.intel-tag{font-family:'Orbitron',monospace;font-size:10px;letter-spacing:3px;color:var(--cyan);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
-.intel-tag::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--cyan);animation:blink 1.5s step-end infinite;flex-shrink:0;}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-.intel-text{font-size:17px;font-weight:600;line-height:1.55;color:var(--text);}
-.intel-sub{font-size:13px;color:var(--text2);margin-top:6px;font-family:'Share Tech Mono',monospace;line-height:1.5;}
+.nav-item{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 14px;border-radius:10px;
+  cursor:pointer;transition:all .18s;
+  margin-bottom:2px;
+  border:1px solid transparent;
+  position:relative;
+}
+.nav-item:hover{background:rgba(139,92,246,0.08);border-color:var(--border);}
+.nav-item.active{
+  background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(236,72,153,0.1));
+  border-color:var(--border2);
+}
+.nav-item.active::before{
+  content:'';position:absolute;left:0;top:20%;bottom:20%;
+  width:3px;background:linear-gradient(180deg,var(--purple-b),var(--pink-b));
+  border-radius:0 3px 3px 0;
+}
+.nav-emoji{font-size:18px;width:24px;text-align:center;flex-shrink:0;}
+.nav-label{font-size:14px;font-weight:600;color:var(--text2);}
+.nav-item.active .nav-label{color:var(--text);}
+.nav-item.locked{opacity:.4;cursor:not-allowed;}
+.nav-item.locked:hover{background:none;border-color:transparent;}
+.nav-badge{
+  margin-left:auto;
+  font-size:10px;font-family:'JetBrains Mono',monospace;
+  background:rgba(139,92,246,0.2);
+  border:1px solid var(--border2);
+  border-radius:4px;padding:1px 6px;
+  color:var(--purple-b);
+}
+.nav-badge.done{background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.4);color:var(--green-b);}
+.nav-badge.lock{background:rgba(0,0,0,0.3);border-color:rgba(255,255,255,0.1);color:var(--text3);}
 
-/* SECTION LABEL */
-.section-label{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:3px;color:var(--text2);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
-.section-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+/* sidebar bottom */
+.sidebar-bottom{padding:16px;border-top:1px solid var(--border);}
+.settings-btn{
+  width:100%;display:flex;align-items:center;gap:10px;
+  background:none;border:1px solid var(--border);border-radius:8px;
+  padding:9px 14px;color:var(--text3);cursor:pointer;
+  font-size:13px;font-family:'Inter',sans-serif;
+  transition:all .2s;
+}
+.settings-btn:hover{border-color:var(--border2);color:var(--text2);}
 
-/* DAILY CAP */
-.daily-cap-bar{display:flex;gap:6px;justify-content:center;margin-bottom:8px;}
-.cap-pip{width:60px;height:8px;border-radius:4px;background:var(--bg3);border:1px solid var(--border);transition:background .3s,box-shadow .3s;}
-.cap-pip.filled{background:var(--emerald);box-shadow:0 0 6px var(--glow-e);}
-.cap-pip.filled.r{background:var(--amber);box-shadow:0 0 6px var(--glow-a);}
-.cap-pip.filled.rr{background:var(--red);box-shadow:0 0 6px rgba(239,68,68,0.5);}
-.cap-label{text-align:center;font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--text2);margin-bottom:14px;}
+/* ── MAIN CONTENT ─────────────────────────────── */
+.main{
+  flex:1;height:100vh;overflow-y:auto;
+  position:relative;z-index:5;
+  padding:28px 32px;
+}
+.main::-webkit-scrollbar{width:6px;}
+.main::-webkit-scrollbar-track{background:transparent;}
+.main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
 
-/* STATS GRID */
-.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
-.stat-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;}
-.stat-val{font-family:'Orbitron',monospace;font-size:28px;font-weight:900;color:var(--blue-b);line-height:1;}
-.stat-val.em{color:var(--em-b);}
-.stat-val.amber{color:var(--amber-b);}
-.stat-val.violet{color:#c4b5fd;}
-.stat-lbl{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2);margin-top:5px;letter-spacing:1px;}
+/* Page system */
+.page{display:none;}
+.page.active{display:block;animation:pagein .25s ease;}
+@keyframes pagein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-/* CARD */
+/* Page header */
+.page-header{margin-bottom:24px;}
+.page-title{
+  font-family:'Orbitron',monospace;
+  font-size:22px;font-weight:900;
+  letter-spacing:2px;color:var(--text);
+  display:flex;align-items:center;gap:12px;
+}
+.page-title .title-icon{font-size:26px;}
+.page-subtitle{font-size:14px;color:var(--text3);margin-top:4px;}
+
+/* ── CARDS ────────────────────────────────────── */
 .card{
-  background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;
-  margin-bottom:14px;position:relative;overflow:hidden;
-  box-shadow:0 4px 24px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.03);
-  transition:border-color .2s;
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:14px;padding:20px;
+  margin-bottom:16px;
+  position:relative;overflow:hidden;
 }
-.card:hover{border-color:var(--border2);}
-.card-accent-blue::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--blue),var(--cyan));border-radius:3px 0 0 3px;}
-.card-accent-em::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--emerald),var(--em-b));border-radius:3px 0 0 3px;}
-.card-accent-amber::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--amber),var(--amber-b));border-radius:3px 0 0 3px;}
-.card-accent-violet::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--violet),#c4b5fd);border-radius:3px 0 0 3px;}
-.card-title{font-family:'Orbitron',monospace;font-size:12px;letter-spacing:2px;color:var(--text2);margin-bottom:14px;padding-left:10px;}
+.card-glow-p{box-shadow:0 0 30px rgba(139,92,246,0.1);}
+.card-glow-pk{box-shadow:0 0 30px rgba(236,72,153,0.1);}
+.card-glow-c{box-shadow:0 0 30px rgba(6,182,212,0.1);}
+.card-glow-g{box-shadow:0 0 30px rgba(16,185,129,0.1);}
 
-/* PHASE ROADMAP */
-.phase-item{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;}
-.phase-pip-col{display:flex;flex-direction:column;align-items:center;padding-top:4px;}
-.phase-pip{width:13px;height:13px;border-radius:50%;border:2px solid var(--border);background:var(--bg3);flex-shrink:0;}
-.phase-pip.done{border-color:var(--emerald);background:var(--emerald);}
-.phase-pip.active{border-color:var(--blue-b);background:var(--blue);box-shadow:0 0 8px var(--blue);animation:pippulse 1.5s infinite;}
-@keyframes pippulse{0%,100%{box-shadow:0 0 4px var(--blue)}50%{box-shadow:0 0 14px var(--blue)}}
-.phase-line{width:2px;flex:1;min-height:14px;background:var(--border);margin:3px 0;}
-.phase-line.done{background:var(--emerald);}
-.phase-name{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;color:var(--text);letter-spacing:1px;}
-.phase-name.active{color:var(--blue-b);}
-.phase-name.done{color:var(--em-b);}
-.phase-range{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2);}
-
-/* LOG ITEM */
-.log-item{display:flex;align-items:center;gap:10px;padding:12px;background:var(--bg3);border-radius:8px;margin-bottom:6px;border:1px solid var(--border);}
-.log-icon{font-size:22px;}
-.log-info{flex:1;}
-.log-name{font-size:15px;font-weight:700;color:var(--text);}
-.log-meta{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2);}
-.log-xp{font-family:'Orbitron',monospace;font-size:12px;color:var(--em-b);font-weight:700;}
-
-/* NAV */
-.nav-bar{
-  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
-  width:100%;max-width:480px;
-  background:rgba(2,6,23,0.95);backdrop-filter:blur(20px);
-  border-top:1px solid var(--border);
-  display:flex;z-index:100;padding:8px 0 12px;
+.card-top-line{
+  position:absolute;top:0;left:0;right:0;height:2px;
 }
-.nav-btn{flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;transition:all .2s;position:relative;}
-.nav-icon{font-size:20px;transition:transform .2s;filter:grayscale(1) brightness(.5);}
-.nav-label{font-family:'Orbitron',monospace;font-size:9px;letter-spacing:1px;color:var(--text2);transition:color .2s;}
-.nav-btn.active .nav-icon{filter:none;transform:scale(1.15);}
-.nav-btn.active .nav-label{color:var(--blue-b);}
-.nav-btn.locked{opacity:.3;cursor:not-allowed;}
-.nav-btn::after{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:2px;background:var(--blue);border-radius:0 0 4px 4px;transition:width .2s;}
-.nav-btn.active::after{width:32px;}
+.line-p{background:linear-gradient(90deg,transparent,var(--purple-b),transparent);}
+.line-pk{background:linear-gradient(90deg,transparent,var(--pink-b),transparent);}
+.line-c{background:linear-gradient(90deg,transparent,var(--cyan-b),transparent);}
+.line-g{background:linear-gradient(90deg,transparent,var(--green-b),transparent);}
+.line-a{background:linear-gradient(90deg,transparent,var(--amber-b),transparent);}
 
-/* EMOTION SCANNER */
-.step-indicator{display:flex;gap:8px;margin-bottom:14px;}
-.step-dot{flex:1;height:3px;border-radius:2px;background:var(--bg3);transition:background .3s;}
-.step-dot.done{background:var(--blue);}
-
-.emotion-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-.em-btn{
-  background:var(--bg3);border:1px solid var(--border);border-radius:10px;
-  padding:12px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;
-  transition:all .18s;-webkit-tap-highlight-color:transparent;
+.card-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:3px;color:var(--text3);
+  margin-bottom:8px;display:flex;align-items:center;gap:6px;
 }
-.em-btn:hover{transform:scale(1.04);border-color:var(--border2);}
-.em-btn.selected{transform:scale(1.06);border-color:var(--blue-b);background:rgba(59,130,246,0.15);box-shadow:0 0 16px var(--glow-b);}
-.em-emoji{font-size:30px;line-height:1;}
-.em-name{font-size:12px;font-weight:700;color:var(--text2);text-align:center;}
-
-.source-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
-.src-btn{
-  flex:1;min-width:70px;background:var(--bg3);border:1px solid var(--border);
-  border-radius:8px;padding:10px 6px;cursor:pointer;text-align:center;
-  font-family:'Orbitron',monospace;font-size:11px;letter-spacing:1px;color:var(--text2);transition:all .18s;
+.card-label .dot{
+  width:6px;height:6px;border-radius:50%;
+  animation:blink 1.5s step-end infinite;
 }
-.src-btn:hover,.src-btn.selected{border-color:var(--emerald);color:var(--em-b);background:rgba(16,185,129,0.1);box-shadow:0 0 10px var(--glow-e);}
-.src-icon{display:block;font-size:22px;margin-bottom:4px;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.dot-p{background:var(--purple-b);}
+.dot-pk{background:var(--pink-b);}
+.dot-c{background:var(--cyan-b);}
+.dot-g{background:var(--green-b);}
+.dot-a{background:var(--amber-b);}
 
-/* BUTTONS */
-.submit-btn{
-  width:100%;padding:16px;
-  background:linear-gradient(135deg,var(--blue-d),var(--blue));
-  border:1px solid var(--blue-b);border-radius:10px;
-  font-family:'Orbitron',monospace;font-size:13px;font-weight:700;letter-spacing:2px;
-  color:white;cursor:pointer;transition:all .2s;margin-top:14px;
-  box-shadow:0 0 20px rgba(59,130,246,0.3);position:relative;overflow:hidden;
+/* ── HOME PAGE ────────────────────────────────── */
+.home-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
 }
-.submit-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.1),transparent);}
-.submit-btn:hover{transform:translateY(-1px);box-shadow:0 0 30px rgba(59,130,246,0.5);}
-.submit-btn:active{transform:translateY(0);}
-.submit-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
-.submit-btn.green{background:linear-gradient(135deg,#065f46,var(--emerald));border-color:var(--em-b);box-shadow:0 0 20px rgba(16,185,129,0.3);}
-.submit-btn.green:hover{box-shadow:0 0 30px rgba(16,185,129,0.5);}
-.submit-btn.ghost{background:transparent;border-color:var(--border);box-shadow:none;color:var(--text3);}
-.submit-btn.ghost:hover{border-color:var(--border2);box-shadow:none;transform:none;}
+.home-grid .span2{grid-column:1/-1;}
 
-/* BATTERY */
-.battery-display{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
-.battery-pct{
-  font-family:'Orbitron',monospace;font-size:42px;font-weight:900;line-height:1;
-  background:linear-gradient(135deg,var(--em-b),var(--cyan));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  min-width:90px;text-align:right;
+/* Intel card */
+.intel-card{
+  background:linear-gradient(135deg,var(--bg2),rgba(139,92,246,0.08));
+  border:1px solid var(--border2);
+  border-radius:14px;padding:20px;
+  position:relative;overflow:hidden;
 }
-.battery-status{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;color:var(--em-b);letter-spacing:1px;}
-.battery-tip{font-size:14px;color:var(--text2);margin-top:4px;line-height:1.5;}
-
-.slider-wrap{position:relative;margin-bottom:10px;}
-input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;background:var(--bg3);border-radius:4px;outline:none;border:1px solid var(--border);}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--em-b),var(--cyan));cursor:pointer;box-shadow:0 0 12px var(--glow-e);border:2px solid var(--bg);transition:transform .15s;}
-input[type=range]::-webkit-slider-thumb:active{transform:scale(1.3);}
-.slider-track-fill{position:absolute;top:50%;left:0;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--emerald),var(--em-b));transform:translateY(-50%);pointer-events:none;box-shadow:0 0 8px var(--glow-e);transition:width .1s;}
-.slider-labels{display:flex;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2);margin-top:4px;}
-
-/* REPAIR LAB */
-.repair-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
-.filter-btn{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:7px 14px;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:1px;color:var(--text2);cursor:pointer;transition:all .18s;}
-.filter-btn.active{background:rgba(139,92,246,0.2);border-color:var(--violet);color:#c4b5fd;}
-
-.script-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px;transition:border-color .2s;}
-.script-card:hover{border-color:var(--violet);}
-.script-title{font-family:'Orbitron',monospace;font-size:12px;letter-spacing:1px;color:#c4b5fd;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;}
-.script-cat{font-size:10px;letter-spacing:2px;color:var(--text2);background:var(--bg4);border-radius:4px;padding:2px 8px;}
-.script-text{font-size:15px;color:var(--text);line-height:1.55;font-style:italic;margin:8px 0;}
-.copy-btn{background:rgba(139,92,246,0.15);border:1px solid var(--violet);border-radius:6px;padding:7px 14px;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:1px;color:#c4b5fd;cursor:pointer;transition:all .2s;margin-top:6px;}
-.copy-btn:hover{background:rgba(139,92,246,0.3);}
-.copy-btn.copied{background:rgba(16,185,129,0.2);border-color:var(--emerald);color:var(--em-b);}
-
-/* RECOVERY TIMER */
-.timer-display{text-align:center;padding:20px 0;}
-.timer-digits{
-  font-family:'Orbitron',monospace;font-size:56px;font-weight:900;
-  background:linear-gradient(135deg,var(--amber-b),var(--red-b));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  letter-spacing:4px;line-height:1;
+.intel-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--purple-b),var(--pink-b),transparent);}
+.intel-eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:3px;color:var(--purple-b);
+  margin-bottom:10px;display:flex;align-items:center;gap:6px;
 }
-.timer-digits.running{animation:timerglow 1s ease-in-out infinite alternate;}
-@keyframes timerglow{from{filter:drop-shadow(0 0 4px var(--amber))}to{filter:drop-shadow(0 0 16px var(--red))}}
-.timer-label{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--text2);margin-top:6px;letter-spacing:2px;}
-.timer-btns{display:flex;gap:10px;margin-top:16px;}
-.timer-btn{flex:1;padding:16px;border-radius:10px;font-family:'Orbitron',monospace;font-size:12px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:all .2s;border:1px solid;}
-.timer-btn.start{background:linear-gradient(135deg,rgba(245,158,11,0.2),rgba(239,68,68,0.2));border-color:var(--amber);color:var(--amber-b);box-shadow:0 0 14px var(--glow-a);}
-.timer-btn.start:hover{box-shadow:0 0 24px rgba(245,158,11,0.5);}
-.timer-btn.start:disabled{opacity:.4;cursor:not-allowed;}
-.timer-btn.stop{background:linear-gradient(135deg,rgba(16,185,129,0.2),rgba(6,182,212,0.1));border-color:var(--emerald);color:var(--em-b);}
-.timer-btn.stop:disabled{opacity:.4;cursor:not-allowed;}
-.timer-btn.reset{background:var(--bg3);border-color:var(--border);color:var(--text2);flex:0 0 auto;padding:16px 18px;}
+.intel-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--purple-b);animation:blink 1.5s step-end infinite;}
+.intel-headline{font-size:17px;font-weight:700;line-height:1.5;color:var(--text);margin-bottom:8px;}
+.intel-body{font-size:13px;color:var(--text2);line-height:1.6;font-family:'JetBrains Mono',monospace;}
 
-.pr-section{background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:10px;padding:14px;margin-top:12px;text-align:center;}
-.pr-label{font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px;color:var(--amber);margin-bottom:4px;}
-.pr-time{font-family:'Orbitron',monospace;font-size:26px;font-weight:700;color:var(--amber-b);}
-.pr-sub{font-size:13px;color:var(--text2);margin-top:4px;}
-
-/* LOCK OVERLAY */
-.lock-overlay{text-align:center;padding:30px 20px;}
-.lock-icon{font-size:44px;margin-bottom:14px;}
-.lock-title{font-family:'Orbitron',monospace;font-size:15px;font-weight:700;color:var(--text);margin-bottom:10px;letter-spacing:2px;}
-.lock-desc{font-size:15px;color:var(--text2);line-height:1.6;}
-.lock-xp{margin-top:14px;font-family:'Orbitron',monospace;font-size:12px;color:var(--amber);}
-
-/* EMPTY STATE */
-.empty-state{text-align:center;padding:30px 20px;color:var(--text2);}
-.empty-icon{font-size:36px;margin-bottom:10px;opacity:.6;}
-.empty-text{font-size:14px;font-family:'Share Tech Mono',monospace;line-height:1.6;}
-
-/* XP POPUP */
-#xp-popup{
-  position:fixed;top:80px;left:50%;transform:translateX(-50%);
-  background:var(--bg2);border:1px solid var(--emerald);border-radius:10px;
-  padding:12px 22px;font-family:'Orbitron',monospace;font-size:14px;font-weight:700;
-  color:var(--em-b);box-shadow:0 0 24px var(--glow-e);z-index:500;
-  opacity:0;pointer-events:none;transition:opacity .3s;white-space:nowrap;
+/* Stat cards */
+.stat-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:14px;padding:18px 20px;
+  display:flex;align-items:center;gap:16px;
 }
-#xp-popup.show{opacity:1;}
-
-/* UNLOCK BANNER */
-#unlock-banner{
-  position:fixed;inset:0;background:rgba(0,0,0,0.85);
+.stat-icon-wrap{
+  width:52px;height:52px;border-radius:12px;
   display:flex;align-items:center;justify-content:center;
-  z-index:900;opacity:0;pointer-events:none;transition:opacity .4s;
-  backdrop-filter:blur(10px);
+  font-size:26px;flex-shrink:0;
 }
-#unlock-banner.show{opacity:1;pointer-events:all;}
-.unlock-box{
-  background:var(--bg2);border:2px solid var(--amber);border-radius:16px;
-  padding:36px 32px;text-align:center;max-width:340px;
-  box-shadow:0 0 60px rgba(245,158,11,0.3);
-  animation:unlockpop .5s cubic-bezier(.4,0,.2,1);
-}
-@keyframes unlockpop{0%{transform:scale(.7);opacity:0}100%{transform:scale(1);opacity:1}}
-.unlock-emoji{font-size:54px;margin-bottom:14px;}
-.unlock-title{font-family:'Orbitron',monospace;font-size:16px;font-weight:900;color:var(--amber-b);letter-spacing:2px;margin-bottom:10px;}
-.unlock-sub{font-size:15px;color:var(--text);line-height:1.5;margin-bottom:18px;}
-.unlock-close{background:linear-gradient(135deg,#78350f,var(--amber));border:none;border-radius:8px;padding:12px 28px;font-family:'Orbitron',monospace;font-size:12px;letter-spacing:2px;color:var(--bg);cursor:pointer;font-weight:700;}
+.si-p{background:rgba(139,92,246,0.15);}
+.si-pk{background:rgba(236,72,153,0.15);}
+.si-g{background:rgba(16,185,129,0.15);}
+.si-a{background:rgba(245,158,11,0.15);}
+.stat-info{}
+.stat-val{font-family:'Orbitron',monospace;font-size:26px;font-weight:900;line-height:1;}
+.sv-p{color:var(--purple-b);}
+.sv-pk{color:var(--pink-b);}
+.sv-g{color:var(--green-b);}
+.sv-a{color:var(--amber-b);}
+.stat-lbl{font-size:12px;color:var(--text3);margin-top:2px;}
 
-/* MODAL */
-#modal-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,0.8);
-  display:flex;align-items:flex-end;justify-content:center;
-  z-index:800;opacity:0;pointer-events:none;transition:opacity .3s;
-  backdrop-filter:blur(8px);
+/* Daily quota */
+.quota-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:14px;padding:18px 20px;
 }
-#modal-overlay.show{opacity:1;pointer-events:all;}
-.modal-sheet{
-  background:var(--bg2);border:1px solid var(--border);border-radius:20px 20px 0 0;
-  padding:24px 20px 40px;width:100%;max-width:480px;
-  transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);
+.quota-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.quota-title{font-weight:700;font-size:15px;color:var(--text);}
+.quota-count{
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;color:var(--text2);
 }
-#modal-overlay.show .modal-sheet{transform:translateY(0);}
-.modal-title{font-family:'Orbitron',monospace;font-size:15px;font-weight:700;color:var(--text);margin-bottom:16px;letter-spacing:2px;}
-.modal-action-row{display:flex;gap:10px;margin-top:14px;}
-.modal-btn{flex:1;padding:14px;border-radius:8px;font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;transition:all .2s;border:1px solid;}
-.modal-btn.primary{background:linear-gradient(135deg,rgba(59,130,246,0.3),rgba(59,130,246,0.1));border-color:var(--blue);color:var(--blue-b);}
-.modal-btn.danger{background:linear-gradient(135deg,rgba(239,68,68,0.2),rgba(239,68,68,0.05));border-color:var(--red);color:var(--red-b);}
-.modal-btn.neutral{background:var(--bg3);border-color:var(--border);color:var(--text2);}
+.quota-pips{display:flex;gap:8px;}
+.q-pip{
+  flex:1;height:8px;border-radius:4px;
+  background:var(--bg4);border:1px solid var(--border);
+  transition:all .3s;
+}
+.q-pip.on{box-shadow:0 0 8px var(--glow-p);}
+.q-pip.on-1{background:var(--green-b);box-shadow:0 0 8px var(--glow-g);}
+.q-pip.on-2{background:var(--amber-b);box-shadow:0 0 8px rgba(245,158,11,0.4);}
+.q-pip.on-3{background:var(--pink-b);box-shadow:0 0 8px var(--glow-pk);}
 
-/* TOAST */
+/* Roadmap */
+.roadmap-list{display:flex;flex-direction:column;gap:0;}
+.rm-item{display:flex;gap:14px;align-items:flex-start;}
+.rm-spine{display:flex;flex-direction:column;align-items:center;padding-top:3px;}
+.rm-dot{
+  width:14px;height:14px;border-radius:50%;
+  border:2px solid var(--border);background:var(--bg4);flex-shrink:0;
+}
+.rm-dot.done{border-color:var(--green-b);background:var(--green-b);}
+.rm-dot.active{border-color:var(--purple-b);background:var(--purple);
+  animation:rmpulse 1.5s infinite;box-shadow:0 0 8px var(--glow-p);}
+@keyframes rmpulse{0%,100%{box-shadow:0 0 4px var(--glow-p)}50%{box-shadow:0 0 16px var(--glow-p)}}
+.rm-line{width:2px;flex:1;min-height:20px;background:var(--border);margin:3px 0;}
+.rm-line.done{background:var(--green-b);}
+.rm-body{padding-bottom:16px;}
+.rm-name{font-weight:700;font-size:14px;color:var(--text);}
+.rm-name.active{color:var(--purple-b);}
+.rm-name.done{color:var(--green-b);}
+.rm-range{font-size:12px;color:var(--text3);font-family:'JetBrains Mono',monospace;}
+
+/* Recent log */
+.log-item{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;background:var(--bg3);
+  border-radius:10px;margin-bottom:8px;
+  border:1px solid var(--border);
+}
+.log-icon{font-size:20px;width:28px;text-align:center;}
+.log-info{flex:1;}
+.log-name{font-size:14px;font-weight:600;color:var(--text);}
+.log-meta{font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:1px;}
+.log-xp{font-family:'Orbitron',monospace;font-size:12px;color:var(--green-b);font-weight:700;}
+
+/* ── SCANNER PAGE ─────────────────────────────── */
+/* Emotion tabs */
+.scanner-wrap{max-width:760px;}
+.em-tabs{
+  display:flex;gap:8px;flex-wrap:wrap;
+  margin-bottom:24px;
+}
+.em-tab{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  background:var(--bg3);border:2px solid var(--border);
+  border-radius:14px;padding:14px 10px;
+  cursor:pointer;transition:all .18s;
+  min-width:90px;flex:1;
+  -webkit-tap-highlight-color:transparent;
+}
+.em-tab:hover{border-color:var(--border2);transform:translateY(-2px);}
+.em-tab.selected{
+  border-color:var(--purple-b);
+  background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(236,72,153,0.1));
+  transform:translateY(-3px);
+  box-shadow:0 8px 24px rgba(139,92,246,0.25);
+}
+.em-tab-emoji{font-size:32px;line-height:1;}
+.em-tab-name{font-size:13px;font-weight:700;color:var(--text2);text-align:center;}
+.em-tab.selected .em-tab-name{color:var(--text);}
+
+/* Source row */
+.source-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+  margin-bottom:20px;
+}
+.src-btn{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  background:var(--bg3);border:2px solid var(--border);
+  border-radius:12px;padding:14px 8px;
+  cursor:pointer;transition:all .18s;
+  font-family:'Inter',sans-serif;
+}
+.src-btn:hover{border-color:var(--border2);}
+.src-btn.selected{
+  border-color:var(--green-b);
+  background:rgba(16,185,129,0.12);
+  box-shadow:0 0 16px var(--glow-g);
+}
+.src-emoji{font-size:26px;}
+.src-label{font-size:13px;font-weight:700;color:var(--text2);}
+.src-btn.selected .src-label{color:var(--green-b);}
+
+/* Step flow */
+.scanner-step{display:none;}
+.scanner-step.active{display:block;animation:pagein .25s ease;}
+.step-bar{display:flex;gap:6px;margin-bottom:20px;}
+.step-pip{flex:1;height:4px;border-radius:2px;background:var(--bg4);}
+.step-pip.done{background:linear-gradient(90deg,var(--purple-b),var(--pink-b));}
+
+/* ── BATTERY PAGE ─────────────────────────────── */
+.battery-wrap{max-width:600px;}
+.battery-big{
+  font-family:'Orbitron',monospace;
+  font-size:80px;font-weight:900;line-height:1;
+  background:linear-gradient(135deg,var(--green-b),var(--cyan-b));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;text-align:center;
+  margin:16px 0 6px;
+}
+.battery-status-lbl{
+  text-align:center;font-family:'Orbitron',monospace;
+  font-size:14px;letter-spacing:2px;
+  margin-bottom:4px;
+}
+.battery-tip-txt{text-align:center;font-size:14px;color:var(--text2);margin-bottom:20px;line-height:1.5;}
+
+/* Custom slider */
+.slider-container{position:relative;margin-bottom:10px;}
+.custom-slider{
+  -webkit-appearance:none;appearance:none;
+  width:100%;height:10px;
+  background:var(--bg4);border-radius:5px;
+  outline:none;border:1px solid var(--border);
+}
+.custom-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,var(--green-b),var(--cyan-b));
+  cursor:pointer;
+  box-shadow:0 0 14px var(--glow-g);
+  border:3px solid var(--bg);
+  transition:transform .15s;
+}
+.custom-slider::-webkit-slider-thumb:active{transform:scale(1.25);}
+.slider-track{
+  position:absolute;top:50%;left:0;
+  height:10px;border-radius:5px;
+  background:linear-gradient(90deg,var(--green),var(--green-b),var(--cyan-b));
+  transform:translateY(-50%);pointer-events:none;
+  box-shadow:0 0 10px var(--glow-g);transition:width .08s;
+}
+.slider-ends{
+  display:flex;justify-content:space-between;
+  font-size:12px;color:var(--text3);
+  font-family:'JetBrains Mono',monospace;
+  margin-top:6px;
+}
+
+/* ── REPAIR LAB ───────────────────────────────── */
+.repair-wrap{max-width:780px;}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+.filter-chip{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:20px;padding:7px 18px;
+  font-size:13px;font-weight:600;
+  color:var(--text3);cursor:pointer;transition:all .18s;
+}
+.filter-chip.active{
+  background:rgba(139,92,246,0.2);
+  border-color:var(--purple-b);color:var(--purple-b);
+}
+.scripts-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+}
+.script-card{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:12px;padding:16px;
+  transition:border-color .18s;
+  display:flex;flex-direction:column;
+}
+.script-card:hover{border-color:var(--border2);}
+.script-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.script-title{font-size:14px;font-weight:700;color:var(--purple-b);}
+.script-cat-badge{
+  font-size:10px;font-family:'JetBrains Mono',monospace;
+  background:rgba(139,92,246,0.12);border:1px solid var(--border2);
+  border-radius:4px;padding:2px 8px;color:var(--purple-b);
+}
+.script-text{
+  font-size:14px;color:var(--text);line-height:1.6;
+  font-style:italic;margin-bottom:8px;flex:1;
+}
+.script-when{font-size:12px;color:var(--text3);margin-bottom:10px;line-height:1.4;}
+.copy-btn{
+  background:rgba(139,92,246,0.12);
+  border:1px solid var(--border2);
+  border-radius:8px;padding:8px 14px;
+  font-size:12px;font-weight:600;
+  color:var(--purple-b);cursor:pointer;
+  transition:all .18s;align-self:flex-start;
+  font-family:'Inter',sans-serif;
+}
+.copy-btn:hover{background:rgba(139,92,246,0.25);}
+.copy-btn.copied{
+  background:rgba(16,185,129,0.15);
+  border-color:rgba(16,185,129,0.5);color:var(--green-b);
+}
+
+/* ── RECOVERY TIMER ───────────────────────────── */
+.recovery-wrap{max-width:600px;}
+.timer-hero{
+  text-align:center;padding:24px 0 20px;
+}
+.timer-big{
+  font-family:'Orbitron',monospace;
+  font-size:88px;font-weight:900;
+  letter-spacing:8px;line-height:1;
+  background:linear-gradient(135deg,var(--amber-b),var(--pink-b));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.timer-big.running{animation:timerglow 1s ease-in-out infinite alternate;}
+@keyframes timerglow{
+  from{filter:drop-shadow(0 0 6px var(--amber))}
+  to{filter:drop-shadow(0 0 20px var(--pink))}
+}
+.timer-status{
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;color:var(--text3);
+  margin-top:8px;letter-spacing:2px;
+}
+.timer-btns{display:flex;gap:12px;justify-content:center;margin-top:20px;}
+.timer-btn{
+  padding:14px 32px;border-radius:12px;
+  font-family:'Orbitron',monospace;
+  font-size:13px;font-weight:700;
+  letter-spacing:2px;cursor:pointer;
+  transition:all .2s;border:2px solid;
+}
+.tbtn-start{
+  background:linear-gradient(135deg,rgba(245,158,11,0.2),rgba(236,72,153,0.15));
+  border-color:var(--amber);color:var(--amber-b);
+  box-shadow:0 0 20px rgba(245,158,11,0.2);
+}
+.tbtn-start:hover{box-shadow:0 0 30px rgba(245,158,11,0.4);}
+.tbtn-start:disabled{opacity:.4;cursor:not-allowed;}
+.tbtn-stop{
+  background:linear-gradient(135deg,rgba(16,185,129,0.2),rgba(6,182,212,0.1));
+  border-color:var(--green-b);color:var(--green-b);
+}
+.tbtn-stop:disabled{opacity:.4;cursor:not-allowed;}
+.tbtn-reset{
+  background:var(--bg3);border-color:var(--border);
+  color:var(--text3);padding:14px 20px;
+}
+
+.pr-display{
+  background:linear-gradient(135deg,rgba(245,158,11,0.08),rgba(236,72,153,0.05));
+  border:1px solid rgba(245,158,11,0.25);
+  border-radius:12px;padding:16px;
+  text-align:center;margin-top:16px;
+}
+.pr-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:3px;color:var(--amber);
+  margin-bottom:4px;
+}
+.pr-time{
+  font-family:'Orbitron',monospace;
+  font-size:32px;font-weight:900;color:var(--amber-b);
+}
+.pr-sub{font-size:13px;color:var(--text3);margin-top:4px;}
+
+/* Recovery log grid */
+.rec-log-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;
+}
+.rec-log-item{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:10px;padding:12px;
+  display:flex;align-items:center;gap:10px;
+}
+.rec-log-icon{font-size:20px;}
+.rec-log-time{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:var(--amber-b);}
+.rec-log-date{font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;}
+
+/* ── LOCK SCREEN ──────────────────────────────── */
+.lock-screen{
+  text-align:center;padding:60px 40px;max-width:460px;margin:0 auto;
+}
+.lock-emoji{font-size:56px;margin-bottom:16px;}
+.lock-title{
+  font-family:'Orbitron',monospace;
+  font-size:20px;font-weight:900;
+  color:var(--text);margin-bottom:10px;letter-spacing:2px;
+}
+.lock-desc{font-size:15px;color:var(--text2);line-height:1.6;margin-bottom:16px;}
+.lock-xp-needed{
+  display:inline-block;
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;color:var(--amber-b);
+  background:rgba(245,158,11,0.1);
+  border:1px solid rgba(245,158,11,0.3);
+  border-radius:8px;padding:8px 20px;
+}
+
+/* ── BUTTONS ──────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 28px;border-radius:12px;
+  font-family:'Orbitron',monospace;
+  font-size:13px;font-weight:700;letter-spacing:2px;
+  cursor:pointer;transition:all .2s;border:2px solid;
+  width:100%;margin-top:14px;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--purple-d),var(--purple));
+  border-color:var(--purple-b);color:white;
+  box-shadow:0 0 24px rgba(139,92,246,0.3);
+}
+.btn-primary:hover{box-shadow:0 0 36px rgba(139,92,246,0.5);transform:translateY(-1px);}
+.btn-primary:active{transform:translateY(0);}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.btn-green{
+  background:linear-gradient(135deg,rgba(5,150,105,0.8),rgba(16,185,129,0.8));
+  border-color:var(--green-b);color:white;
+  box-shadow:0 0 24px rgba(16,185,129,0.25);
+}
+.btn-green:hover{box-shadow:0 0 36px rgba(16,185,129,0.45);transform:translateY(-1px);}
+.btn-ghost{
+  background:transparent;border-color:var(--border);
+  color:var(--text3);box-shadow:none;
+}
+.btn-ghost:hover{border-color:var(--border2);color:var(--text2);transform:none;box-shadow:none;}
+
+/* ── MODAL ────────────────────────────────────── */
+.modal-bg{
+  position:fixed;inset:0;background:rgba(0,0,0,0.75);
+  backdrop-filter:blur(8px);z-index:200;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.modal-bg.open{opacity:1;pointer-events:all;}
+.modal{
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:18px;padding:28px;
+  width:100%;max-width:420px;
+  transform:scale(.93);transition:transform .3s;
+}
+.modal-bg.open .modal{transform:scale(1);}
+.modal-title{
+  font-family:'Orbitron',monospace;
+  font-size:16px;font-weight:900;
+  color:var(--text);margin-bottom:14px;letter-spacing:2px;
+}
+.modal-desc{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:18px;}
+.modal-row{display:flex;gap:10px;}
+.modal-btn{
+  flex:1;padding:12px;border-radius:10px;
+  font-family:'Orbitron',monospace;font-size:11px;
+  letter-spacing:1px;cursor:pointer;
+  transition:all .2s;border:1px solid;font-weight:700;
+}
+.mbtn-p{background:rgba(139,92,246,0.2);border-color:var(--purple-b);color:var(--purple-b);}
+.mbtn-g{background:rgba(16,185,129,0.15);border-color:var(--green-b);color:var(--green-b);}
+.mbtn-r{background:rgba(239,68,68,0.15);border-color:var(--red);color:#f87171;}
+.mbtn-n{background:var(--bg3);border-color:var(--border);color:var(--text3);}
+
+/* ── TOASTS & POPUPS ──────────────────────────── */
+#xp-toast{
+  position:fixed;top:24px;left:50%;transform:translateX(-50%);
+  background:var(--bg2);border:1px solid var(--green-b);
+  border-radius:10px;padding:12px 24px;
+  font-family:'Orbitron',monospace;font-size:14px;font-weight:700;
+  color:var(--green-b);box-shadow:0 0 28px var(--glow-g);
+  z-index:300;opacity:0;pointer-events:none;
+  transition:opacity .3s;white-space:nowrap;
+}
+#xp-toast.show{opacity:1;}
+
 #toast{
-  position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
-  background:var(--bg2);border:1px solid var(--border2);border-radius:8px;
-  padding:12px 20px;font-family:'Share Tech Mono',monospace;font-size:13px;
-  color:var(--text);z-index:600;opacity:0;pointer-events:none;
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:8px;padding:11px 22px;
+  font-size:13px;color:var(--text);
+  font-family:'JetBrains Mono',monospace;
+  z-index:300;opacity:0;pointer-events:none;
   transition:opacity .3s;white-space:nowrap;
 }
 #toast.show{opacity:1;}
 
-.page{display:none;}
-.page.active{display:block;animation:fadein .3s ease;}
-@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* Unlock overlay */
+#unlock-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.82);
+  backdrop-filter:blur(12px);z-index:400;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .4s;
+}
+#unlock-overlay.show{opacity:1;pointer-events:all;}
+.unlock-box{
+  background:var(--bg2);
+  border:2px solid var(--purple-b);
+  border-radius:20px;padding:40px 36px;text-align:center;
+  max-width:360px;
+  animation:unlockpop .5s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 0 60px rgba(139,92,246,0.3);
+}
+@keyframes unlockpop{0%{transform:scale(.7);opacity:0}100%{transform:scale(1);opacity:1}}
+.unlock-emoji{font-size:56px;margin-bottom:14px;}
+.unlock-title{
+  font-family:'Orbitron',monospace;
+  font-size:17px;font-weight:900;
+  color:var(--purple-b);letter-spacing:2px;margin-bottom:8px;
+}
+.unlock-sub{font-size:14px;color:var(--text2);line-height:1.5;margin-bottom:20px;}
+.unlock-close{
+  background:linear-gradient(135deg,var(--purple-d),var(--purple));
+  border:none;border-radius:10px;padding:12px 28px;
+  font-family:'Orbitron',monospace;font-size:12px;
+  letter-spacing:2px;color:white;cursor:pointer;font-weight:700;
+  box-shadow:0 0 20px rgba(139,92,246,0.3);
+}
+
+/* ── EMPTY STATE ──────────────────────────────── */
+.empty{text-align:center;padding:32px 20px;color:var(--text3);}
+.empty-icon{font-size:40px;margin-bottom:10px;opacity:.5;}
+.empty-text{font-size:14px;font-family:'JetBrains Mono',monospace;line-height:1.6;}
+
+/* ── SECTION HEADING ──────────────────────────── */
+.section-h{
+  font-size:12px;font-family:'JetBrains Mono',monospace;
+  letter-spacing:3px;color:var(--text3);
+  margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.section-h::after{content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,var(--border),transparent);}
+
+/* Scrollbar for main */
+.main::-webkit-scrollbar{width:5px;}
+.main::-webkit-scrollbar-thumb{background:rgba(139,92,246,0.3);border-radius:3px;}
 </style>
 </head>
 <body>
-<div class="scanlines"></div>
-<div id="xp-popup">⚡ +50 XP</div>
 
-<div id="unlock-banner">
-  <div class="unlock-box">
-    <div class="unlock-emoji" id="unlock-emoji">🔓</div>
-    <div class="unlock-title" id="unlock-title">PHASE UNLOCKED</div>
-    <div class="unlock-sub"   id="unlock-sub">New module deployed.</div>
-    <button class="unlock-close" onclick="closeUnlock()">ENGAGE PROTOCOL ▶</button>
+<!-- ═══ SIDEBAR ═══ -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-title">APEX MIND</div>
+    <div class="logo-sub">PROTOCOL SIX</div>
+  </div>
+
+  <div class="streak-pill">
+    <div class="streak-fire">🔥</div>
+    <div class="streak-info">
+      <div class="streak-num" id="sb-streak">0</div>
+      <div class="streak-lbl">day streak</div>
+    </div>
+  </div>
+
+  <div class="xp-block">
+    <div class="xp-top">
+      <div class="xp-phase" id="sb-phase">THE OBSERVER</div>
+      <div class="xp-nums"><span id="sb-xp">0</span> / <span id="sb-next">500</span></div>
+    </div>
+    <div class="xp-bar"><div class="xp-fill" id="sb-xp-fill" style="width:0%"></div></div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-group-label">DASHBOARD</div>
+    <div class="nav-item active" id="nav-home" onclick="navigate('home')">
+      <span class="nav-emoji">🏠</span>
+      <span class="nav-label">Home</span>
+    </div>
+
+    <div class="nav-group-label" style="margin-top:8px">DAILY TOOLS</div>
+    <div class="nav-item" id="nav-scanner" onclick="navigate('scanner')">
+      <span class="nav-emoji">🔍</span>
+      <span class="nav-label">Emotion Scanner</span>
+      <span class="nav-badge" id="badge-scanner">GO</span>
+    </div>
+    <div class="nav-item" id="nav-battery" onclick="navigate('battery')">
+      <span class="nav-emoji">⚡</span>
+      <span class="nav-label">Battery Check</span>
+      <span class="nav-badge" id="badge-battery">GO</span>
+    </div>
+
+    <div class="nav-group-label" style="margin-top:8px">UNLOCKABLES</div>
+    <div class="nav-item" id="nav-repair" onclick="navigate('repair')">
+      <span class="nav-emoji">🔧</span>
+      <span class="nav-label">Repair Lab</span>
+      <span class="nav-badge lock" id="badge-repair">1500 XP</span>
+    </div>
+    <div class="nav-item" id="nav-recovery" onclick="navigate('recovery')">
+      <span class="nav-emoji">⏱</span>
+      <span class="nav-label">Recovery Timer</span>
+      <span class="nav-badge lock" id="badge-recovery">3000 XP</span>
+    </div>
+  </div>
+
+  <div class="sidebar-bottom">
+    <button class="settings-btn" onclick="openModal()">⚙ Settings & Backup</button>
   </div>
 </div>
 
-<div id="modal-overlay" onclick="if(event.target===this)closeModal()">
-  <div class="modal-sheet">
-    <div class="modal-title">⚙ SYSTEM SETTINGS</div>
-    <p style="font-size:15px;color:var(--text2);line-height:1.6;margin-bottom:4px">
-      <b>BACKUP</b> saves your XP, streak &amp; logs as a file you can restore anytime.<br><br>
-      <b>RESTORE</b> loads a previously saved backup.<br><br>
-      <b>RESET</b> wipes all data and restarts Protocol 6 from zero.
-    </p>
-    <div class="modal-action-row">
-      <button class="modal-btn primary" onclick="exportData()">📥 BACKUP</button>
-      <button class="modal-btn neutral" onclick="document.getElementById('restore-input').click()">📤 RESTORE</button>
-    </div>
-    <div class="modal-action-row">
-      <button class="modal-btn danger"  onclick="confirmReset()">⚠ FULL RESET</button>
-      <button class="modal-btn neutral" onclick="closeModal()">CANCEL</button>
-    </div>
-    <input type="file" id="restore-input" accept=".json" style="display:none" onchange="importData(event)">
-  </div>
-</div>
+<!-- ═══ MAIN ═══ -->
+<div class="main" id="main">
 
-<div id="toast"></div>
+  <!-- XP TOAST -->
+  <div id="xp-toast">⚡ +65 XP</div>
+  <div id="toast"></div>
 
-<div id="app">
-  <!-- HEADER -->
-  <div class="hdr">
-    <div class="hdr-logo">APEX MIND<span>PROTOCOL SIX</span></div>
-    <div class="hdr-right">
-      <div class="streak-badge">🔥 <span id="streak-count">0</span> DAY</div>
-      <button class="gear-btn" onclick="openModal()">⚙</button>
+  <!-- UNLOCK OVERLAY -->
+  <div id="unlock-overlay">
+    <div class="unlock-box">
+      <div class="unlock-emoji" id="ul-emoji">🔓</div>
+      <div class="unlock-title" id="ul-title">UNLOCKED</div>
+      <div class="unlock-sub"  id="ul-sub">New module ready.</div>
+      <button class="unlock-close" onclick="closeUnlock()">LET'S GO ▶</button>
     </div>
   </div>
 
-  <!-- XP BAR -->
-  <div class="xp-section">
-    <div class="xp-meta">
-      <div class="xp-phase" id="phase-label">THE OBSERVER</div>
-      <div class="xp-count"><span id="xp-display">0</span> / <span id="xp-next">500</span> XP</div>
+  <!-- SETTINGS MODAL -->
+  <div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-title">⚙ SETTINGS</div>
+      <div class="modal-desc">
+        <b>Backup</b> saves your XP, streak &amp; logs as a file.<br>
+        <b>Restore</b> loads a backup file.<br>
+        <b>Reset</b> wipes everything and starts fresh.
+      </div>
+      <div class="modal-row">
+        <button class="modal-btn mbtn-p" onclick="exportData()">📥 BACKUP</button>
+        <button class="modal-btn mbtn-g" onclick="document.getElementById('restore-file').click()">📤 RESTORE</button>
+      </div>
+      <div class="modal-row" style="margin-top:8px">
+        <button class="modal-btn mbtn-r" onclick="confirmReset()">⚠ RESET ALL</button>
+        <button class="modal-btn mbtn-n" onclick="closeModal()">CANCEL</button>
+      </div>
+      <input type="file" id="restore-file" accept=".json" style="display:none" onchange="importData(event)">
     </div>
-    <div class="xp-bar-wrap"><div class="xp-bar-fill" id="xp-bar" style="width:0%"></div></div>
   </div>
 
-  <!-- ═══ HOME ═══ -->
+  <!-- ══ HOME ══ -->
   <div class="page active" id="page-home">
-    <div class="intel-card">
-      <div class="intel-tag" id="intel-tag">📡 DAILY INTEL</div>
-      <div class="intel-text" id="intel-text">Initializing neural feed...</div>
-      <div class="intel-sub"  id="intel-sub"></div>
+    <div class="page-header">
+      <div class="page-title"><span class="title-icon">🏠</span> Dashboard</div>
+      <div class="page-subtitle">Your daily EQ training hub</div>
     </div>
 
-    <div class="section-label">DAILY QUOTA</div>
-    <div class="daily-cap-bar">
-      <div class="cap-pip" id="pip-1"></div>
-      <div class="cap-pip" id="pip-2"></div>
-      <div class="cap-pip" id="pip-3"></div>
-    </div>
-    <div class="cap-label" id="cap-label">0 / 3 ENTRIES LOGGED TODAY</div>
-
-    <div class="section-label">SYSTEM STATUS</div>
-    <div class="stats-grid">
-      <div class="stat-box"><div class="stat-val" id="stat-xp">0</div><div class="stat-lbl">TOTAL XP</div></div>
-      <div class="stat-box"><div class="stat-val em" id="stat-streak">0</div><div class="stat-lbl">DAY STREAK</div></div>
-      <div class="stat-box"><div class="stat-val amber" id="stat-scans">0</div><div class="stat-lbl">SCANS LOGGED</div></div>
-      <div class="stat-box"><div class="stat-val violet" id="stat-pr">--</div><div class="stat-lbl">BEST RECOVERY</div></div>
+    <!-- Intel Card -->
+    <div class="intel-card" style="margin-bottom:16px">
+      <div class="intel-eyebrow"><div class="dot"></div><span id="intel-tag">📡 DAILY INTEL</span></div>
+      <div class="intel-headline" id="intel-text">Loading...</div>
+      <div class="intel-body"    id="intel-sub"></div>
     </div>
 
-    <div class="section-label">PROTOCOL ROADMAP</div>
-    <div class="card card-accent-blue" id="roadmap-card"></div>
+    <!-- Stats row -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px">
+      <div class="stat-card">
+        <div class="stat-icon-wrap si-p">⚡</div>
+        <div class="stat-info">
+          <div class="stat-val sv-p" id="st-xp">0</div>
+          <div class="stat-lbl">Total XP</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap si-pk">🔥</div>
+        <div class="stat-info">
+          <div class="stat-val sv-pk" id="st-streak">0</div>
+          <div class="stat-lbl">Day Streak</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap si-g">🔍</div>
+        <div class="stat-info">
+          <div class="stat-val sv-g" id="st-scans">0</div>
+          <div class="stat-lbl">Scans Done</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap si-a">⏱</div>
+        <div class="stat-info">
+          <div class="stat-val sv-a" id="st-pr">--</div>
+          <div class="stat-lbl">Best Recovery</div>
+        </div>
+      </div>
+    </div>
 
-    <div class="section-label">RECENT INTEL</div>
+    <!-- Two col: Quota + Roadmap -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+      <!-- Daily Quota -->
+      <div class="card card-glow-p">
+        <div class="card-top-line line-p"></div>
+        <div class="card-label"><div class="dot dot-p"></div>TODAY'S QUOTA</div>
+        <div class="quota-header">
+          <div class="quota-title">Daily Entries</div>
+          <div class="quota-count"><span id="q-count">0</span> / 3</div>
+        </div>
+        <div class="quota-pips">
+          <div class="q-pip" id="qp1"></div>
+          <div class="q-pip" id="qp2"></div>
+          <div class="q-pip" id="qp3"></div>
+        </div>
+        <div style="font-size:12px;color:var(--text3);margin-top:10px;font-family:'JetBrains Mono',monospace">
+          Mix of Scans + Battery Checks
+        </div>
+      </div>
+
+      <!-- Roadmap -->
+      <div class="card card-glow-p">
+        <div class="card-top-line line-p"></div>
+        <div class="card-label"><div class="dot dot-p"></div>PROTOCOL ROADMAP</div>
+        <div class="roadmap-list" id="roadmap"></div>
+      </div>
+    </div>
+
+    <!-- Recent logs -->
+    <div class="section-h">RECENT ACTIVITY</div>
     <div id="recent-logs">
-      <div class="empty-state"><div class="empty-icon">📡</div><div class="empty-text">NO DATA LOGGED YET<br>COMPLETE YOUR FIRST SCAN</div></div>
+      <div class="empty"><div class="empty-icon">📡</div><div class="empty-text">No entries yet.<br>Run your first scan to start building XP.</div></div>
     </div>
   </div>
 
-  <!-- ═══ SCANNER ═══ -->
+  <!-- ══ SCANNER ══ -->
   <div class="page" id="page-scanner">
-    <div class="step-indicator">
-      <div class="step-dot done" id="step-dot-1"></div>
-      <div class="step-dot"      id="step-dot-2"></div>
+    <div class="page-header">
+      <div class="page-title"><span class="title-icon">🔍</span> Emotion Scanner</div>
+      <div class="page-subtitle">Pick what you're feeling right now, then tag where it came from</div>
     </div>
+    <div class="scanner-wrap">
 
-    <div id="scanner-s1">
-      <div class="intel-card" style="border-color:var(--blue);box-shadow:0 0 20px rgba(59,130,246,0.12)">
-        <div class="intel-tag" style="color:var(--blue-b)">EMOTION SCANNER — STEP 1 OF 2</div>
-        <div class="intel-text">Pick the one that best matches how you're feeling right now.</div>
-      </div>
-      <div class="card card-accent-blue">
-        <div class="card-title">HOW ARE YOU FEELING?</div>
-        <div class="emotion-grid" id="grid-emotions"></div>
-      </div>
-      <button class="submit-btn" id="scanner-next-btn" disabled onclick="scannerStep2()">NEXT → TAG SOURCE</button>
-    </div>
-
-    <div id="scanner-s2" style="display:none">
-      <div class="intel-card" style="border-color:var(--emerald);box-shadow:0 0 20px var(--glow-e)">
-        <div class="intel-tag" style="color:var(--em-b)">EMOTION SCANNER — STEP 2 OF 2</div>
-        <div class="intel-text" id="step2-emotion">Signal Tagged: —</div>
-        <div class="intel-sub">Tag the source for a +15 XP Context Bonus.</div>
-      </div>
-      <div class="card card-accent-em">
-        <div class="card-title">📡 SOURCE IDENTIFICATION</div>
-        <div class="source-row">
-          <button class="src-btn" data-src="Family" onclick="selectSource(this)"><span class="src-icon">🏠</span>FAMILY</button>
-          <button class="src-btn" data-src="Friend" onclick="selectSource(this)"><span class="src-icon">🤝</span>FRIEND</button>
-          <button class="src-btn" data-src="Media"  onclick="selectSource(this)"><span class="src-icon">📱</span>MEDIA</button>
-          <button class="src-btn" data-src="Self"   onclick="selectSource(this)"><span class="src-icon">🧠</span>SELF</button>
+      <!-- Step 1 -->
+      <div class="scanner-step active" id="scan-s1">
+        <div class="step-bar">
+          <div class="step-pip done"></div>
+          <div class="step-pip" id="sp2"></div>
         </div>
-      </div>
-      <button class="submit-btn green" id="scanner-submit-btn" disabled onclick="submitScan()">⚡ SUBMIT SCAN</button>
-      <button class="submit-btn ghost" onclick="scannerBack()" style="margin-top:8px">← BACK</button>
-    </div>
-  </div>
-
-  <!-- ═══ BATTERY ═══ -->
-  <div class="page" id="page-battery">
-    <div id="bat-locked" style="display:none">
-      <div class="card card-accent-amber">
-        <div class="lock-overlay">
-          <div class="lock-icon">🔒</div>
-          <div class="lock-title">ARCHITECT MODE LOCKED</div>
-          <div class="lock-desc">Internal diagnostics unlock at 500 XP. Keep scanning to power up the system.</div>
-          <div class="lock-xp">NEED <span id="bat-xp-need">500</span> XP · CURRENT: <span id="bat-xp-cur">0</span> XP</div>
+        <div class="card card-glow-p" style="margin-bottom:16px">
+          <div class="card-top-line line-p"></div>
+          <div class="card-label"><div class="dot dot-p"></div>STEP 1 — HOW ARE YOU FEELING?</div>
+          <div class="em-tabs" id="em-grid"></div>
         </div>
+        <button class="btn btn-primary" id="scan-next-btn" disabled onclick="scanStep2()">NEXT → TAG THE SOURCE</button>
       </div>
-    </div>
-    <div id="bat-unlocked" style="display:none">
-      <div class="intel-card" style="border-color:var(--emerald);box-shadow:0 0 20px var(--glow-e)">
-        <div class="intel-tag" style="color:var(--em-b)">BATTERY CHECK — INTERNAL DIAGNOSTICS</div>
-        <div class="intel-text">Calibrate your internal energy reading. Where is the system at right now?</div>
-      </div>
-      <div class="card card-accent-em">
-        <div class="card-title">⚡ POWER LEVEL</div>
-        <div class="battery-display">
-          <div class="battery-pct" id="bat-pct">72%</div>
-          <div>
-            <div class="battery-status" id="bat-status">NOMINAL</div>
-            <div class="battery-tip"   id="bat-tip">System running well. Minor optimization may help.</div>
+
+      <!-- Step 2 -->
+      <div class="scanner-step" id="scan-s2">
+        <div class="step-bar">
+          <div class="step-pip done"></div>
+          <div class="step-pip done" id="sp2b"></div>
+        </div>
+        <div class="card card-glow-g" style="margin-bottom:16px">
+          <div class="card-top-line line-g"></div>
+          <div class="card-label"><div class="dot dot-g"></div>STEP 2 — WHERE DID IT COME FROM?</div>
+          <div style="font-size:15px;color:var(--text2);margin-bottom:16px">
+            You picked: <span id="s2-emotion-display" style="color:var(--purple-b);font-weight:700"></span>
+            <br><span style="font-size:12px;color:var(--text3)">Tag the source for a +15 XP bonus</span>
+          </div>
+          <div class="source-grid">
+            <button class="src-btn" data-src="Family"  onclick="selectSrc(this)"><span class="src-emoji">🏠</span><span class="src-label">Family</span></button>
+            <button class="src-btn" data-src="Friend"  onclick="selectSrc(this)"><span class="src-emoji">🤝</span><span class="src-label">Friend</span></button>
+            <button class="src-btn" data-src="Media"   onclick="selectSrc(this)"><span class="src-emoji">📱</span><span class="src-label">Media</span></button>
+            <button class="src-btn" data-src="Self"    onclick="selectSrc(this)"><span class="src-emoji">🧠</span><span class="src-label">Myself</span></button>
           </div>
         </div>
-        <div class="slider-wrap">
-          <div class="slider-track-fill" id="slider-fill" style="width:72%"></div>
-          <input type="range" id="bat-slider" min="1" max="100" value="72" oninput="updateBattery(this.value)">
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-ghost" onclick="scanBack()" style="width:auto;padding:14px 24px;margin-top:14px">← Back</button>
+          <button class="btn btn-green" id="scan-submit-btn" disabled onclick="submitScan()">⚡ LOG IT</button>
         </div>
-        <div class="slider-labels"><span>1% DRAINED</span><span>50% HALF</span><span>100% OPTIMAL</span></div>
       </div>
-      <button class="submit-btn green" onclick="submitBattery()">⚡ LOG BATTERY LEVEL</button>
     </div>
   </div>
 
-  <!-- ═══ REPAIR LAB ═══ -->
+  <!-- ══ BATTERY ══ -->
+  <div class="page" id="page-battery">
+    <div class="page-header">
+      <div class="page-title"><span class="title-icon">⚡</span> Battery Check</div>
+      <div class="page-subtitle">How charged are you feeling right now?</div>
+    </div>
+    <div class="battery-wrap">
+      <div id="bat-locked" style="display:none">
+        <div class="lock-screen">
+          <div class="lock-emoji">🔒</div>
+          <div class="lock-title">ARCHITECT MODE</div>
+          <div class="lock-desc">Battery checks unlock at 500 XP. Keep scanning emotions to power up.</div>
+          <div class="lock-xp-needed">Need <span id="bat-need">500</span> more XP</div>
+        </div>
+      </div>
+      <div id="bat-unlocked" style="display:none">
+        <div class="card card-glow-g">
+          <div class="card-top-line line-g"></div>
+          <div class="card-label"><div class="dot dot-g"></div>POWER LEVEL</div>
+          <div class="battery-big" id="bat-pct">72%</div>
+          <div class="battery-status-lbl" id="bat-status" style="color:var(--green-b)">NOMINAL</div>
+          <div class="battery-tip-txt"    id="bat-tip">System running well.</div>
+
+          <div class="slider-container">
+            <div class="slider-track" id="bat-track" style="width:72%"></div>
+            <input class="custom-slider" type="range" id="bat-slider" min="1" max="100" value="72" oninput="updateBat(this.value)">
+          </div>
+          <div class="slider-ends">
+            <span>1% — Totally drained</span>
+            <span>100% — Full power</span>
+          </div>
+        </div>
+        <button class="btn btn-green" onclick="submitBat()">⚡ LOG MY BATTERY</button>
+
+        <!-- Today's battery history -->
+        <div class="section-h" style="margin-top:20px">TODAY'S READINGS</div>
+        <div id="bat-history">
+          <div class="empty" style="padding:20px"><div class="empty-icon" style="font-size:28px">⚡</div><div class="empty-text">No readings yet today</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ REPAIR LAB ══ -->
   <div class="page" id="page-repair">
-    <div id="rep-locked" style="display:none">
-      <div class="card card-accent-violet">
-        <div class="lock-overlay">
-          <div class="lock-icon">🔒</div>
-          <div class="lock-title">DIPLOMAT MODE LOCKED</div>
-          <div class="lock-desc">Social patches deploy at 1,500 XP. The Repair Lab holds tactical scripts to fix communication glitches in real-world chats.</div>
-          <div class="lock-xp">NEED <span id="rep-xp-need">1500</span> XP · CURRENT: <span id="rep-xp-cur">0</span> XP</div>
+    <div class="page-header">
+      <div class="page-title"><span class="title-icon">🔧</span> Repair Lab</div>
+      <div class="page-subtitle">Copy a script to use in real life when things get awkward</div>
+    </div>
+    <div class="repair-wrap">
+      <div id="rep-locked" style="display:none">
+        <div class="lock-screen">
+          <div class="lock-emoji">🔒</div>
+          <div class="lock-title">DIPLOMAT MODE</div>
+          <div class="lock-desc">The Repair Lab unlocks at 1,500 XP. You'll get a library of scripts to fix awkward situations, set limits, and recover from Ls.</div>
+          <div class="lock-xp-needed">Need <span id="rep-need">1500</span> more XP</div>
         </div>
       </div>
-    </div>
-    <div id="rep-unlocked" style="display:none">
-      <div class="intel-card" style="border-color:var(--violet);box-shadow:0 0 20px var(--glow-v)">
-        <div class="intel-tag" style="color:#c4b5fd">REPAIR LAB — SOCIAL PATCH LIBRARY</div>
-        <div class="intel-text">Select a script. Tap COPY PATCH → deploy in real chats or texts.</div>
+      <div id="rep-unlocked" style="display:none">
+        <div class="filter-row" id="filter-row">
+          <button class="filter-chip active" onclick="filterScripts('all',this)">All</button>
+          <button class="filter-chip" onclick="filterScripts('TILT',this)">🌡 Tilt</button>
+          <button class="filter-chip" onclick="filterScripts('BOUNDARY',this)">🚧 Boundary</button>
+          <button class="filter-chip" onclick="filterScripts('REPAIR',this)">🛠 Repair</button>
+          <button class="filter-chip" onclick="filterScripts('ASSERT',this)">💬 Assert</button>
+        </div>
+        <div class="scripts-grid" id="scripts-list"></div>
       </div>
-      <div class="repair-filter" id="repair-filters">
-        <button class="filter-btn active" onclick="filterScripts('all',this)">ALL</button>
-        <button class="filter-btn" onclick="filterScripts('TILT',this)">TILT</button>
-        <button class="filter-btn" onclick="filterScripts('BOUNDARY',this)">BOUNDARY</button>
-        <button class="filter-btn" onclick="filterScripts('REPAIR',this)">REPAIR</button>
-        <button class="filter-btn" onclick="filterScripts('ASSERT',this)">ASSERT</button>
-      </div>
-      <div id="scripts-list"></div>
     </div>
   </div>
 
-  <!-- ═══ RECOVERY ═══ -->
+  <!-- ══ RECOVERY ══ -->
   <div class="page" id="page-recovery">
-    <div id="rec-locked" style="display:none">
-      <div class="card card-accent-amber">
-        <div class="lock-overlay">
-          <div class="lock-icon">🔒</div>
-          <div class="lock-title">STRATEGIST MODE LOCKED</div>
-          <div class="lock-desc">Recovery Timer unlocks at 3,000 XP. Gamify your bounce-back time and beat your personal record after every tilt.</div>
-          <div class="lock-xp">NEED <span id="rec-xp-need">3000</span> XP · CURRENT: <span id="rec-xp-cur">0</span> XP</div>
-        </div>
-      </div>
+    <div class="page-header">
+      <div class="page-title"><span class="title-icon">⏱</span> Recovery Timer</div>
+      <div class="page-subtitle">Start when you're tilted. Stop when you're fully calm. Beat your PR.</div>
     </div>
-    <div id="rec-unlocked" style="display:none">
-      <div class="intel-card" style="border-color:var(--amber);box-shadow:0 0 20px var(--glow-a)">
-        <div class="intel-tag" style="color:var(--amber-b)">RECOVERY TIMER — BOUNCE-BACK PROTOCOL</div>
-        <div class="intel-text">Hit START when tilt hits. Hit CENTERED when your system is fully neutral. Beat your PR.</div>
-      </div>
-      <div class="card card-accent-amber">
-        <div class="card-title">⏱ TILT RECOVERY STOPWATCH</div>
-        <div class="timer-display">
-          <div class="timer-digits" id="timer-digits">00:00</div>
-          <div class="timer-label"  id="timer-label">READY TO TRACK</div>
-        </div>
-        <div class="timer-btns">
-          <button class="timer-btn start"  id="timer-start-btn" onclick="timerStart()">▶ START TILT</button>
-          <button class="timer-btn stop"   id="timer-stop-btn"  onclick="timerStop()" disabled>■ CENTERED</button>
-          <button class="timer-btn reset"  onclick="timerReset()">↺</button>
+    <div class="recovery-wrap">
+      <div id="rec-locked" style="display:none">
+        <div class="lock-screen">
+          <div class="lock-emoji">🔒</div>
+          <div class="lock-title">STRATEGIST MODE</div>
+          <div class="lock-desc">Recovery Timer unlocks at 3,000 XP. You'll gamify how fast you bounce back from any tilt.</div>
+          <div class="lock-xp-needed">Need <span id="rec-need">3000</span> more XP</div>
         </div>
       </div>
-      <div class="pr-section">
-        <div class="pr-label">⚡ PERSONAL RECORD</div>
-        <div class="pr-time" id="pr-display">--:--</div>
-        <div class="pr-sub"  id="pr-sub">No PR set yet — run your first session</div>
-      </div>
-      <div class="card card-accent-amber" style="margin-top:14px">
-        <div class="card-title">📊 SESSION LOG</div>
-        <div id="recovery-log-list">
-          <div class="empty-state" style="padding:16px 0"><div class="empty-icon" style="font-size:24px">⏱</div><div class="empty-text">NO SESSIONS LOGGED</div></div>
+      <div id="rec-unlocked" style="display:none">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div>
+            <div class="card card-glow-a">
+              <div class="card-top-line line-a"></div>
+              <div class="card-label"><div class="dot dot-a"></div>BOUNCE-BACK STOPWATCH</div>
+              <div class="timer-hero">
+                <div class="timer-big" id="timer-digits">00:00</div>
+                <div class="timer-status" id="timer-status">READY TO TRACK</div>
+              </div>
+              <div class="timer-btns">
+                <button class="timer-btn tbtn-start" id="tbtn-start" onclick="timerStart()">▶ START</button>
+                <button class="timer-btn tbtn-stop"  id="tbtn-stop"  onclick="timerStop()" disabled>■ CALM</button>
+                <button class="timer-btn tbtn-reset" onclick="timerReset()">↺</button>
+              </div>
+            </div>
+
+            <div class="pr-display">
+              <div class="pr-label">⚡ PERSONAL RECORD</div>
+              <div class="pr-time" id="pr-time">--:--</div>
+              <div class="pr-sub"  id="pr-sub">Run your first session to set a PR</div>
+            </div>
+          </div>
+
+          <div>
+            <div class="section-h">SESSION LOG</div>
+            <div id="rec-log">
+              <div class="empty" style="padding:20px">
+                <div class="empty-icon" style="font-size:28px">⏱</div>
+                <div class="empty-text">No sessions yet</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- NAV BAR -->
-<div class="nav-bar">
-  <button class="nav-btn active" id="nav-home"     onclick="navigate('home')"><span class="nav-icon">🏠</span><span class="nav-label">HOME</span></button>
-  <button class="nav-btn"        id="nav-scanner"  onclick="navigate('scanner')"><span class="nav-icon">🔍</span><span class="nav-label">SCANNER</span></button>
-  <button class="nav-btn"        id="nav-battery"  onclick="navigate('battery')"><span class="nav-icon">⚡</span><span class="nav-label">BATTERY</span></button>
-  <button class="nav-btn"        id="nav-repair"   onclick="navigate('repair')"><span class="nav-icon">🔧</span><span class="nav-label">REPAIR</span></button>
-  <button class="nav-btn"        id="nav-recovery" onclick="navigate('recovery')"><span class="nav-icon">⏱</span><span class="nav-label">RECOVERY</span></button>
-</div>
+</div><!-- /main -->
 
 <script>
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // DATA
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════════
 const PHASES = [
-  {name:'THE OBSERVER',   minXP:0,    maxXP:500,  desc:'Emotional Literacy & Pattern Recognition',    emoji:'👁'},
-  {name:'THE ARCHITECT',  minXP:500,  maxXP:1500, desc:'Self-Awareness & Physiological Regulation',   emoji:'⚡'},
-  {name:'THE DIPLOMAT',   minXP:1500, maxXP:3000, desc:'Assertiveness, Boundaries & Social Repair',   emoji:'🔧'},
-  {name:'THE STRATEGIST', minXP:3000, maxXP:5000, desc:'Resilience, Recovery Speed & Calm Under Fire',emoji:'🎯'},
+  {name:'THE OBSERVER',   xp:0,    next:500,  desc:'Emotional Literacy',         emoji:'👁'},
+  {name:'THE ARCHITECT',  xp:500,  next:1500, desc:'Self-Awareness',             emoji:'⚡'},
+  {name:'THE DIPLOMAT',   xp:1500, next:3000, desc:'Social Repair',              emoji:'🔧'},
+  {name:'THE STRATEGIST', xp:3000, next:5000, desc:'Resilience & Recovery Speed',emoji:'🎯'},
 ];
 
 const INTEL = [
-  {text:"Every time you lose, you're getting a free tutorial. Most people just skip it.", sub:"Winners replay the loss. Everyone else replays the excuses. Go back and find the one thing you'd change."},
-  {text:"Breathe in for 4 seconds. Breathe out for 8. That's it. You'll feel it working within 60 seconds.", sub:"Try it next time you're about to say something you'll regret. The long exhale is like hitting pause on your own reaction."},
-  {text:"If someone is annoying you, wait 90 seconds before doing anything. The feeling peaks and crashes on its own.", sub:"If you're still mad after 90 seconds, it's because you kept feeding it. That part is always a choice."},
-  {text:"Calling out what you feel — even just in your head — actually makes it less intense. One word is enough.", sub:"Stuck on 'bad'? Get more specific. Embarrassed? Annoyed? Drained? The more accurate the word, the faster it clears."},
-  {text:"Running a play in your head counts as practice. Not just mentally — your muscles literally rehearse it.", sub:"Before a test, game, or tough conversation: play it through in your head first. Your performance actually improves."},
-  {text:"Being left out or rejected hurts the same way a twisted ankle does. It's a real signal, not you being soft.", sub:"So when it hits hard, treat it like an injury. Rest, don't poke at it, and let it actually heal before going back in."},
-  {text:"Sleep is the cheat code. Reaction time, mood, focus, memory — every single stat goes up with 8+ hours.", sub:"You can't grind your way out of being under-slept. Every athlete, every pro gamer, every top student prioritizes this."},
-  {text:"Your first reaction to anything — anger, embarrassment, fear — is automatic. What you do next is the skill.", sub:"You can't control the first 2 seconds. Everything after that is trainable. That's what this protocol is building."},
-  {text:"Watching someone go through something really does affect you — even if it didn't happen to you.", sub:"This is why you feel weird after watching something intense. Your system ran the whole emotional simulation for the character."},
-  {text:"The hype before something exciting? That's usually better than the thing itself. Your system is wired for the chase.", sub:"The countdown, the buildup, the anticipation — that's peak. Use it. Enjoy the run-up as much as the arrival."},
-  {text:"Replaying bad stuff on a loop is the one thing guaranteed to make your recovery take forever.", sub:"One watch, learn what you can, then close the tab. The people who bounce back fast are the ones who stop the replay."},
-  {text:"The best competitors focus on their next move — not the scoreboard. One play at a time beats panicking about the score.", sub:"When you're trailing, shrinking your focus to the next 30 seconds actually makes you perform better. Zoom in, not out."},
-  {text:"Telling someone you trust what's actually going on isn't a sign you're struggling — it's a power move.", sub:"The strongest people in any room know who they can talk to. Building that trust early is a long-game advantage."},
-  {text:"How you hold your body right now is sending signals to your own head. Good posture isn't just for photos.", sub:"Try it: sit up, take up space, chin level. Give it 2 minutes. Your own system responds to the signal you're sending it."},
-  {text:"Boredom means your brain just shifted into its most creative mode. Don't rush to fill it.", sub:"The random idea that hits when you're doing nothing? That's not an accident. Downtime is where breakthroughs happen."},
+  {h:"Every time you lose, you're getting a free tutorial. Most people just skip it.",            b:"Winners replay the loss. Everyone else replays the excuses. Find the one thing you'd change."},
+  {h:"Breathe in for 4 seconds, out for 8. You'll feel it working within 60 seconds.",            b:"The long exhale is like hitting pause on your own reaction. Try it next time you're about to snap."},
+  {h:"If someone's annoying you, wait 90 seconds before doing anything.",                          b:"The feeling peaks and crashes on its own. If you're still mad after 90s, you kept feeding it."},
+  {h:"Calling out what you feel — even just in your head — makes it less intense.",               b:"Stuck on 'bad'? Get specific. Embarrassed? Annoyed? Drained? The right word clears it faster."},
+  {h:"Imagining yourself doing something well is actual practice. Not just hype.",                 b:"Before a game, test, or tough convo — run it through your head first. Performance actually improves."},
+  {h:"Being left out hurts the same way a twisted ankle does. It's a real signal.",               b:"Treat it like an injury. Rest, don't poke at it, and let it heal before going back in."},
+  {h:"Sleep is the cheat code. Reaction time, mood, focus — every stat goes up with 8+ hours.",  b:"You can't grind your way out of being under-slept. Every top performer treats sleep like training."},
+  {h:"Your first reaction to anything is automatic. What you do next is the actual skill.",        b:"You can't control the first 2 seconds. Everything after that is trainable. That's what this builds."},
+  {h:"Watching someone go through something really does affect you — even if it didn't happen to you.",b:"This is why you feel off after something intense. Your system ran the full emotional simulation."},
+  {h:"The hype before something exciting is usually better than the thing itself.",               b:"Countdown, buildup, anticipation — that's peak. Enjoy the run-up as much as the arrival."},
+  {h:"Replaying bad stuff on loop is the one thing guaranteed to slow your recovery.",            b:"One watch, learn what you can, then close the tab. Fast bounceback = stop the replay."},
+  {h:"Top competitors focus on their next move, not the scoreboard.",                             b:"When you're trailing, zoom your focus to the next 30 seconds. It actually makes you perform better."},
+  {h:"Telling someone you trust what's actually going on isn't soft — it's a power move.",       b:"The strongest people in any room know who they can talk to. Build that trust early."},
+  {h:"How you hold your body right now is sending signals to your own brain.",                    b:"Sit up, take up space, chin level. Give it 2 minutes. Your own system responds to what you send it."},
+  {h:"Boredom means your brain just shifted into its most creative mode.",                        b:"The random idea that hits when you're doing nothing? Not an accident. Downtime is where breakthroughs happen."},
 ];
 
-
 const EMOTIONS = [
-  {emoji:'🤩',name:'Excited',      key:'excited'},
-  {emoji:'😄',name:'Happy',        key:'happy'},
-  {emoji:'😎',name:'Confident',    key:'confident'},
-  {emoji:'😌',name:'Calm',         key:'calm'},
-  {emoji:'😐',name:'Neutral',      key:'neutral'},
-  {emoji:'😬',name:'Anxious',      key:'anxious'},
-  {emoji:'😤',name:'Frustrated',   key:'frustrated'},
-  {emoji:'😡',name:'Angry',        key:'angry'},
-  {emoji:'😢',name:'Sad',          key:'sad'},
-  {emoji:'😞',name:'Disappointed', key:'disappointed'},
-  {emoji:'🤯',name:'Overwhelmed',  key:'overwhelmed'},
-  {emoji:'😔',name:'Drained',      key:'drained'},
-  {emoji:'😳',name:'Embarrassed',  key:'embarrassed'},
-  {emoji:'🥺',name:'Lonely',       key:'lonely'},
-  {emoji:'😴',name:'Bored',        key:'bored'},
-  {emoji:'🫶',name:'Proud',        key:'proud'},
+  {e:'🤩',n:'Excited'},    {e:'😄',n:'Happy'},
+  {e:'😎',n:'Confident'},  {e:'🫶',n:'Proud'},
+  {e:'😌',n:'Calm'},       {e:'😐',n:'Neutral'},
+  {e:'😴',n:'Bored'},      {e:'😬',n:'Anxious'},
+  {e:'😤',n:'Frustrated'}, {e:'😡',n:'Angry'},
+  {e:'😢',n:'Sad'},        {e:'😞',n:'Disappointed'},
+  {e:'😳',n:'Embarrassed'},{e:'🤯',n:'Overwhelmed'},
+  {e:'😔',n:'Drained'},    {e:'🥺',n:'Lonely'},
 ];
 
 const SCRIPTS = [
-  {id:1,cat:'TILT',    title:'The Tilt Reset',         text:"I need 5 minutes before I respond. My system is running hot and I don't want to say something I'll regret.",    when:'When you\'re about to react in a way you\'ll regret'},
-  {id:2,cat:'REPAIR',  title:'The Social Error Fix',   text:"Hey — I think what I said earlier came out wrong. That's not what I meant. Can we reset?",                       when:'After saying something that landed badly'},
-  {id:3,cat:'BOUNDARY',title:'The Hard No',            text:"I'm not going to do that. I'm not changing my answer on this one.",                                               when:'When someone keeps pushing after you\'ve already said no'},
-  {id:4,cat:'ASSERT',  title:'The Calm Request',       text:"I need to tell you something and I want you to hear it before you respond. Is that okay?",                        when:'Before bringing up something difficult'},
-  {id:5,cat:'TILT',    title:'The Cooldown Signal',    text:"I'm too activated to have this conversation right now without it going sideways. Give me an hour.",               when:'Mid-argument when logic has already left the room'},
-  {id:6,cat:'REPAIR',  title:'The Check-In Repair',    text:"I've been off lately and I think it affected how I treated you. I wanted to own that.",                           when:'Reconnecting after a period of tension or distance'},
-  {id:7,cat:'BOUNDARY',title:'The Soft Exit',          text:"I'm going to tap out of this topic. It's not a big deal — I just don't want to keep going here.",                 when:'Redirecting a conversation without escalating it'},
-  {id:8,cat:'ASSERT',  title:'The Disagreement Hold',  text:"I hear you. I still see it differently. I'm not trying to fight — I just don't agree.",                           when:'Holding your ground without shutting the other person down'},
-  {id:9,cat:'TILT',    title:'The Loss Acknowledgment',text:"That was rough. I'm not going to pretend it's fine right now, but I'll process it and come back stronger.",       when:'After a loss, rejection, or major setback'},
-  {id:10,cat:'REPAIR', title:'The Misread Fix',        text:"I think that came across differently than I intended. Here's what I actually meant:",                             when:'When your message or action was completely misinterpreted'},
-  {id:11,cat:'BOUNDARY',title:'The Info Firewall',     text:"That's not something I share. Not because of anything weird — I just keep that private.",                         when:'When someone asks for info you\'re not comfortable giving'},
-  {id:12,cat:'ASSERT', title:'The Credit Claim',       text:"I want to be clear — that idea came from me and I want to make sure that's on the record.",                       when:'When your contribution is being overlooked or taken'},
+  {id:1,cat:'TILT',    title:'The Tilt Reset',         text:"I need 5 minutes before I respond. I don't want to say something I'll regret.",              when:'When you\'re about to snap'},
+  {id:2,cat:'REPAIR',  title:'The Social Error Fix',   text:"Hey — what I said earlier came out wrong. That's not what I meant. Can we reset?",           when:'After saying something that landed badly'},
+  {id:3,cat:'BOUNDARY',title:'The Hard No',            text:"I'm not going to do that. I'm not changing my answer.",                                       when:'When someone keeps pushing after you said no'},
+  {id:4,cat:'ASSERT',  title:'The Calm Request',       text:"I need to tell you something. Can you hear me out before you respond?",                       when:'Before bringing up something difficult'},
+  {id:5,cat:'TILT',    title:'The Cooldown Signal',    text:"I'm too wound up to talk about this without it going sideways. Give me an hour.",             when:'Mid-argument when logic has left the room'},
+  {id:6,cat:'REPAIR',  title:'The Check-In Repair',    text:"I've been off lately and I think it affected how I treated you. I wanted to own that.",       when:'After a period of tension or distance'},
+  {id:7,cat:'BOUNDARY',title:'The Soft Exit',          text:"I'm going to step out of this topic. Not a big deal — I just don't want to keep going here.", when:'Redirecting without escalating'},
+  {id:8,cat:'ASSERT',  title:'The Disagreement Hold',  text:"I hear you. I still see it differently. I'm not trying to fight — I just don't agree.",       when:'Holding your ground calmly'},
+  {id:9,cat:'TILT',    title:'The Loss Acknowledgment',text:"That was rough. I'm not going to pretend it's fine right now, but I'll be back.",             when:'After a loss or major setback'},
+  {id:10,cat:'REPAIR', title:'The Misread Fix',        text:"I think that came across differently than I meant. Here's what I actually was saying:",       when:'When you were completely misunderstood'},
+  {id:11,cat:'BOUNDARY',title:'The Info Firewall',     text:"That's not something I share. Not because of anything weird — I just keep that private.",     when:'When asked for info you don\'t want to give'},
+  {id:12,cat:'ASSERT', title:'The Credit Claim',       text:"I want to be clear — that was my idea and I want to make sure that's on the record.",         when:'When your contribution gets overlooked'},
 ];
 
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // STATE
-// ══════════════════════════════════════════
-const DEFAULT_STATE = {
+// ═══════════════════════════════════════════════
+const DEF = {
   xp:0, streak:0, lastLogDate:null,
   todayEntries:0, todayDate:null,
-  totalScans:0, logs:[],
+  scannerDone:false, batteryDone:false, // per-day flags (reset daily, battery resets each log)
+  totalScans:0, totalBats:0,
+  logs:[], batLogs:[], // batLogs = today's battery readings
+  batLogsDate:null,
   recoveryPR:null, recoverySessions:[],
 };
+let S = {...DEF};
 
-let S = {...DEFAULT_STATE};
-
-function loadState(){
-  try {
-    const raw = localStorage.getItem('apexmind_p6');
-    if(raw) S = {...DEFAULT_STATE,...JSON.parse(raw)};
-  } catch(e){}
-  const today = todayStr();
-  if(S.todayDate !== today){ S.todayDate = today; S.todayEntries = 0; }
-  // Streak check
+function load(){
+  try{ const r=localStorage.getItem('apexmind_p6'); if(r) S={...DEF,...JSON.parse(r)}; }catch(e){}
+  const t = today();
+  if(S.todayDate !== t){
+    S.todayDate=t; S.todayEntries=0; S.scannerDone=false; S.batteryDone=false;
+  }
+  if(S.batLogsDate !== t){ S.batLogsDate=t; S.batLogs=[]; }
+  // streak check
   if(S.lastLogDate){
-    const last = new Date(S.lastLogDate);
-    const now  = new Date(today);
-    const diff = Math.floor((now-last)/86400000);
-    if(diff > 1) S.streak = 0;
+    const diff = Math.floor((new Date(t)-new Date(S.lastLogDate))/86400000);
+    if(diff>1) S.streak=0;
   }
 }
-function save(){ localStorage.setItem('apexmind_p6', JSON.stringify(S)); }
-function todayStr(){ return new Date().toISOString().slice(0,10); }
+function save(){ localStorage.setItem('apexmind_p6',JSON.stringify(S)); }
+function today(){ return new Date().toISOString().slice(0,10); }
+function nowTime(){ return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); }
 
-// ══════════════════════════════════════════
-// PHASE / XP
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════════
+// XP & PHASES
+// ═══════════════════════════════════════════════
 function phaseIdx(){
-  for(let i=PHASES.length-1;i>=0;i--) if(S.xp>=PHASES[i].minXP) return i;
+  for(let i=PHASES.length-1;i>=0;i--) if(S.xp>=PHASES[i].xp) return i;
   return 0;
 }
-function addXP(amt, label){
-  const oldP = phaseIdx();
-  S.xp = Math.max(0, S.xp + amt);
-  const newP = phaseIdx();
+function addXP(amt,label){
+  const old=phaseIdx();
+  S.xp=Math.max(0,S.xp+amt);
+  const nw=phaseIdx();
   save(); renderAll();
-  showXPPopup(amt, label);
-  if(newP > oldP) setTimeout(()=>showUnlock(newP), 700);
+  showXPToast(amt,label);
+  if(nw>old) setTimeout(()=>showUnlock(nw),700);
 }
-function showXPPopup(amt, label){
-  const el = document.getElementById('xp-popup');
-  el.textContent = `⚡ +${amt} XP — ${label||'UPGRADE'}`;
+function showXPToast(amt,label){
+  const el=document.getElementById('xp-toast');
+  el.textContent=`⚡ +${amt} XP — ${label||''}`;
   el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'), 2400);
+  setTimeout(()=>el.classList.remove('show'),2400);
 }
-function showUnlock(idx){
-  const p = PHASES[idx];
-  document.getElementById('unlock-emoji').textContent = p.emoji;
-  document.getElementById('unlock-title').textContent = p.name+' UNLOCKED';
-  document.getElementById('unlock-sub').textContent   = 'Protocol deployed: '+p.desc;
-  document.getElementById('unlock-banner').classList.add('show');
+function showUnlock(i){
+  const p=PHASES[i];
+  document.getElementById('ul-emoji').textContent=p.emoji;
+  document.getElementById('ul-title').textContent=p.name+' UNLOCKED';
+  document.getElementById('ul-sub').textContent='New module: '+p.desc;
+  document.getElementById('unlock-overlay').classList.add('show');
 }
-function closeUnlock(){ document.getElementById('unlock-banner').classList.remove('show'); }
+function closeUnlock(){ document.getElementById('unlock-overlay').classList.remove('show'); }
+function showCustomUnlock(em,ti,su){
+  document.getElementById('ul-emoji').textContent=em;
+  document.getElementById('ul-title').textContent=ti;
+  document.getElementById('ul-sub').textContent=su;
+  document.getElementById('unlock-overlay').classList.add('show');
+}
 
-function showCustomUnlock(emoji, title, sub){
-  document.getElementById('unlock-emoji').textContent = emoji;
-  document.getElementById('unlock-title').textContent = title;
-  document.getElementById('unlock-sub').textContent   = sub;
-  document.getElementById('unlock-banner').classList.add('show');
-}
-
-// ══════════════════════════════════════════
-// RENDER
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════════
+// RENDER ALL
+// ═══════════════════════════════════════════════
 function renderAll(){
-  const xp   = S.xp;
-  const pi   = phaseIdx();
-  const ph   = PHASES[pi];
-  const next = pi < PHASES.length-1 ? PHASES[pi+1].minXP : 5000;
-  const pct  = Math.min(100,((xp-ph.minXP)/(next-ph.minXP))*100);
+  const xp=S.xp, pi=phaseIdx(), ph=PHASES[pi];
+  const next=pi<PHASES.length-1?PHASES[pi+1].xp:5000;
+  const pct=Math.min(100,((xp-ph.xp)/(next-ph.xp))*100);
 
-  document.getElementById('phase-label').textContent = ph.name;
-  document.getElementById('xp-display').textContent  = xp.toLocaleString();
-  document.getElementById('xp-next').textContent     = next.toLocaleString();
-  document.getElementById('xp-bar').style.width      = pct+'%';
-  document.getElementById('streak-count').textContent= S.streak;
+  // Sidebar
+  document.getElementById('sb-phase').textContent=ph.name;
+  document.getElementById('sb-xp').textContent=xp.toLocaleString();
+  document.getElementById('sb-next').textContent=next.toLocaleString();
+  document.getElementById('sb-xp-fill').style.width=pct+'%';
+  document.getElementById('sb-streak').textContent=S.streak;
 
   // Stats
-  document.getElementById('stat-xp').textContent    = xp.toLocaleString();
-  document.getElementById('stat-streak').textContent= S.streak;
-  document.getElementById('stat-scans').textContent = S.totalScans;
-  document.getElementById('stat-pr').textContent    = S.recoveryPR ? fmtTime(S.recoveryPR) : '--';
+  document.getElementById('st-xp').textContent=xp.toLocaleString();
+  document.getElementById('st-streak').textContent=S.streak;
+  document.getElementById('st-scans').textContent=S.totalScans;
+  document.getElementById('st-pr').textContent=S.recoveryPR?fmtMs(S.recoveryPR):'--';
 
-  // Daily cap pips
-  const e = Math.min(S.todayEntries, 3);
+  // Quota pips
+  const e=Math.min(S.todayEntries,3);
+  document.getElementById('q-count').textContent=e;
   for(let i=1;i<=3;i++){
-    const pip = document.getElementById('pip-'+i);
-    pip.className = 'cap-pip'+(i<=e?' filled':'');
-    if(i<=e){
-      if(i===2) pip.classList.add('r');
-      if(i===3) pip.classList.add('rr');
-    }
+    const pip=document.getElementById('qp'+i);
+    pip.className='q-pip'+(i<=e?` on on-${i}`:'');
   }
-  document.getElementById('cap-label').textContent = `${e} / 3 ENTRIES LOGGED TODAY`;
 
-  // Nav locks
-  ['battery','repair','recovery'].forEach((page,i)=>{
-    const threshold = [500,1500,3000][i];
-    const btn = document.getElementById('nav-'+page);
-    btn.classList.toggle('locked', xp < threshold);
-  });
+  // Nav badges + locks
+  const batOk=xp>=500, repOk=xp>=1500, recOk=xp>=3000;
+  // scanner badge
+  const sbScan=document.getElementById('badge-scanner');
+  sbScan.className='nav-badge'+(S.scannerDone?' done':'');
+  sbScan.textContent=S.scannerDone?'✓':'GO';
+  // battery nav
+  const navBat=document.getElementById('nav-battery');
+  const sbBat=document.getElementById('badge-battery');
+  navBat.classList.toggle('locked',!batOk);
+  sbBat.className='nav-badge'+(batOk?(S.batteryDone?' done':''):' lock');
+  sbBat.textContent=batOk?(S.batteryDone?'✓':'GO'):'500 XP';
+  // repair nav
+  const navRep=document.getElementById('nav-repair');
+  const sbRep=document.getElementById('badge-repair');
+  navRep.classList.toggle('locked',!repOk);
+  sbRep.className='nav-badge'+(repOk?'':' lock');
+  sbRep.textContent=repOk?'OPEN':'1500 XP';
+  // recovery nav
+  const navRec=document.getElementById('nav-recovery');
+  const sbRec=document.getElementById('badge-recovery');
+  navRec.classList.toggle('locked',!recOk);
+  sbRec.className='nav-badge'+(recOk?'':' lock');
+  sbRec.textContent=recOk?'OPEN':'3000 XP';
 
-  // Section visibility
-  sv('bat-locked',   xp<500);  sv('bat-unlocked',  xp>=500);
-  sv('rep-locked',   xp<1500); sv('rep-unlocked',  xp>=1500);
-  sv('rec-locked',   xp<3000); sv('rec-unlocked',  xp>=3000);
+  // Locked/unlocked sections
+  sv('bat-locked',!batOk); sv('bat-unlocked',batOk);
+  sv('rep-locked',!repOk); sv('rep-unlocked',repOk);
+  sv('rec-locked',!recOk); sv('rec-unlocked',recOk);
 
-  // XP needed labels
-  setT('bat-xp-need', Math.max(0,500-xp));  setT('bat-xp-cur',xp);
-  setT('rep-xp-need', Math.max(0,1500-xp)); setT('rep-xp-cur',xp);
-  setT('rec-xp-need', Math.max(0,3000-xp)); setT('rec-xp-cur',xp);
+  // Lock screen XP needed
+  setTxt('bat-need',Math.max(0,500-xp));
+  setTxt('rep-need',Math.max(0,1500-xp));
+  setTxt('rec-need',Math.max(0,3000-xp));
 
+  // Roadmap
   renderRoadmap(pi);
   renderRecentLogs();
+  renderBatHistory();
   renderRecoveryLog();
 }
 
-function sv(id,show){ const el=document.getElementById(id); if(el) el.style.display=show?'block':'none'; }
-function setT(id,val){ const el=document.getElementById(id); if(el) el.textContent=val; }
+function sv(id,show){const el=document.getElementById(id);if(el)el.style.display=show?'block':'none';}
+function setTxt(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
 
 function renderRoadmap(pi){
-  const c = document.getElementById('roadmap-card');
-  c.innerHTML = '<div class="card-title">🗺 PHASE ROADMAP</div>';
-  PHASES.forEach((p,i)=>{
-    const done   = i < pi;
-    const active = i === pi;
-    const hasLine = i < PHASES.length-1;
-    c.innerHTML += `
-      <div class="phase-item">
-        <div class="phase-pip-col">
-          <div class="phase-pip ${done?'done':active?'active':''}"></div>
-          ${hasLine?`<div class="phase-line ${done?'done':''}"></div>`:''}
-        </div>
-        <div style="padding-bottom:${hasLine?10:0}px">
-          <div class="phase-name ${done?'done':active?'active':''}">${p.emoji} ${p.name}</div>
-          <div class="phase-range">${p.minXP.toLocaleString()}–${p.maxXP.toLocaleString()} XP · ${active?'⚡ ACTIVE':done?'✅ COMPLETE':'🔒 LOCKED'}</div>
-        </div>
-      </div>`;
-  });
+  const c=document.getElementById('roadmap');
+  c.innerHTML=PHASES.map((p,i)=>{
+    const done=i<pi,active=i===pi,hasLine=i<PHASES.length-1;
+    return`<div class="rm-item">
+      <div class="rm-spine">
+        <div class="rm-dot ${done?'done':active?'active':''}"></div>
+        ${hasLine?`<div class="rm-line ${done?'done':''}"></div>`:''}
+      </div>
+      <div class="rm-body" style="padding-bottom:${hasLine?'16':'0'}px">
+        <div class="rm-name ${done?'done':active?'active':''}">${p.emoji} ${p.name}</div>
+        <div class="rm-range">${p.xp.toLocaleString()}–${p.next.toLocaleString()} XP · ${active?'⚡ ACTIVE':done?'✅ DONE':'🔒 LOCKED'}</div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 function renderRecentLogs(){
-  const c = document.getElementById('recent-logs');
-  const logs = (S.logs||[]).slice(-5).reverse();
+  const c=document.getElementById('recent-logs');
+  const logs=(S.logs||[]).slice(-6).reverse();
   if(!logs.length){
-    c.innerHTML=`<div class="empty-state"><div class="empty-icon">📡</div><div class="empty-text">NO DATA LOGGED YET<br>COMPLETE YOUR FIRST SCAN</div></div>`;
+    c.innerHTML='<div class="empty"><div class="empty-icon">📡</div><div class="empty-text">No entries yet.<br>Run your first scan to start building XP.</div></div>';
     return;
   }
-  c.innerHTML = logs.map(l=>`
+  c.innerHTML=logs.map(l=>`
     <div class="log-item">
-      <div class="log-icon">${l.icon||'📊'}</div>
+      <div class="log-icon">${l.icon}</div>
       <div class="log-info">
         <div class="log-name">${l.name}</div>
         <div class="log-meta">${l.meta} · ${l.time}</div>
@@ -832,329 +1330,319 @@ function renderRecentLogs(){
     </div>`).join('');
 }
 
-function renderRecoveryLog(){
-  const c = document.getElementById('recovery-log-list');
+function renderBatHistory(){
+  const c=document.getElementById('bat-history');
   if(!c) return;
-  const sessions = (S.recoverySessions||[]).slice(-5).reverse();
-  if(!sessions.length){
-    c.innerHTML=`<div class="empty-state" style="padding:16px 0"><div class="empty-icon" style="font-size:24px">⏱</div><div class="empty-text">NO SESSIONS LOGGED</div></div>`;
-  } else {
-    c.innerHTML = sessions.map(s=>`
-      <div class="log-item">
-        <div class="log-icon">${s.isPR?'🏆':'⏱'}</div>
-        <div class="log-info">
-          <div class="log-name">${fmtTime(s.ms)}</div>
-          <div class="log-meta">${s.date}${s.isPR?' · 🏆 NEW PR':''}</div>
-        </div>
-        <div class="log-xp">+60 XP</div>
-      </div>`).join('');
+  const logs=(S.batLogs||[]).slice().reverse();
+  if(!logs.length){
+    c.innerHTML='<div class="empty" style="padding:20px"><div class="empty-icon" style="font-size:28px">⚡</div><div class="empty-text">No readings yet today</div></div>';
+    return;
   }
-  const pr = S.recoveryPR;
-  document.getElementById('pr-display').textContent = pr ? fmtTime(pr) : '--:--';
-  document.getElementById('pr-sub').textContent     = pr ? `Beat ${fmtTime(pr)} to set a new record` : 'No PR set yet — run your first session';
+  c.innerHTML=logs.map(l=>`
+    <div class="log-item">
+      <div class="log-icon">${l.icon}</div>
+      <div class="log-info">
+        <div class="log-name">${l.pct}% — ${l.status}</div>
+        <div class="log-meta">${l.time}</div>
+      </div>
+      <div class="log-xp">+${l.xp} XP</div>
+    </div>`).join('');
 }
 
-// ══════════════════════════════════════════
+function renderRecoveryLog(){
+  const c=document.getElementById('rec-log');
+  if(!c) return;
+  const sess=(S.recoverySessions||[]).slice(-6).reverse();
+  if(!sess.length){
+    c.innerHTML='<div class="empty" style="padding:20px"><div class="empty-icon" style="font-size:28px">⏱</div><div class="empty-text">No sessions yet</div></div>';
+    return;
+  }
+  c.innerHTML='<div class="rec-log-grid">'+sess.map(s=>`
+    <div class="rec-log-item">
+      <div class="rec-log-icon">${s.isPR?'🏆':'⏱'}</div>
+      <div>
+        <div class="rec-log-time">${fmtMs(s.ms)}</div>
+        <div class="rec-log-date">${s.date}${s.isPR?' · PR':''}</div>
+      </div>
+    </div>`).join('')+'</div>';
+
+  const pr=S.recoveryPR;
+  document.getElementById('pr-time').textContent=pr?fmtMs(pr):'--:--';
+  document.getElementById('pr-sub').textContent=pr?`Beat ${fmtMs(pr)} to set a new record`:'Run your first session to set a PR';
+}
+
+// ═══════════════════════════════════════════════
 // DAILY INTEL
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function loadIntel(){
-  const d   = new Date();
-  const doy = Math.floor((d - new Date(d.getFullYear(),0,0))/86400000);
-  const item = INTEL[doy % INTEL.length];
-  document.getElementById('intel-tag').textContent  = '📡 DAILY INTEL — DAY '+doy;
-  document.getElementById('intel-text').textContent = item.text;
-  document.getElementById('intel-sub').textContent  = item.sub;
+  const d=new Date();
+  const doy=Math.floor((d-new Date(d.getFullYear(),0,0))/86400000);
+  const item=INTEL[doy%INTEL.length];
+  document.getElementById('intel-tag').textContent=`📡 DAILY INTEL — DAY ${doy}`;
+  document.getElementById('intel-text').textContent=item.h;
+  document.getElementById('intel-sub').textContent=item.b;
 }
 
-// ══════════════════════════════════════════
-// NAV
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════
 function navigate(page){
-  if(page==='battery'  && S.xp<500)  return;
-  if(page==='repair'   && S.xp<1500) return;
-  if(page==='recovery' && S.xp<3000) return;
+  if(page==='battery' && S.xp<500) return;
+  if(page==='repair'  && S.xp<1500) return;
+  if(page==='recovery'&& S.xp<3000) return;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
   document.getElementById('nav-'+page).classList.add('active');
+  document.getElementById('main').scrollTo(0,0);
   if(page==='scanner') resetScanner();
   if(page==='repair')  buildScripts();
 }
 
-// ══════════════════════════════════════════
-// SCANNER
-// ══════════════════════════════════════════
-let selEmotion = null;
-let selSource  = null;
+// ═══════════════════════════════════════════════
+// EMOTION SCANNER
+// ═══════════════════════════════════════════════
+let selEm=null, selSrc=null;
 
-function buildEmotionGrids(){
-  const g = document.getElementById('grid-emotions');
-  g.innerHTML = EMOTIONS.map(e=>`
-    <button class="em-btn" data-key="${e.key}" onclick="selectEmotion(this,'${e.key}','${e.name}')">
-      <div class="em-emoji">${e.emoji}</div>
-      <div class="em-name">${e.name}</div>
+function buildEmGrid(){
+  document.getElementById('em-grid').innerHTML=EMOTIONS.map(e=>`
+    <button class="em-tab" onclick="selectEm(this,'${e.n}')">
+      <span class="em-tab-emoji">${e.e}</span>
+      <span class="em-tab-name">${e.n}</span>
     </button>`).join('');
 }
 
-function selectEmotion(btn, key, name){
-  document.querySelectorAll('.em-btn').forEach(b=>b.classList.remove('selected'));
+function selectEm(btn,name){
+  document.querySelectorAll('.em-tab').forEach(b=>b.classList.remove('selected'));
   btn.classList.add('selected');
-  selEmotion = {key, name};
-  document.getElementById('scanner-next-btn').disabled = false;
+  selEm=name;
+  document.getElementById('scan-next-btn').disabled=false;
 }
 
-function scannerStep2(){
-  if(!selEmotion) return;
-  document.getElementById('scanner-s1').style.display = 'none';
-  document.getElementById('scanner-s2').style.display = 'block';
-  document.getElementById('step-dot-2').classList.add('done');
-  document.getElementById('step2-emotion').textContent = `Signal Tagged: ${selEmotion.name}`;
-  selSource = null;
-  document.getElementById('scanner-submit-btn').disabled = true;
+function scanStep2(){
+  if(!selEm) return;
+  document.getElementById('scan-s1').classList.remove('active');
+  document.getElementById('scan-s2').classList.add('active');
+  document.getElementById('s2-emotion-display').textContent=selEm;
+  selSrc=null;
+  document.getElementById('scan-submit-btn').disabled=true;
   document.querySelectorAll('.src-btn').forEach(b=>b.classList.remove('selected'));
 }
 
-function scannerBack(){
-  document.getElementById('scanner-s2').style.display = 'none';
-  document.getElementById('scanner-s1').style.display = 'block';
-  document.getElementById('step-dot-2').classList.remove('done');
+function scanBack(){
+  document.getElementById('scan-s2').classList.remove('active');
+  document.getElementById('scan-s1').classList.add('active');
 }
 
-function selectSource(btn){
+function selectSrc(btn){
   document.querySelectorAll('.src-btn').forEach(b=>b.classList.remove('selected'));
   btn.classList.add('selected');
-  selSource = btn.dataset.src;
-  document.getElementById('scanner-submit-btn').disabled = false;
+  selSrc=btn.dataset.src;
+  document.getElementById('scan-submit-btn').disabled=false;
 }
 
 function submitScan(){
-  if(!selEmotion || !selSource) return;
-  if(S.todayEntries >= 3){ showToast('⚠ DAILY CAP REACHED — 3 entries max'); return; }
-  const xp = 65;
+  if(!selEm||!selSrc) return;
+  if(S.todayEntries>=3){ showToast('⚠ Daily cap reached — 3 entries max'); return; }
+  const pos=['Excited','Happy','Confident','Proud','Calm'];
+  const neg=['Angry','Overwhelmed','Frustrated','Drained','Lonely','Sad','Disappointed','Embarrassed','Anxious'];
+  const icon=pos.includes(selEm)?'🟢':neg.includes(selEm)?'🔴':'🟡';
+  const xp=65;
   S.todayEntries++;
   S.totalScans++;
-  const positiveKeys = ['excited','happy','confident','calm','proud'];
-  const negativeKeys = ['angry','overwhelmed','frustrated','drained','lonely','sad','disappointed','embarrassed','anxious'];
-  const icon = positiveKeys.includes(selEmotion.key) ? '🟢' : negativeKeys.includes(selEmotion.key) ? '🔴' : '🟡';
-  S.logs.push({
-    icon,
-    name: `Scan: ${selEmotion.name}`,
-    meta: `Source: ${selSource} · +15 XP context bonus`,
-    time: new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),
-    xp, type:'scan'
-  });
-  markDailyLog();
-  addXP(xp, 'SCAN COMPLETE');
-  navigate('home');
+  S.scannerDone=true;
+  S.logs.push({icon,name:`Scan: ${selEm}`,meta:`Source: ${selSrc}`,time:nowTime(),xp});
+  markStreak();
+  addXP(xp,'SCAN COMPLETE');
   resetScanner();
+  navigate('home');
 }
 
 function resetScanner(){
-  selEmotion = null; selSource = null;
-  document.getElementById('scanner-s1').style.display = 'block';
-  document.getElementById('scanner-s2').style.display = 'none';
-  document.getElementById('step-dot-2').classList.remove('done');
-  document.getElementById('scanner-next-btn').disabled = true;
-  document.querySelectorAll('.em-btn,.src-btn').forEach(b=>b.classList.remove('selected'));
+  selEm=null; selSrc=null;
+  document.getElementById('scan-s1').classList.add('active');
+  document.getElementById('scan-s2').classList.remove('active');
+  document.getElementById('scan-next-btn').disabled=true;
+  document.querySelectorAll('.em-tab,.src-btn').forEach(b=>b.classList.remove('selected'));
 }
 
-// ══════════════════════════════════════════
-// BATTERY
-// ══════════════════════════════════════════
-function updateBattery(val){
-  val = parseInt(val);
-  document.getElementById('slider-fill').style.width = val+'%';
-  document.getElementById('bat-pct').textContent = val+'%';
-  const pct = document.getElementById('bat-pct');
-  let status, tip;
-  if(val>=80){
-    status='OPTIMAL'; tip='System fully charged. Prime window for high-output performance.';
-    pct.style.background='linear-gradient(135deg,var(--em-b),var(--cyan))';
-  } else if(val>=50){
-    status='NOMINAL'; tip='System running well. Minor optimization may help output.';
-    pct.style.background='linear-gradient(135deg,var(--blue-b),var(--em-b))';
-  } else if(val>=25){
-    status='LOW POWER'; tip='Energy reserve limited. Prioritize recovery inputs: sleep, food, downtime.';
-    pct.style.background='linear-gradient(135deg,var(--amber),var(--blue-b))';
-  } else {
-    status='CRITICAL'; tip='System in emergency mode. Do not make major decisions. Rest first.';
-    pct.style.background='linear-gradient(135deg,var(--red-b),var(--amber))';
-  }
-  pct.style.webkitBackgroundClip='text'; pct.style.webkitTextFillColor='transparent';
-  pct.style.backgroundClip='text';
-  document.getElementById('bat-status').textContent = status;
-  document.getElementById('bat-tip').textContent    = tip;
+// ═══════════════════════════════════════════════
+// BATTERY — unlimited per day, each log tracked
+// ═══════════════════════════════════════════════
+function updateBat(v){
+  v=parseInt(v);
+  document.getElementById('bat-track').style.width=v+'%';
+  document.getElementById('bat-pct').textContent=v+'%';
+  let status,tip,color;
+  if(v>=80){     status='OPTIMAL';   tip='Fully charged. Great time for hard tasks.';     color='var(--green-b)';}
+  else if(v>=60){status='GOOD';      tip='Running well. Stay consistent.';                color='var(--cyan-b)';}
+  else if(v>=40){status='MODERATE';  tip='Half tank. Manage your energy wisely.';         color='var(--amber-b)';}
+  else if(v>=20){status='LOW POWER'; tip='Running low. Prioritize rest and food.';        color='#f97316';}
+  else{          status='CRITICAL';  tip='Emergency mode. Rest before big decisions.';   color='var(--red)';}
+  const sl=document.getElementById('bat-status');
+  sl.textContent=status; sl.style.color=color;
+  document.getElementById('bat-tip').textContent=tip;
 }
 
-function submitBattery(){
-  if(S.todayEntries>=3){ showToast('⚠ DAILY CAP REACHED — 3 entries max'); return; }
-  const val = parseInt(document.getElementById('bat-slider').value);
-  const xp  = 60;
-  S.todayEntries++;
-  S.logs.push({
-    icon: val>=80?'🟢':val>=50?'🟡':val>=25?'🟠':'🔴',
-    name: `Battery: ${val}% — ${document.getElementById('bat-status').textContent}`,
-    meta: 'Internal Diagnostic',
-    time: new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),
-    xp, type:'battery'
-  });
-  markDailyLog();
-  addXP(xp, 'BATTERY LOGGED');
-  navigate('home');
+function submitBat(){
+  // Battery is NOT capped — can log multiple times per day
+  const v=parseInt(document.getElementById('bat-slider').value);
+  const xp=50;
+  const status=document.getElementById('bat-status').textContent;
+  const icon=v>=80?'🟢':v>=60?'🔵':v>=40?'🟡':v>=20?'🟠':'🔴';
+
+  // If still within daily entry cap, count it
+  if(S.todayEntries<3) S.todayEntries++;
+  S.batteryDone=true;
+  S.totalBats=(S.totalBats||0)+1;
+
+  const entry={icon,pct:v,status,time:nowTime(),xp};
+  if(!S.batLogs) S.batLogs=[];
+  S.batLogs.push(entry);
+
+  S.logs.push({icon,name:`Battery: ${v}% — ${status}`,meta:'Internal Check',time:entry.time,xp});
+  markStreak();
+  addXP(xp,'BATTERY LOGGED');
 }
 
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // REPAIR LAB
-// ══════════════════════════════════════════
-let activeFilter = 'all';
-
+// ═══════════════════════════════════════════════
+let activeFilter='all';
 function buildScripts(){
-  const list = document.getElementById('scripts-list');
+  const list=document.getElementById('scripts-list');
   if(!list) return;
-  const filtered = activeFilter==='all' ? SCRIPTS : SCRIPTS.filter(s=>s.cat===activeFilter);
-  list.innerHTML = filtered.map(s=>`
+  const f=activeFilter==='all'?SCRIPTS:SCRIPTS.filter(s=>s.cat===activeFilter);
+  list.innerHTML=f.map(s=>`
     <div class="script-card">
-      <div class="script-title">${s.title}<span class="script-cat">${s.cat}</span></div>
+      <div class="script-header">
+        <div class="script-title">${s.title}</div>
+        <div class="script-cat-badge">${s.cat}</div>
+      </div>
       <div class="script-text">"${s.text}"</div>
-      <div style="font-size:13px;color:var(--text2);margin-bottom:6px">▶ Use when: ${s.when}</div>
-      <button class="copy-btn" onclick="copyScript(event,${s.id},\`${s.text.replace(/`/g,"'")}\`)">📋 COPY PATCH</button>
+      <div class="script-when">▶ ${s.when}</div>
+      <button class="copy-btn" onclick="copyScript(event,${s.id},\`${s.text.replace(/`/g,"'")}\`)">📋 Copy</button>
     </div>`).join('');
 }
-
-function filterScripts(cat, btn){
-  activeFilter = cat;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+function filterScripts(cat,btn){
+  activeFilter=cat;
+  document.querySelectorAll('.filter-chip').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   buildScripts();
 }
-
-function copyScript(e, id, text){
+function copyScript(e,id,text){
   e.stopPropagation();
-  const btn = e.target;
+  const btn=e.target;
   navigator.clipboard.writeText(text).then(()=>{
-    btn.textContent='✅ COPIED'; btn.classList.add('copied');
-    showToast('📋 Patch copied — ready to deploy');
-    const key = 'repair_'+todayStr();
-    if(!localStorage.getItem(key)){
-      localStorage.setItem(key,'1');
-      addXP(25, 'PATCH DEPLOYED');
-    }
-    setTimeout(()=>{ btn.textContent='📋 COPY PATCH'; btn.classList.remove('copied'); }, 2000);
+    btn.textContent='✅ Copied!'; btn.classList.add('copied');
+    showToast('📋 Script copied — ready to use');
+    const k='repair_'+today();
+    if(!localStorage.getItem(k)){ localStorage.setItem(k,'1'); addXP(25,'PATCH DEPLOYED'); }
+    setTimeout(()=>{ btn.textContent='📋 Copy'; btn.classList.remove('copied'); },2000);
   }).catch(()=>showToast('⚠ Clipboard access denied'));
 }
 
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // RECOVERY TIMER
-// ══════════════════════════════════════════
-let timerIv = null, timerStart0 = null, timerElapsed = 0, timerRunning = false;
-
+// ═══════════════════════════════════════════════
+let tIv=null,tStart=null,tElapsed=0,tRunning=false;
 function timerStart(){
-  if(timerRunning) return;
-  timerRunning = true;
-  timerStart0  = Date.now() - timerElapsed;
-  document.getElementById('timer-start-btn').disabled = true;
-  document.getElementById('timer-stop-btn').disabled  = false;
-  document.getElementById('timer-label').textContent  = 'TILT IN PROGRESS...';
+  if(tRunning) return;
+  tRunning=true; tStart=Date.now()-tElapsed;
+  document.getElementById('tbtn-start').disabled=true;
+  document.getElementById('tbtn-stop').disabled=false;
+  document.getElementById('timer-status').textContent='TILT IN PROGRESS...';
   document.getElementById('timer-digits').classList.add('running');
-  timerIv = setInterval(()=>{
-    timerElapsed = Date.now()-timerStart0;
-    document.getElementById('timer-digits').textContent = fmtTime(timerElapsed);
-  },100);
+  tIv=setInterval(()=>{ tElapsed=Date.now()-tStart; document.getElementById('timer-digits').textContent=fmtMs(tElapsed); },100);
 }
-
 function timerStop(){
-  if(!timerRunning) return;
-  clearInterval(timerIv); timerRunning = false;
-  document.getElementById('timer-start-btn').disabled = false;
-  document.getElementById('timer-stop-btn').disabled  = true;
+  if(!tRunning) return;
+  clearInterval(tIv); tRunning=false;
+  document.getElementById('tbtn-start').disabled=false;
+  document.getElementById('tbtn-stop').disabled=true;
   document.getElementById('timer-digits').classList.remove('running');
-  document.getElementById('timer-label').textContent  = 'CENTERED ✓ SESSION COMPLETE';
-  const ms = timerElapsed;
-  let isPR = false;
-  if(!S.recoveryPR || ms < S.recoveryPR){ S.recoveryPR = ms; isPR = true; }
-  if(!S.recoverySessions) S.recoverySessions = [];
-  S.recoverySessions.push({ms, isPR, date:new Date().toLocaleDateString()});
-  if(S.todayEntries < 3){
-    S.todayEntries++;
-    S.logs.push({icon:'⏱',name:`Recovery: ${fmtTime(ms)}`,meta:isPR?'🏆 PERSONAL RECORD':'Bounce-Back Session',
-      time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),xp:60,type:'recovery'});
-    markDailyLog();
-    addXP(60, isPR?'NEW PERSONAL RECORD':'RECOVERY LOGGED');
-  }
+  document.getElementById('timer-status').textContent='CENTERED ✓ DONE';
+  const ms=tElapsed;
+  let isPR=false;
+  if(!S.recoveryPR||ms<S.recoveryPR){ S.recoveryPR=ms; isPR=true; }
+  if(!S.recoverySessions) S.recoverySessions=[];
+  S.recoverySessions.push({ms,isPR,date:new Date().toLocaleDateString()});
+  if(S.todayEntries<3){ S.todayEntries++; }
+  S.logs.push({icon:'⏱',name:`Recovery: ${fmtMs(ms)}`,meta:isPR?'🏆 New PR':'Bounce-back session',time:nowTime(),xp:60});
+  markStreak();
+  addXP(60,isPR?'NEW PERSONAL RECORD':'RECOVERY LOGGED');
   save(); renderAll();
-  if(isPR) setTimeout(()=>showCustomUnlock('🏆','NEW PERSONAL RECORD!',`Bounced back in ${fmtTime(ms)}. Faster every time.`), 400);
+  if(isPR) setTimeout(()=>showCustomUnlock('🏆','NEW PERSONAL RECORD!',`Bounced back in ${fmtMs(ms)}. Keep going.`),400);
 }
-
 function timerReset(){
-  clearInterval(timerIv); timerRunning=false; timerElapsed=0; timerStart0=null;
-  document.getElementById('timer-digits').textContent = '00:00';
+  clearInterval(tIv); tRunning=false; tElapsed=0; tStart=null;
+  document.getElementById('timer-digits').textContent='00:00';
   document.getElementById('timer-digits').classList.remove('running');
-  document.getElementById('timer-label').textContent  = 'READY TO TRACK';
-  document.getElementById('timer-start-btn').disabled = false;
-  document.getElementById('timer-stop-btn').disabled  = true;
+  document.getElementById('timer-status').textContent='READY TO TRACK';
+  document.getElementById('tbtn-start').disabled=false;
+  document.getElementById('tbtn-stop').disabled=true;
 }
-
-function fmtTime(ms){
-  const s = Math.floor(ms/1000);
+function fmtMs(ms){
+  const s=Math.floor(ms/1000);
   return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
 }
 
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // STREAK
-// ══════════════════════════════════════════
-function markDailyLog(){
-  const today = todayStr();
-  if(S.lastLogDate !== today){
-    const yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
-    const yStr = yesterday.toISOString().slice(0,10);
-    S.streak = (S.lastLogDate === yStr) ? S.streak+1 : 1;
-    S.lastLogDate = today;
+// ═══════════════════════════════════════════════
+function markStreak(){
+  const t=today();
+  if(S.lastLogDate!==t){
+    const yest=new Date(); yest.setDate(yest.getDate()-1);
+    const ys=yest.toISOString().slice(0,10);
+    S.streak=(S.lastLogDate===ys)?S.streak+1:1;
+    S.lastLogDate=t;
   }
 }
 
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // IMPORT / EXPORT
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function exportData(){
-  const blob = new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
-  const a = Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:`apexmind_backup_${todayStr()}.json`});
+  const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+  const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:`apexmind_${today()}.json`});
   a.click(); URL.revokeObjectURL(a.href);
   showToast('✅ Backup saved'); closeModal();
 }
 function importData(ev){
-  const file = ev.target.files[0]; if(!file) return;
-  const r = new FileReader();
-  r.onload = e => {
-    try { S={...DEFAULT_STATE,...JSON.parse(e.target.result)}; save(); renderAll(); showToast('✅ Data restored'); closeModal(); }
-    catch { showToast('⚠ Invalid backup file'); }
+  const file=ev.target.files[0]; if(!file) return;
+  const r=new FileReader();
+  r.onload=e=>{
+    try{ S={...DEF,...JSON.parse(e.target.result)}; save(); renderAll(); showToast('✅ Data restored'); closeModal(); }
+    catch{ showToast('⚠ Invalid backup file'); }
   };
   r.readAsText(file);
 }
 function confirmReset(){
-  if(confirm('FULL RESET: Wipes ALL XP, streaks, and logs. Cannot be undone. Continue?')){
+  if(confirm('Reset everything? This wipes all XP, streaks and logs. Cannot be undone.')){
     localStorage.removeItem('apexmind_p6'); location.reload();
   }
 }
 
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // MODAL / TOAST
-// ══════════════════════════════════════════
-function openModal()  { document.getElementById('modal-overlay').classList.add('show'); }
-function closeModal() { document.getElementById('modal-overlay').classList.remove('show'); }
-let _toast;
+// ═══════════════════════════════════════════════
+function openModal() { document.getElementById('modal-bg').classList.add('open'); }
+function closeModal(){ document.getElementById('modal-bg').classList.remove('open'); }
+let _t;
 function showToast(msg){
-  const el = document.getElementById('toast');
-  el.textContent = msg; el.classList.add('show');
-  clearTimeout(_toast); _toast = setTimeout(()=>el.classList.remove('show'), 2600);
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  clearTimeout(_t); _t=setTimeout(()=>el.classList.remove('show'),2600);
 }
 
-// ══════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // INIT
-// ══════════════════════════════════════════
-loadState();
+// ═══════════════════════════════════════════════
+load();
 loadIntel();
-buildEmotionGrids();
-updateBattery(72);
+buildEmGrid();
+updateBat(72);
 buildScripts();
 renderAll();
 </script>
